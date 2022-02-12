@@ -1,4 +1,4 @@
-package task1.subtask2;
+package com.epam.task1.util;
 
 import java.util.List;
 import java.util.Collection;
@@ -10,9 +10,11 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 public class MyList<E> implements List<E> {
-
-    private static final int DEFAULT_CAPACITY = 5;
+    /**
+     * The mod loader used when {@link #elementData} needs to {@link #grow} capacity.
+     */
     private static final int MOD_LOADER = 2;
+    private static final int DEFAULT_CAPACITY = 5;
 
     private Object[] elementData;
     private int size;
@@ -29,10 +31,10 @@ public class MyList<E> implements List<E> {
         elementData = new Object[DEFAULT_CAPACITY];
     }
 
-    public MyList(Collection<? extends E> c) {
-        Object[] a = c.toArray();
-        size = a.length;
-        elementData = Arrays.copyOf(a, size);
+    public MyList(Collection<? extends E> collection) {
+        Object[] array = collection.toArray();
+        size = array.length;
+        elementData = Arrays.copyOf(array, size);
     }
 
     @Override
@@ -46,16 +48,16 @@ public class MyList<E> implements List<E> {
     }
 
     @Override
-    public boolean contains(Object o) {
-        return indexOf(o) >= 0;
+    public boolean contains(Object object) {
+        return indexOf(object) >= 0;
     }
 
     @Override
     public Iterator<E> iterator() {
-        return new MyItr();
+        return new MyIterator();
     }
 
-    private class MyItr implements Iterator<E> {
+    private class MyIterator implements Iterator<E> {
         private int cursor;
 
         @Override
@@ -66,24 +68,25 @@ public class MyList<E> implements List<E> {
         @Override
         @SuppressWarnings("unchecked")
         public E next() {
-            if (cursor >= size)
+            if (cursor >= size) {
                 throw new NoSuchElementException();
+            }
             return (E) elementData[cursor++];
         }
     }
 
     public Iterator<E> filteredIterator(Predicate<E> filter) {
-        return new MyFilteredItr(filter);
+        return new MyFilteredIterator(filter);
     }
 
-    private class MyFilteredItr implements Iterator<E> {
+    private class MyFilteredIterator implements Iterator<E> {
         private final Iterator<E> iterator = iterator();
         private final Predicate<E> filter;
 
         private E next;
         private boolean hasNext = true;
 
-        public MyFilteredItr(final Predicate<E> filter) {
+        public MyFilteredIterator(final Predicate<E> filter) {
             this.filter = Objects.requireNonNullElseGet(filter, AcceptAllFilter::new);
             findNext();
         }
@@ -95,8 +98,9 @@ public class MyList<E> implements List<E> {
 
         @Override
         public E next() {
-            if (!hasNext())
+            if (!hasNext()) {
                 throw new NoSuchElementException();
+            }
             E returnValue = next;
             findNext();
             return returnValue;
@@ -126,67 +130,83 @@ public class MyList<E> implements List<E> {
     }
 
     @Override
-    public <T> T[] toArray(T[] a) {
-        return null;
+    @SuppressWarnings("unchecked")
+    public <T> T[] toArray(T[] array) {
+        if (array.length < size) {
+            return (T[]) Arrays.copyOf(elementData, size, array.getClass());
+        }
+        System.arraycopy(elementData, 0, array, 0, size);
+        if (array.length > size) {
+            array[size] = null;
+        }
+        return array;
     }
 
     @Override
-    public boolean add(E e) {
-        if (size == elementData.length)
+    public boolean add(E element) {
+        if (size == elementData.length) {
             grow();
-        elementData[size] = e;
+        }
+        elementData[size] = element;
         size++;
         return true;
     }
 
     @Override
-    public boolean remove(Object o) {
-        int index = indexOf(o);
-        if (index < 0)
+    public boolean remove(Object object) {
+        int index = indexOf(object);
+        if (index < 0) {
             return false;
+        }
         fastRemove(index);
         return true;
     }
 
     @Override
-    public boolean containsAll(Collection<?> c) {
-        for (Object e : c)
-            if (!contains(e))
+    public boolean containsAll(Collection<?> collection) {
+        for (Object element : collection) {
+            if (!contains(element)) {
                 return false;
+            }
+        }
         return true;
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
-        if (c.size() == 0)
+    public boolean addAll(Collection<? extends E> collection) {
+        if (collection.size() == 0) {
             return false;
-        for (E e : c)
-            add(e);
+        }
+        for (E element : collection) {
+            add(element);
+        }
         return true;
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
+    public boolean addAll(int index, Collection<? extends E> collection) {
         rangeCheckForAdd(index);
-        Object[] postArr = c.toArray();
-        int numPostElements = postArr.length;
-        if (numPostElements == 0)
+        Object[] postArray = collection.toArray();
+        int numberOfPostElements = postArray.length;
+        if (numberOfPostElements == 0) {
             return false;
-        if (numPostElements > elementData.length - size)
-            grow(size + numPostElements);
-        int numMoved = size - index;
-        if (numMoved > 0)
-            System.arraycopy(elementData, index, elementData, index + numPostElements, numMoved);
-        System.arraycopy(postArr, 0, elementData, index, numPostElements);
-        size = size + numPostElements;
+        }
+        if (numberOfPostElements > elementData.length - size) {
+            grow(size + numberOfPostElements);
+        }
+        int numberOfMoved = size - index;
+        if (numberOfMoved > 0)
+            System.arraycopy(elementData, index, elementData, index + numberOfPostElements, numberOfMoved);
+        System.arraycopy(postArray, 0, elementData, index, numberOfPostElements);
+        size = size + numberOfPostElements;
         return true;
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean removeAll(Collection<?> collection) {
         boolean modified = false;
         for (int i = 0; i < size; i++) {
-            if (c.contains(elementData[i])) {
+            if (collection.contains(elementData[i])) {
                 remove(i--);
                 modified = true;
             }
@@ -195,10 +215,10 @@ public class MyList<E> implements List<E> {
     }
 
     @Override
-    public boolean retainAll(Collection<?> c) {
+    public boolean retainAll(Collection<?> collection) {
         boolean modified = false;
         for (int i = 0; i < size; i++) {
-            if (!c.contains(elementData[i])) {
+            if (!collection.contains(elementData[i])) {
                 remove(i--);
                 modified = true;
             }
@@ -208,8 +228,9 @@ public class MyList<E> implements List<E> {
 
     @Override
     public void clear() {
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             elementData[i] = null;
+        }
         size = 0;
     }
 
@@ -232,8 +253,9 @@ public class MyList<E> implements List<E> {
     @Override
     public void add(int index, E element) {
         rangeCheckForAdd(index);
-        if (size == elementData.length)
+        if (size == elementData.length) {
             grow();
+        }
         System.arraycopy(elementData, index, elementData, index + 1, size - index);
         elementData[index] = element;
         size++;
@@ -249,8 +271,8 @@ public class MyList<E> implements List<E> {
     }
 
     @Override
-    public int indexOf(Object o) {
-        if (o == null) {
+    public int indexOf(Object object) {
+        if (object == null) {
             for (int i = 0; i < size; i++) {
                 if (elementData[i] == null) {
                     return i;
@@ -258,7 +280,7 @@ public class MyList<E> implements List<E> {
             }
         } else {
             for (int i = 0; i < size; i++) {
-                if (o.equals(elementData[i])) {
+                if (object.equals(elementData[i])) {
                     return i;
                 }
             }
@@ -267,8 +289,8 @@ public class MyList<E> implements List<E> {
     }
 
     @Override
-    public int lastIndexOf(Object o) {
-        if (o == null) {
+    public int lastIndexOf(Object object) {
+        if (object == null) {
             for (int i = size - 1; i >= 0; i--) {
                 if (elementData[i] == null) {
                     return i;
@@ -276,7 +298,7 @@ public class MyList<E> implements List<E> {
             }
         } else {
             for (int i = size - 1; i >= 0; i--) {
-                if (o.equals(elementData[i])) {
+                if (object.equals(elementData[i])) {
                     return i;
                 }
             }
@@ -296,36 +318,39 @@ public class MyList<E> implements List<E> {
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        Object[] a = Arrays.copyOfRange(elementData, fromIndex, toIndex);
-        return new MyList<>((Collection<? extends E>) Arrays.asList(a));
+        return null;
     }
 
     private void grow() {
         grow(size + 1);
     }
 
-    private void grow(int minGrowCapacity) {
+    private void grow(int minimumGrowCapacity) {
         long newSize = elementData.length;
-        while (newSize < minGrowCapacity)
+        while (newSize < minimumGrowCapacity) {
             newSize += newSize * MOD_LOADER;
+        }
         newSize = newSize > Integer.MAX_VALUE ? Integer.MAX_VALUE : newSize;
         elementData = Arrays.copyOf(elementData, (int) newSize);
     }
 
+    private void fastRemove(int index) {
+        if (size - 1 > index) {
+            System.arraycopy(elementData, index + 1, elementData, index, size - 1 - index);
+        }
+        elementData[--size] = null;
+    }
+
     private void rangeCheck(int index) {
-        if (index < 0 || index >= size)
+        if (index < 0 || index >= size) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
+        }
     }
 
     private void rangeCheckForAdd(int index) {
-        if (index < 0 || index > size)
+        if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
-    }
-
-    private void fastRemove(int i) {
-        if (size - 1 > i)
-            System.arraycopy(elementData, i + 1, elementData, i, size - 1 - i);
-        elementData[--size] = null;
+        }
     }
 
     private String outOfBoundsMsg(int index) {
@@ -335,17 +360,18 @@ public class MyList<E> implements List<E> {
     @Override
     public String toString() {
         Iterator<E> it = iterator();
-        if (! it.hasNext())
+        if (!it.hasNext()) {
             return "[]";
-
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (;;) {
+        }
+        StringBuilder result = new StringBuilder();
+        result.append('[');
+        while (true) {
             E e = it.next();
-            sb.append(e == this ? "(this Collection)" : e);
-            if (! it.hasNext())
-                return sb.append(']').toString();
-            sb.append(',').append(' ');
+            result.append(e == this ? "(this Collection)" : e);
+            if (!it.hasNext()) {
+                return result.append(']').toString();
+            }
+            result.append(',').append(' ');
         }
     }
 }

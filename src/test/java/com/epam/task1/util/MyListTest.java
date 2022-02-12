@@ -1,4 +1,4 @@
-package task1.subtask2;
+package com.epam.task1.util;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -13,6 +13,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MyListTest {
@@ -63,33 +64,41 @@ class MyListTest {
 
     @Test
     void iterator() {
-        Iterator<String> it = list.iterator();
-        assertTrue(it.hasNext());
-        assertEquals("A", it.next());
-        it.next();
-        assertEquals("C", it.next());
-        assertFalse(it.hasNext());
+        Iterator<String> iterator = list.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals("A", iterator.next());
+        iterator.next();
+        assertEquals("C", iterator.next());
+        assertFalse(iterator.hasNext());
     }
 
     @Test
     void filteredIterator() {
         MyList<Integer> testList1 = new MyList<>(Arrays.asList(1, 2, 3, 4, 5));
-        Iterator<Integer> it = testList1.filteredIterator(e -> e % 2 == 0);
-        assertTrue(it.hasNext());
-        assertEquals(2, it.next());
-        assertEquals(4, it.next());
-        assertFalse(it.hasNext());
+        Iterator<Integer> iterator = testList1.filteredIterator(e -> e % 2 == 0);
+        assertTrue(iterator.hasNext());
+        assertEquals(2, iterator.next());
+        assertEquals(4, iterator.next());
+        assertFalse(iterator.hasNext());
     }
 
     @Test
     void toArray() {
-        Object[] testArr1 = list.toArray();
-        assertEquals("A", testArr1[0]);
-        assertEquals(3, testArr1.length);
+        Object[] testArray1 = list.toArray();
+        assertEquals(3, testArray1.length);
+        assertEquals("[A, B, C]", Arrays.toString(testArray1));
     }
 
     @Test
-    void testToArray() {
+    void toArrayWithArray() {
+        String[] testArray1 = list.toArray(new String[] {"F", "F"});
+        assertEquals(3, testArray1.length);
+        assertEquals("[A, B, C]", Arrays.toString(testArray1));
+
+        String[] testArray2 = list.toArray(new String[] {"F", "F", "F", "F", "F"});
+        assertNull(testArray2[3]);
+        assertEquals(5, testArray2.length);
+        assertEquals("[A, B, C, null, F]", Arrays.toString(testArray2));
     }
 
     @Test
@@ -233,17 +242,7 @@ class MyListTest {
 
     @Test
     void subList() {
-        List<String> testSubList1 = list.subList(1, 2);
-        assertEquals(1, testSubList1.size());
-        assertEquals("[B]", testSubList1.toString());
 
-        List<String> testSubList2 = list.subList(0, 2);
-        assertEquals(2, testSubList2.size());
-        assertEquals("[A, B]", testSubList2.toString());
-
-        List<String> testSubList3 = list.subList(2, 3);
-        assertEquals(1, testSubList3.size());
-        assertEquals("[C]", testSubList3.toString());
     }
 
     @Test
