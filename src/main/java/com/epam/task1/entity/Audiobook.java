@@ -3,16 +3,30 @@ package com.epam.task1.entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class AudioBook extends Book {
+/**
+ * Bean class representation of the digital e-book with audio voice acting.
+ *
+ * @author Oleksii Kushch
+ */
+public class Audiobook extends Book {
     private static final long serialVersionUID = 7869732606451640629L;
 
-    protected int sizeMB;
-    protected int listeningLength;    // minutes
-    protected String narrator;
+    /**
+     * the total size of the digital e-book (all its components (files))
+     */
+    private int sizeMB;
+    /**
+     * the total time (duration or length) of listening concrete audiobook (measured in minutes)
+     */
+    private int listeningLength;
+    /**
+     * the narrator concrete digital audiobook (main or first narrator to the list of audiobook narrators)
+     */
+    private String narrator;
 
-    public AudioBook() {}
+    public Audiobook() {}
 
-    public AudioBook(Long id, BigDecimal price, String title, String author, String language, int numberOfPages,
+    public Audiobook(Long id, BigDecimal price, String title, String author, String language, int numberOfPages,
                      int sizeMB, int listeningLength, String narrator) {
         super(id, price, title, author, language, numberOfPages);
         this.sizeMB = sizeMB;
@@ -47,9 +61,9 @@ public class AudioBook extends Book {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AudioBook)) return false;
+        if (!(o instanceof Audiobook)) return false;
         if (!super.equals(o)) return false;
-        AudioBook audioBook = (AudioBook) o;
+        Audiobook audioBook = (Audiobook) o;
         return sizeMB == audioBook.sizeMB &&
                 listeningLength == audioBook.listeningLength &&
                 Objects.equals(narrator, audioBook.narrator);
@@ -63,14 +77,12 @@ public class AudioBook extends Book {
     @Override
     public String toString() {
         return "AudioBook{" +
-                "id=" + id +
-                ", price=" + price +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", language='" + language + '\'' +
-                ", numberOfPages=" + numberOfPages +
-                ", id=" + id +
-                ", price=" + price +
+                "id=" + getId() +
+                ", price=" + getPrice() +
+                ", title='" + getTitle() + '\'' +
+                ", author='" + getAuthor() + '\'' +
+                ", language='" + getLanguage() + '\'' +
+                ", numberOfPages=" + getNumberOfPages() +
                 ", sizeMB=" + sizeMB +
                 ", listeningLength=" + listeningLength +
                 ", narrator='" + narrator + '\'' +

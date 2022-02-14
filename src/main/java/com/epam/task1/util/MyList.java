@@ -9,11 +9,22 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Predicate;
 
+/**
+ * Resizable-array implementation of the List interface. Permits all elements, including {@code null}.
+ *
+ * <p>Each MyList instance has a capacity. The capacity is the size of the array used to store the elements in the list.
+ * Default capacity {@link #DEFAULT_CAPACITY} {@code = 5}, sets in constructor without parameters.
+ * It is always at least as large as the list size. As elements are added to an MyList, its capacity grows automatically.
+ * The details of the growth policy see description for the method {@link #grow(int)}.
+ *
+ * <p>This implementation is not synchronized. The iterators returned by this class's iterator.
+ * If the list is structurally modified at any time after the iterator is created the iterator also change structure
+ *
+ * @author Oleksii Kushch
+ *
+ * @param <E> the type of elements in this list
+ */
 public class MyList<E> implements List<E> {
-    /**
-     * The mod loader used when {@link #elementData} needs to {@link #grow} capacity.
-     */
-    private static final int MOD_LOADER = 2;
     private static final int DEFAULT_CAPACITY = 5;
 
     private Object[] elementData;
@@ -29,12 +40,6 @@ public class MyList<E> implements List<E> {
 
     public MyList() {
         elementData = new Object[DEFAULT_CAPACITY];
-    }
-
-    public MyList(Collection<? extends E> collection) {
-        Object[] array = collection.toArray();
-        size = array.length;
-        elementData = Arrays.copyOf(array, size);
     }
 
     @Override
@@ -68,7 +73,7 @@ public class MyList<E> implements List<E> {
         @Override
         @SuppressWarnings("unchecked")
         public E next() {
-            if (cursor >= size) {
+            if (!hasNext()) {
                 throw new NoSuchElementException();
             }
             return (E) elementData[cursor++];
@@ -129,6 +134,9 @@ public class MyList<E> implements List<E> {
         return Arrays.copyOf(elementData, size);
     }
 
+    /**
+     * @throws NullPointerException if the specified array is null
+     */
     @Override
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] array) {
@@ -306,29 +314,46 @@ public class MyList<E> implements List<E> {
         return -1;
     }
 
+    /**
+     * @throws UnsupportedOperationException not implemented method
+     */
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
+    /**
+     * @throws UnsupportedOperationException not implemented method
+     */
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
+    /**
+     * @throws UnsupportedOperationException not implemented method
+     */
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     private void grow() {
         grow(size + 1);
     }
 
+    /**
+     * As elements are added, capacity grows automatically by this method.
+     * <p>The growth policy are {@code capacity * 1.5 + 1}
+     * <p>If needs increase the capacity of an MyList more than the growth policy use parameter {@code minimumGrowCapacity}
+     * which sets the minimum by how much the capacitance should grow
+     *
+     * @param minimumGrowCapacity minimum by how much the capacitance should grow
+     */
     private void grow(int minimumGrowCapacity) {
         long newSize = elementData.length;
         while (newSize < minimumGrowCapacity) {
-            newSize += newSize * MOD_LOADER;
+            newSize += (newSize * 3) / 2 + 1;
         }
         newSize = newSize > Integer.MAX_VALUE ? Integer.MAX_VALUE : newSize;
         elementData = Arrays.copyOf(elementData, (int) newSize);
@@ -347,6 +372,9 @@ public class MyList<E> implements List<E> {
         }
     }
 
+    /**
+     * unlike {@link #rangeCheck}, when adding, we can add element by last index + 1
+     */
     private void rangeCheckForAdd(int index) {
         if (index < 0 || index > size) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
@@ -355,23 +383,5 @@ public class MyList<E> implements List<E> {
 
     private String outOfBoundsMsg(int index) {
         return "Index: " + index + ", Size: " + size;
-    }
-
-    @Override
-    public String toString() {
-        Iterator<E> it = iterator();
-        if (!it.hasNext()) {
-            return "[]";
-        }
-        StringBuilder result = new StringBuilder();
-        result.append('[');
-        while (true) {
-            E e = it.next();
-            result.append(e == this ? "(this Collection)" : e);
-            if (!it.hasNext()) {
-                return result.append(']').toString();
-            }
-            result.append(',').append(' ');
-        }
     }
 }

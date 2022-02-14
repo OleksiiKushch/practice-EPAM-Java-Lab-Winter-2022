@@ -3,13 +3,31 @@ package com.epam.task1.entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ * Bean class representation of the book.
+ *
+ * @see Audiobook
+ * @author Oleksii Kushch
+ */
 public class Book extends Commodity {
     private static final long serialVersionUID = 4564726723641617117L;
 
-    protected String title;
-    protected String author;
-    protected String language;
-    protected int numberOfPages;
+    /**
+     * the title concrete book (name)
+     */
+    private String title;
+    /**
+     * the author concrete book (main or first author to the list of book authors)
+     */
+    private String author;
+    /**
+     * the language concrete book
+     */
+    private String language;
+    /**
+     * the number of pages concrete book
+     */
+    private int numberOfPages;
 
     public Book() {}
 
@@ -73,8 +91,8 @@ public class Book extends Commodity {
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + id +
-                ", price=" + price +
+                "id=" + getId() +
+                ", price=" + getPrice() +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", language='" + language + '\'' +

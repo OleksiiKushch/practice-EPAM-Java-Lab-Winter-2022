@@ -4,11 +4,23 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ * An abstract representation of the commodity.
+ * Abstract wrapper for bean classes like {@link EReader}, {@link Book}.
+ *
+ * @author Oleksii Kushch
+ */
 public abstract class Commodity implements Serializable {
     private static final long serialVersionUID = 5773634382252297178L;
 
-    protected Long id;
-    protected BigDecimal price;
+    /**
+     * the identifier concrete commodity (unique value)
+     */
+    private Long id;
+    /**
+     * the price concrete commodity (used BigDecimal because need the precision for money values)
+     */
+    private BigDecimal price;
 
     public Commodity() {}
 

@@ -3,13 +3,31 @@ package com.epam.task1.entity;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ * Bean class representation of the e-reader (e-book reader or e-book device)
+ * <p>(mobile electronic device designed to read digital e-books).
+ *
+ * @author Oleksii Kushch
+ */
 public class EReader extends Commodity {
     private static final long serialVersionUID = -5185587079239564593L;
 
-    protected String model;
-    protected float displaySize;      // inches
-    protected int storageGB;
-    protected int resolutionPPI;
+    /**
+     * the model concrete e-reader (title name)
+     */
+    private String model;
+    /**
+     * the display size concrete e-reader (measured in inches)
+     */
+    private float displaySize;
+    /**
+     * the on-device (e-reader) storage (measured in GB)
+     */
+    private int storageGB;
+    /**
+     * the display resolution concrete e-reader (measured in ppi)
+     */
+    private int resolutionPPI;
 
     public EReader() {}
 
@@ -73,8 +91,8 @@ public class EReader extends Commodity {
     @Override
     public String toString() {
         return "EReader{" +
-                "id=" + id +
-                ", price=" + price +
+                "id=" + getId() +
+                ", price=" + getPrice() +
                 ", model='" + model + '\'' +
                 ", displaySize=" + displaySize +
                 ", storageGB=" + storageGB +
