@@ -80,19 +80,33 @@ public class MyList<E> implements List<E> {
         }
     }
 
+    /**
+     * @return iterator over the elements in this list in proper sequence by specific condition ({@link Predicate})
+     * @throws IllegalArgumentException if parameter {@code filter} equal {@code null}
+     */
     public Iterator<E> filteredIterator(Predicate<E> filter) {
         return new MyFilteredIterator(filter);
     }
 
     private class MyFilteredIterator implements Iterator<E> {
         private final Iterator<E> iterator = iterator();
+        /**
+         * the condition by which the list ({@link #iterator}) is filtered
+         */
         private final Predicate<E> filter;
 
         private E next;
+        /**
+         * flag variable which indicates whether the next element
+         * <p>in this iterator (concrete filtered iterator {@link MyFilteredIterator})
+         */
         private boolean hasNext = true;
 
         public MyFilteredIterator(final Predicate<E> filter) {
-            this.filter = Objects.requireNonNullElseGet(filter, AcceptAllFilter::new);
+            if (filter == null) {
+                throw new IllegalArgumentException();
+            }
+            this.filter = filter;
             findNext();
         }
 
@@ -111,6 +125,9 @@ public class MyList<E> implements List<E> {
             return returnValue;
         }
 
+        /**
+         * finds the next element of the list ({@link #iterator}) that matches the specified condition ({@link #filter})
+         */
         private void findNext() {
             while (iterator.hasNext()) {
                 next = iterator.next();
@@ -120,12 +137,6 @@ public class MyList<E> implements List<E> {
             }
             next = null;
             hasNext = false;
-        }
-
-        private final class AcceptAllFilter<T> implements Predicate<T> {
-            public boolean test(final T type) {
-                return true;
-            }
         }
     }
 
