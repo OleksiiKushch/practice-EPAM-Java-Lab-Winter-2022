@@ -1,12 +1,11 @@
-package com.epam.task1.util;
+package com.epam.task2.util;
 
-import java.util.List;
-import java.util.Collection;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
-import java.util.function.Predicate;
 
 /**
  * Resizable-array implementation of the List interface. Permits all elements, including {@code null}.
@@ -23,13 +22,13 @@ import java.util.function.Predicate;
  *
  * @param <E> the type of elements in this list
  */
-public class MyList<E> implements List<E> {
+public class MyCopyOnWriteList<E> implements List<E> {
     private static final int DEFAULT_CAPACITY = 5;
 
     private Object[] elementData;
     private int size;
 
-    public MyList(int capacity) {
+    public MyCopyOnWriteList(int capacity) {
         if (capacity >= 0) {
             elementData = new Object[capacity];
         } else {
@@ -37,7 +36,7 @@ public class MyList<E> implements List<E> {
         }
     }
 
-    public MyList() {
+    public MyCopyOnWriteList() {
         elementData = new Object[DEFAULT_CAPACITY];
     }
 
@@ -56,17 +55,34 @@ public class MyList<E> implements List<E> {
         return indexOf(object) >= 0;
     }
 
+    /**
+     * The returned iterator provides a snapshot of the state of the list when the iterator was constructed.
+     * @return an iterator over the elements in this list in proper sequence
+     */
     @Override
     public Iterator<E> iterator() {
-        return new MyIterator();
+        return new MyCopyOnWriteIterator();
     }
 
-    private class MyIterator implements Iterator<E> {
+    private class MyCopyOnWriteIterator implements Iterator<E> {
         private int cursor;
+        /**
+         * snapshot of the array {@link #elementData}
+         */
+        private final Object[] snapshotElementData;
+        /**
+         * snapshot of the list size {@link #size}
+         */
+        private final int snapshotSize;
+
+        private MyCopyOnWriteIterator() {
+            snapshotElementData = elementData.clone();
+            snapshotSize = size;
+        }
 
         @Override
         public boolean hasNext() {
-            return cursor < size;
+            return cursor < snapshotSize;
         }
 
         @Override
@@ -75,67 +91,7 @@ public class MyList<E> implements List<E> {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            return (E) elementData[cursor++];
-        }
-    }
-
-    /**
-     * @return iterator over the elements in this list in proper sequence by specific condition ({@link Predicate})
-     * @throws IllegalArgumentException if parameter {@code filter} equal {@code null}
-     */
-    public Iterator<E> filteredIterator(Predicate<E> filter) {
-        return new MyFilteredIterator(filter);
-    }
-
-    private class MyFilteredIterator implements Iterator<E> {
-        private final Iterator<E> iterator = iterator();
-        /**
-         * the condition by which the list ({@link #iterator}) is filtered
-         */
-        private final Predicate<E> filter;
-
-        private E next;
-        /**
-         * flag variable which indicates whether the next element
-         * <p>in this iterator (concrete filtered iterator {@link MyFilteredIterator})
-         */
-        private boolean hasNext = true;
-
-        public MyFilteredIterator(final Predicate<E> filter) {
-            if (filter == null) {
-                throw new IllegalArgumentException();
-            }
-            this.filter = filter;
-            findNext();
-        }
-
-        @Override
-        public boolean hasNext() {
-            return hasNext;
-        }
-
-        @Override
-        public E next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            E returnValue = next;
-            findNext();
-            return returnValue;
-        }
-
-        /**
-         * finds the next element of the list ({@link #iterator}) that matches the specified condition ({@link #filter})
-         */
-        private void findNext() {
-            while (iterator.hasNext()) {
-                next = iterator.next();
-                if (filter.test(next)) {
-                    return;
-                }
-            }
-            next = null;
-            hasNext = false;
+            return (E) snapshotElementData[cursor++];
         }
     }
 
