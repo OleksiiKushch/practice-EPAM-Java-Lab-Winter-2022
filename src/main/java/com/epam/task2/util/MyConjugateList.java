@@ -60,10 +60,7 @@ public final class MyConjugateList<E> implements List<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                if (cursor >= unmodifiableList.size()) {
-                    return modifiableList.get(cursor++ - unmodifiableList.size());
-                }
-                return unmodifiableList.get(cursor++);
+                return get(cursor++);
             }
         };
     }
