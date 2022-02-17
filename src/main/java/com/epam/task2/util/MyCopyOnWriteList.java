@@ -61,38 +61,27 @@ public class MyCopyOnWriteList<E> implements List<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new MyCopyOnWriteIterator();
-    }
+        return new Iterator<>() {
+            private int cursor;
+            /** snapshot of the array */
+            private final Object[] snapshotElementData = elementData.clone();
+            /** snapshot of the list size */
+            private final int snapshotSize = size;
 
-    private class MyCopyOnWriteIterator implements Iterator<E> {
-        private int cursor;
-        /**
-         * snapshot of the array {@link #elementData}
-         */
-        private final Object[] snapshotElementData;
-        /**
-         * snapshot of the list size {@link #size}
-         */
-        private final int snapshotSize;
-
-        private MyCopyOnWriteIterator() {
-            snapshotElementData = elementData.clone();
-            snapshotSize = size;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return cursor < snapshotSize;
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public E next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
+            @Override
+            public boolean hasNext() {
+                return cursor < snapshotSize;
             }
-            return (E) snapshotElementData[cursor++];
-        }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public E next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return (E) snapshotElementData[cursor++];
+            }
+        };
     }
 
     @Override
