@@ -109,9 +109,12 @@ class MyConjugateListTest {
     @Test
     void toArrayWithArrayParameter() {
         assertEquals("[1, 2, 3, 4, 5, 6]", Arrays.toString(list.toArray(new Number[] {7, 8, 9})));
+        assertEquals("[1, 2, 3, 4, 5, 6]", Arrays.toString(list.toArray(new Number[] {7, 8, 9, 10 , 11, 12})));
+        assertEquals("[1, 2, 3, 4, 5, 6, null]", Arrays.toString(list.toArray(new Number[] {7, 8, 9, 10 , 11, 12, 13})));
         assertEquals("[1, 2, 3, 4, 5, 6, null, 14, 15]",
                 Arrays.toString(list.toArray(new Number[] {7, 8, 9, 10, 11, 12, 13, 14, 15})));
     }
+
 
     @Test
     void add() {
@@ -127,11 +130,15 @@ class MyConjugateListTest {
         assertEquals(6, list.get(4));
 
         assertFalse(list.remove((Integer) 99));
-        assertFalse(list.remove((Integer) 1));
 
         assertTrue(list.remove((Integer) 6));
         assertEquals(4, list.size());
         assertEquals(5, list.get(3));
+    }
+
+    @Test
+    void remove_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.remove((Integer) 1));
     }
 
     @Test
@@ -160,37 +167,32 @@ class MyConjugateListTest {
     }
 
     @Test
-    void addAllWithIndex_shouldThrowUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> list.addAll(2, Arrays.asList(7, 8)));
+    void addAllWithIndex_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.addAll(2, Arrays.asList(7, 8)));
     }
 
     @Test
     void removeAll() {
-        List<Integer> testList = new MyConjugateList<>(
-                new ArrayList<>(Arrays.asList(1, 2)), new ArrayList<>(Arrays.asList(2, 2, 3)));
-        assertTrue(testList.removeAll(Arrays.asList(1, 2)));
-        assertEquals(3, testList.size());
+        assertTrue(list.removeAll(Arrays.asList(4, 5)));
+        assertEquals(4, list.size());
+        assertEquals(6, list.get(3));
+    }
 
-        assertFalse(list.removeAll(Arrays.asList(1, 2)));
+    @Test
+    void removeAll_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.removeAll(Arrays.asList(1, 5, 6)));
     }
 
     @Test
     void retainAll() {
-        List<Integer> testList = new MyConjugateList<>(
-                new ArrayList<>(Arrays.asList(1, 2)), new ArrayList<>(Arrays.asList(2, 2, 3)));
-        assertTrue(testList.retainAll(Arrays.asList(1, 3)));
-        assertEquals(3, testList.size());
-        assertEquals(3, testList.get(2));
-
-        assertFalse(list.retainAll(Arrays.asList(4, 5, 6)));
+        assertTrue(list.retainAll(Arrays.asList(1, 2, 3, 5)));
+        assertEquals(4, list.size());
+        assertEquals(5, list.get(3));
     }
 
     @Test
-    void clear() {
-        list.clear();
-        assertEquals(3, list.size());
-        assertEquals(1, list.get(0));
-        assertEquals(3, list.get(2));
+    void retainAll_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.retainAll(Arrays.asList(1, 2, 5)));
     }
 
     @ParameterizedTest
@@ -200,7 +202,7 @@ class MyConjugateListTest {
     }
 
     @Test
-    void get_shouldThrowIndexOutOfBoundsException() {
+    void get_shouldThrowException() {
         Exception exception1 = assertThrows(IndexOutOfBoundsException.class, () -> list.get(-1));
         Exception exception2 = assertThrows(IndexOutOfBoundsException.class, () -> list.get(6));
 
@@ -215,8 +217,8 @@ class MyConjugateListTest {
     }
 
     @Test
-    void set_shouldThrowUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> list.set(0, 99));
+    void set_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.set(0, 99));
     }
 
     @Test
@@ -234,8 +236,8 @@ class MyConjugateListTest {
     }
 
     @Test
-    void add_shouldThrowUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> list.add(0, 99));
+    void add_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.add(0, 99));
     }
 
     @Test
@@ -251,8 +253,8 @@ class MyConjugateListTest {
     }
 
     @Test
-    void remove_shouldThrowUnsupportedOperationException() {
-        assertThrows(UnsupportedOperationException.class, () -> list.remove(0));
+    void removeWithIndex_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.remove(0));
     }
 
     @Test

@@ -20,25 +20,22 @@ import java.util.NoSuchElementException;
  *
  * @param <E> the type of elements in this list
  */
-public final class MyConjugateList<E> implements List<E> {
+public class MyConjugateList<E> implements List<E> {
     private final List<E> unmodifiableList;
     private List<E> modifiableList;
-
-    private int size;
 
     public MyConjugateList(List<E> unmodifiableList,
                            List<E> modifiableList) {
         this.unmodifiableList = unmodifiableList;
         this.modifiableList = modifiableList;
-        size = unmodifiableList.size() + modifiableList.size();
     }
 
     public int size() {
-        return size;
+        return unmodifiableList.size() + modifiableList.size();
     }
 
     public boolean isEmpty() {
-        return size == 0;
+        return size() == 0;
     }
 
     @Override
@@ -52,7 +49,7 @@ public final class MyConjugateList<E> implements List<E> {
 
             @Override
             public boolean hasNext() {
-                return cursor < size;
+                return cursor < size();
             }
 
             @Override
@@ -67,24 +64,29 @@ public final class MyConjugateList<E> implements List<E> {
 
     @Override
     public Object[] toArray() {
-        Object[] result = new Object[unmodifiableList.size() + modifiableList.size()];
-        System.arraycopy(unmodifiableList.toArray(), 0, result, 0, unmodifiableList.size());
-        System.arraycopy(modifiableList.toArray(), 0, result, unmodifiableList.size(), modifiableList.size());
+        Object[] result = new Object[size()];
+        Iterator<E> iterator = iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            result[i++] =  iterator.next();
+        }
         return result;
     }
 
-    /**
-     * @throws NullPointerException if the specified array is null
-     */
     @Override
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] array) {
-        if (array.length < size) {
+        if (array.length < size()) {
             return (T[]) toArray();
         }
-        System.arraycopy(toArray(), 0, array, 0, size);
-        if (array.length > size)
-            array[size] = null;
+        Iterator<E> iterator = iterator();
+        int i = 0;
+        while (iterator.hasNext()) {
+            array[i++] = (T) iterator.next();
+        }
+        if (array.length > size()) {
+            array[size()] = null;
+        }
         return array;
     }
 
@@ -95,21 +97,19 @@ public final class MyConjugateList<E> implements List<E> {
      */
     @Override
     public boolean add(E element) {
-        size++;
         return modifiableList.add(element);
     }
 
     /**
-     * Removes the first occurrence of the specified element from modifiable part {@link #modifiableList},
-     * unmodifiable part {@link #unmodifiableList} is ignored.
+     * Removes the first occurrence of the specified element from modifiable part {@link #modifiableList}.
+     * @throws IllegalArgumentException if delete element contains in unmodified part (list)
      */
     @Override
     public boolean remove(Object object) {
-        boolean result = modifiableList.remove(object);
-        if (result) {
-            size--;
+        if (unmodifiableList.contains(object)) {
+            throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
         }
-        return result;
+        return modifiableList.remove(object);
     }
 
     @Override
@@ -124,65 +124,57 @@ public final class MyConjugateList<E> implements List<E> {
 
     @Override
     public boolean addAll(Collection<? extends E> collection) {
-        if (collection.size() == 0) {
-            return false;
-        }
-        for (E element : collection) {
-            add(element);
-        }
-        return true;
+        return modifiableList.addAll(collection);
     }
 
     /**
      * Inserts all the elements in the specified collection into this list (by implementation only to modifiable part
      * {@link #modifiableList}), starting at the specified position.
      *
-     * @throws UnsupportedOperationException when trying to add the elements
+     * @throws IllegalArgumentException when trying to add the elements
      * <p>to unmodifiable part {@link #unmodifiableList} of the list
      */
     @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
         rangeCheckForAdd(index);
         if (index >= unmodifiableList.size()) {
-            size += collection.size();
             return modifiableList.addAll(index - unmodifiableList.size(), collection);
         }
-        throw new UnsupportedOperationException(cannotChangeUnmodifiablePartOfList());
+        throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
     }
 
     /**
-     * Removes from modifiable part {@link #modifiableList} this list all of its elements that are contained in
-     * the specified collection, unmodifiable part {@link #unmodifiableList} is ignored.
+     * @throws IllegalArgumentException when trying to remove the element
+     * <p>from unmodifiable part {@link #unmodifiableList} of the list
      */
     @Override
     public boolean removeAll(Collection<?> collection) {
-        int oldSizeModifiablePart = modifiableList.size();
-        boolean result = modifiableList.removeAll(collection);
-        size -= oldSizeModifiablePart - modifiableList.size();
-        return result;
+        for (Object element : collection) {
+            if (unmodifiableList.contains(element)) {
+                throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
+            }
+        }
+        return modifiableList.removeAll(collection);
     }
 
     /**
-     * Retains only the elements in modifiable part {@link #modifiableList} this list that are contained in
-     * the specified collection. In other words, removes from modifiable part this list all of its elements that
-     * are not contained in the specified collection, unmodifiable part {@link #unmodifiableList} is ignored.
+     * @throws IllegalArgumentException when trying to remove the element
+     * <p>from unmodifiable part {@link #unmodifiableList} of the list
      */
     @Override
     public boolean retainAll(Collection<?> collection) {
-        int oldSizeModifiablePart = modifiableList.size();
-        boolean result = modifiableList.retainAll(collection);
-        size -= oldSizeModifiablePart - modifiableList.size();
-        return result;
+        if (!collection.containsAll(unmodifiableList)) {
+            throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
+        }
+        return modifiableList.retainAll(collection);
     }
 
     /**
-     * Removes all the elements from modifiable part {@link #modifiableList},
-     * unmodifiable part {@link #unmodifiableList} is ignored.
+     * @throws UnsupportedOperationException operation is not supported by this list.
      */
     @Override
     public void clear() {
-        size -= modifiableList.size();
-        modifiableList.clear();
+        throw new UnsupportedOperationException();
     }
 
     public E get(int index) {
@@ -194,46 +186,40 @@ public final class MyConjugateList<E> implements List<E> {
     }
 
     /**
-     * @throws UnsupportedOperationException when trying to set (change) the element
+     * @throws IllegalArgumentException when trying to set (change) the element
      * <p>from unmodifiable part {@link #unmodifiableList} of the list
      */
     public E set(int index, E element) {
         rangeCheck(index);
         if (index >= unmodifiableList.size()) {
-            E oldValue = modifiableList.get(index - unmodifiableList.size());
-            modifiableList.set(index - unmodifiableList.size(), element);
-            return oldValue;
+            return modifiableList.set(index - unmodifiableList.size(), element);
         }
-        throw new UnsupportedOperationException(cannotChangeUnmodifiablePartOfList());
+        throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
     }
 
     /**
-     * @throws UnsupportedOperationException when trying to add the element
+     * @throws IllegalArgumentException when trying to add the element
      * <p>to unmodifiable part {@link #unmodifiableList} of the list
      */
     public void add(int index, E element) {
         rangeCheckForAdd(index);
         if (index >= unmodifiableList.size()) {
             modifiableList.add(index - unmodifiableList.size(), element);
-            size++;
         } else {
-            throw new UnsupportedOperationException(cannotChangeUnmodifiablePartOfList());
+            throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
         }
     }
 
     /**
-     * @throws UnsupportedOperationException when trying to remove the element
+     * @throws IllegalArgumentException when trying to remove the element
      * <p>from unmodifiable part {@link #unmodifiableList} of the list
      */
     public E remove(int index) {
         rangeCheck(index);
         if (index >= unmodifiableList.size()) {
-            E oldValue = modifiableList.get(index - unmodifiableList.size());
-            modifiableList.remove(index - unmodifiableList.size());
-            size--;
-            return oldValue;
+            return modifiableList.remove(index - unmodifiableList.size());
         }
-        throw new UnsupportedOperationException(cannotChangeUnmodifiablePartOfList());
+        throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
     }
 
     @Override
@@ -284,20 +270,20 @@ public final class MyConjugateList<E> implements List<E> {
     }
 
     private void rangeCheck(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= size()) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
         }
     }
 
     /** unlike {@link #rangeCheck}, when adding, we can add element by last index + 1 */
     private void rangeCheckForAdd(int index) {
-        if (index < 0 || index > size) {
+        if (index < 0 || index > size()) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
         }
     }
 
     private String outOfBoundsMsg(int index) {
-        return "Index: " + index + ", Size: " + size;
+        return "Index: " + index + ", Size: " + size();
     }
 
     private String cannotChangeUnmodifiablePartOfList() {
