@@ -229,11 +229,8 @@ class MyConjugateListTest {
 
     @Test
     void get_shouldThrowException() {
-        Exception exception1 = assertThrows(IndexOutOfBoundsException.class, () -> list.get(-1));
-        Exception exception2 = assertThrows(IndexOutOfBoundsException.class, () -> list.get(6));
-
-        assertEquals("Index: -1, Size: 6", exception1.getMessage());
-        assertEquals("Index: 6, Size: 6", exception2.getMessage());
+        assertThrows(IndexOutOfBoundsException.class, () -> list.get(-1));
+        assertThrows(IndexOutOfBoundsException.class, () -> list.get(6));
     }
 
     @Test

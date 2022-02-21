@@ -148,7 +148,6 @@ public class MyConjugateList<E> implements List<E> {
      */
     @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
-        rangeCheckForAdd(index);
         if (isIndexFromModifiableList(index)) {
             return modifiableList.addAll(calculateModifiableListIndex(index), collection);
         }
@@ -190,7 +189,6 @@ public class MyConjugateList<E> implements List<E> {
     }
 
     public E get(int index) {
-        rangeCheck(index);
         if (isIndexFromModifiableList(index)) {
             return modifiableList.get(calculateModifiableListIndex(index));
         }
@@ -202,7 +200,6 @@ public class MyConjugateList<E> implements List<E> {
      * <p>from unmodifiable part {@link #unmodifiableList} of the list
      */
     public E set(int index, E element) {
-        rangeCheck(index);
         if (isIndexFromModifiableList(index)) {
             return modifiableList.set(calculateModifiableListIndex(index), element);
         }
@@ -214,7 +211,6 @@ public class MyConjugateList<E> implements List<E> {
      * <p>to unmodifiable part {@link #unmodifiableList} of the list
      */
     public void add(int index, E element) {
-        rangeCheckForAdd(index);
         if (isIndexFromModifiableList(index)) {
             modifiableList.add(calculateModifiableListIndex(index), element);
         } else {
@@ -227,7 +223,6 @@ public class MyConjugateList<E> implements List<E> {
      * <p>from unmodifiable part {@link #unmodifiableList} of the list
      */
     public E remove(int index) {
-        rangeCheck(index);
         if (isIndexFromModifiableList(index)) {
             return modifiableList.remove(calculateModifiableListIndex(index));
         }
@@ -283,19 +278,6 @@ public class MyConjugateList<E> implements List<E> {
         throw new UnsupportedOperationException();
     }
 
-    private void rangeCheck(int index) {
-        if (index < 0 || index >= size()) {
-            throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
-        }
-    }
-
-    /** unlike {@link #rangeCheck}, when adding, we can add element by last index + 1 */
-    private void rangeCheckForAdd(int index) {
-        if (index < 0 || index > size()) {
-            throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
-        }
-    }
-
     /** checks the index of this list whether it belongs to a modifiable part (list) or not (to an unmodifiable part) */
     private boolean isIndexFromModifiableList(int index) {
         return index >= unmodifiableList.size();
@@ -304,10 +286,6 @@ public class MyConjugateList<E> implements List<E> {
     /** calculate the index for the modifiable part (list) relative to this list */
     private int calculateModifiableListIndex(int index) {
         return index - unmodifiableList.size();
-    }
-
-    private String outOfBoundsMsg(int index) {
-        return "Index: " + index + ", Size: " + size();
     }
 
     private String cannotChangeUnmodifiablePartOfList() {
