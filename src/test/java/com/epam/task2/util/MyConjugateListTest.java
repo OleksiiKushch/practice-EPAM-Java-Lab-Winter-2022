@@ -27,6 +27,15 @@ class MyConjugateListTest {
     }
 
     @Test
+    public void constructor_ifArgumentIsNull() {
+        assertThrows(IllegalArgumentException.class, () -> new MyConjugateList<>(
+                null, new ArrayList<>(Arrays.asList(1, 2, 3))));
+        assertThrows(IllegalArgumentException.class, () -> new MyConjugateList<>(
+                new ArrayList<>(Arrays.asList(1, 2, 3)), null));
+        assertThrows(IllegalArgumentException.class, () -> new MyConjugateList<>(null, null));
+    }
+
+    @Test
     void size() {
         assertEquals(6, list.size());
     }
@@ -108,13 +117,30 @@ class MyConjugateListTest {
 
     @Test
     void toArrayWithArrayParameter() {
-        assertEquals("[1, 2, 3, 4, 5, 6]", Arrays.toString(list.toArray(new Number[] {7, 8, 9})));
-        assertEquals("[1, 2, 3, 4, 5, 6]", Arrays.toString(list.toArray(new Number[] {7, 8, 9, 10 , 11, 12})));
-        assertEquals("[1, 2, 3, 4, 5, 6, null]", Arrays.toString(list.toArray(new Number[] {7, 8, 9, 10 , 11, 12, 13})));
+        assertEquals("[1, 2, 3, 4, 5, 6]", Arrays.toString(list.toArray(new Integer[] {7, 8, 9})));
+        assertEquals("[1, 2, 3, 4, 5, 6]", Arrays.toString(list.toArray(new Integer[] {7, 8, 9, 10 , 11, 12})));
+        assertEquals("[1, 2, 3, 4, 5, 6, null]", Arrays.toString(list.toArray(new Integer[] {7, 8, 9, 10 , 11, 12, 13})));
         assertEquals("[1, 2, 3, 4, 5, 6, null, 14, 15]",
-                Arrays.toString(list.toArray(new Number[] {7, 8, 9, 10, 11, 12, 13, 14, 15})));
+                Arrays.toString(list.toArray(new Integer[] {7, 8, 9, 10, 11, 12, 13, 14, 15})));
     }
 
+    @Test
+    void toArrayWithArrayParameter_ifListIsEmpty() {
+        List<Integer> testList = new MyConjugateList<>(new ArrayList<>(), new ArrayList<>());
+        assertEquals("[null, 2, 3]", Arrays.toString(testList.toArray(new Integer[] {1, 2, 3})));
+        assertEquals("[]", Arrays.toString(testList.toArray(new Integer[0])));
+    }
+
+    @Test
+    void toArrayWithArrayParameter_ifCast() {
+        List<Integer> testList = new MyConjugateList<>(new ArrayList<>(List.of(1)), new ArrayList<>(List.of(2)));
+        assertEquals("[1, 2, null, 4]", Arrays.toString(testList.toArray(new Number[] {1, 2, 3, 4})));
+        assertEquals("[1, 2]", Arrays.toString(testList.toArray(new Number[0])));
+
+        List<Number> testList2 = new MyConjugateList<>(new ArrayList<>(List.of(1)), new ArrayList<>(List.of(2)));
+        assertEquals("[1, 2, null, 4]", Arrays.toString(testList2.toArray(new Integer[] {1, 2, 3, 4})));
+        assertEquals("[1, 2]", Arrays.toString(testList2.toArray(new Integer[0])));
+    }
 
     @Test
     void add() {

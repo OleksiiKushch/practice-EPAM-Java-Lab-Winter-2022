@@ -1,5 +1,6 @@
 package com.epam.task2.util;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -24,8 +25,10 @@ public class MyConjugateList<E> implements List<E> {
     private final List<E> unmodifiableList;
     private List<E> modifiableList;
 
-    public MyConjugateList(List<E> unmodifiableList,
-                           List<E> modifiableList) {
+    public MyConjugateList(List<E> unmodifiableList, List<E> modifiableList) {
+        if (unmodifiableList == null || modifiableList == null) {
+            throw new IllegalArgumentException("Unmodifiable or modifiable part of list cannot be null");
+        }
         this.unmodifiableList = unmodifiableList;
         this.modifiableList = modifiableList;
     }
@@ -34,13 +37,15 @@ public class MyConjugateList<E> implements List<E> {
         return unmodifiableList.size() + modifiableList.size();
     }
 
+    private static final int EMPTY_LIST_SIZE = 0;
+
     public boolean isEmpty() {
-        return size() == 0;
+        return size() == EMPTY_LIST_SIZE;
     }
 
     @Override
     public boolean contains(Object object) {
-        return indexOf(object) >= 0;
+        return indexOf(object) != INDEX_IF_NO_SUCH_ELEMENT;
     }
 
     public Iterator<E> iterator() {
@@ -68,19 +73,26 @@ public class MyConjugateList<E> implements List<E> {
         Iterator<E> iterator = iterator();
         int i = 0;
         while (iterator.hasNext()) {
-            result[i++] =  iterator.next();
+            result[i++] = iterator.next();
         }
         return result;
     }
 
+    /**
+     * @throws NullPointerException if the specified array is null
+     */
     @Override
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] array) {
-        if (array.length < size()) {
-            return (T[]) toArray();
-        }
         Iterator<E> iterator = iterator();
         int i = 0;
+        if (array.length < size()) {
+            T[] result = (T[]) Array.newInstance(array.getClass().getComponentType(), size());
+            while (iterator.hasNext()) {
+                result[i++] = (T) iterator.next();
+            }
+            return result;
+        }
         while (iterator.hasNext()) {
             array[i++] = (T) iterator.next();
         }
@@ -137,8 +149,8 @@ public class MyConjugateList<E> implements List<E> {
     @Override
     public boolean addAll(int index, Collection<? extends E> collection) {
         rangeCheckForAdd(index);
-        if (index >= unmodifiableList.size()) {
-            return modifiableList.addAll(index - unmodifiableList.size(), collection);
+        if (isIndexFromModifiableList(index)) {
+            return modifiableList.addAll(calculateModifiableListIndex(index), collection);
         }
         throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
     }
@@ -179,8 +191,8 @@ public class MyConjugateList<E> implements List<E> {
 
     public E get(int index) {
         rangeCheck(index);
-        if (index >= unmodifiableList.size()) {
-            return modifiableList.get(index - unmodifiableList.size());
+        if (isIndexFromModifiableList(index)) {
+            return modifiableList.get(calculateModifiableListIndex(index));
         }
         return unmodifiableList.get(index);
     }
@@ -191,8 +203,8 @@ public class MyConjugateList<E> implements List<E> {
      */
     public E set(int index, E element) {
         rangeCheck(index);
-        if (index >= unmodifiableList.size()) {
-            return modifiableList.set(index - unmodifiableList.size(), element);
+        if (isIndexFromModifiableList(index)) {
+            return modifiableList.set(calculateModifiableListIndex(index), element);
         }
         throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
     }
@@ -203,8 +215,8 @@ public class MyConjugateList<E> implements List<E> {
      */
     public void add(int index, E element) {
         rangeCheckForAdd(index);
-        if (index >= unmodifiableList.size()) {
-            modifiableList.add(index - unmodifiableList.size(), element);
+        if (isIndexFromModifiableList(index)) {
+            modifiableList.add(calculateModifiableListIndex(index), element);
         } else {
             throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
         }
@@ -216,18 +228,20 @@ public class MyConjugateList<E> implements List<E> {
      */
     public E remove(int index) {
         rangeCheck(index);
-        if (index >= unmodifiableList.size()) {
-            return modifiableList.remove(index - unmodifiableList.size());
+        if (isIndexFromModifiableList(index)) {
+            return modifiableList.remove(calculateModifiableListIndex(index));
         }
         throw new IllegalArgumentException(cannotChangeUnmodifiablePartOfList());
     }
 
+    private static final int INDEX_IF_NO_SUCH_ELEMENT = -1;
+
     @Override
     public int indexOf(Object object) {
         int result = unmodifiableList.indexOf(object);
-        if (result == -1) {
+        if (result == INDEX_IF_NO_SUCH_ELEMENT) {
             result = modifiableList.indexOf(object);
-            if (result == -1) {
+            if (result == INDEX_IF_NO_SUCH_ELEMENT) {
                 return result;
             } else {
                 return result + unmodifiableList.size();
@@ -239,7 +253,7 @@ public class MyConjugateList<E> implements List<E> {
     @Override
     public int lastIndexOf(Object object) {
         int result = modifiableList.lastIndexOf(object);
-        if (result == -1) {
+        if (result == INDEX_IF_NO_SUCH_ELEMENT) {
             return unmodifiableList.lastIndexOf(object);
         }
         return result + unmodifiableList.size();
@@ -280,6 +294,16 @@ public class MyConjugateList<E> implements List<E> {
         if (index < 0 || index > size()) {
             throw new IndexOutOfBoundsException(outOfBoundsMsg(index));
         }
+    }
+
+    /** checks the index of this list whether it belongs to a modifiable part (list) or not (to an unmodifiable part) */
+    private boolean isIndexFromModifiableList(int index) {
+        return index >= unmodifiableList.size();
+    }
+
+    /** calculate the index for the modifiable part (list) relative to this list */
+    private int calculateModifiableListIndex(int index) {
+        return index - unmodifiableList.size();
     }
 
     private String outOfBoundsMsg(int index) {
