@@ -12,27 +12,20 @@ import java.util.Objects;
 public class EReader extends Commodity {
     private static final long serialVersionUID = -5185587079239564593L;
 
-    /**
-     * the model concrete e-reader (title name)
-     */
+    /** the model concrete e-reader (title name) */
     private String model;
-    /**
-     * the display size concrete e-reader (measured in inches)
-     */
+    /** the display size concrete e-reader (measured in inches) */
     private float displaySize;
-    /**
-     * the on-device (e-reader) storage (measured in GB)
-     */
+    /** the on-device (e-reader) storage (measured in GB) */
     private int storageGB;
-    /**
-     * the display resolution concrete e-reader (measured in ppi)
-     */
+    /** the display resolution concrete e-reader (measured in ppi) */
     private int resolutionPPI;
 
     public EReader() {}
 
-    public EReader(Long id, BigDecimal price, String model, float displaySize, int storageGB, int resolutionPPI) {
-        super(id, price);
+    public EReader(Long id, String frontTitle, BigDecimal price,
+                   String model, float displaySize, int storageGB, int resolutionPPI) {
+        super(id, frontTitle, price);
         this.model = model;
         this.displaySize = displaySize;
         this.storageGB = storageGB;
@@ -72,11 +65,11 @@ public class EReader extends Commodity {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof EReader)) return false;
-        if (!super.equals(o)) return false;
-        EReader eReader = (EReader) o;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof EReader)) return false;
+        if (!super.equals(object)) return false;
+        EReader eReader = (EReader) object;
         return Float.compare(eReader.displaySize, displaySize) == 0 &&
                 storageGB == eReader.storageGB &&
                 resolutionPPI == eReader.resolutionPPI &&
@@ -92,6 +85,7 @@ public class EReader extends Commodity {
     public String toString() {
         return "EReader{" +
                 "id=" + getId() +
+                ", frontTitle='" + getFrontTitle() + '\'' +
                 ", price=" + getPrice() +
                 ", model='" + model + '\'' +
                 ", displaySize=" + displaySize +
