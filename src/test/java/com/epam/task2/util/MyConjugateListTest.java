@@ -28,11 +28,11 @@ class MyConjugateListTest {
 
     @Test
     public void constructor_ifArgumentIsNull() {
-        assertThrows(IllegalArgumentException.class, () -> new MyConjugateList<>(
+        assertThrows(NullPointerException.class, () -> new MyConjugateList<>(
                 null, new ArrayList<>(Arrays.asList(1, 2, 3))));
-        assertThrows(IllegalArgumentException.class, () -> new MyConjugateList<>(
+        assertThrows(NullPointerException.class, () -> new MyConjugateList<>(
                 new ArrayList<>(Arrays.asList(1, 2, 3)), null));
-        assertThrows(IllegalArgumentException.class, () -> new MyConjugateList<>(null, null));
+        assertThrows(NullPointerException.class, () -> new MyConjugateList<>(null, null));
     }
 
     @Test

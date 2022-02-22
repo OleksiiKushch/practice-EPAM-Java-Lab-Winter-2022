@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * This list implementation represents two orderly lists (parts), the first is unmodifiable and the second is modifiable.
@@ -26,11 +27,8 @@ public class MyConjugateList<E> implements List<E> {
     private List<E> modifiableList;
 
     public MyConjugateList(List<E> unmodifiableList, List<E> modifiableList) {
-        if (unmodifiableList == null || modifiableList == null) {
-            throw new IllegalArgumentException("Unmodifiable or modifiable part of list cannot be null");
-        }
-        this.unmodifiableList = unmodifiableList;
-        this.modifiableList = modifiableList;
+        this.unmodifiableList = Objects.requireNonNull(unmodifiableList);
+        this.modifiableList = Objects.requireNonNull(modifiableList);
     }
 
     public int size() {
