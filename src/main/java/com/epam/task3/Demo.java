@@ -19,7 +19,7 @@ import java.util.Map;
 public class Demo {
     public static void main(String[] args)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        List<Commodity> testList = new ArrayList<>(Arrays.asList(
+        List<Commodity> testData = new ArrayList<>(Arrays.asList(
                 new Book(1L, "Verity (Colleen H.)", new BigDecimal("10.99"),
                         "Verity", "Colleen Hoover", "English", 239),
                 new Book(2L, "Abandoned in Death (Robb J.D.)", new BigDecimal("14.99"),
@@ -28,10 +28,10 @@ public class Demo {
                         "Ugly Love", "Colleen Hoover", "English", 415,
                         12863, 612, "Jim Dale")));
 
-        test(new HashMap<>(), StrKeyByLength.class, testList);
-        test(new HashMap<>(), StrKeyBySumChar.class, testList);
-        test(new LinkedHashMap<>(), StrKeyByLength.class, testList);
-        test(new LinkedHashMap<>(), StrKeyBySumChar.class, testList);
+        test(new HashMap<>(), StrKeyByLength.class, testData);
+        test(new HashMap<>(), StrKeyBySumChar.class, testData);
+        test(new LinkedHashMap<>(), StrKeyByLength.class, testData);
+        test(new LinkedHashMap<>(), StrKeyBySumChar.class, testData);
     }
 
     public static void test(Map<StrKey, Commodity> map, Class<? extends StrKey> typeStrKey, List<Commodity> data)
