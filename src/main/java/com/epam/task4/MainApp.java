@@ -8,16 +8,17 @@ public class MainApp {
     private boolean isRunning;
     private final CommandHolder commandHolder = CommandHolder.getInstance();
 
-    private MainApp() {
+    public static final Scanner SCANNER = new Scanner(System.in);
 
+    private MainApp() {
+        // hide
     }
 
     public void run() {
         isRunning = true;
         System.out.println("Enter '--help' to see a list of possible commands, or '--stop' to stop the application.");
-        Scanner scanner = new Scanner(System.in);
         while (isRunning) {
-            String command = scanner.nextLine().trim();
+            String command = SCANNER.nextLine().trim();
             if (command.equals("--help")) {
                 printHelpCommand();
             } else if (commandHolder.isContain(command)) {
@@ -29,6 +30,7 @@ public class MainApp {
                 System.out.println("Unsupported command");
             }
         }
+        SCANNER.close();
     }
 
     public void stop() {

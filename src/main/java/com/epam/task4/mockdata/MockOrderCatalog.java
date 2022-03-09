@@ -44,7 +44,7 @@ public class MockOrderCatalog {
     }
 
     public void printOrderList() {
-        orderCatalog.entrySet().stream().forEach(getConsumeOrder());
+        orderCatalog.entrySet().forEach(getConsumeOrder());
     }
 
     public static Consumer<Map.Entry<LocalDateTime, Map<Long, Integer>>> getConsumeOrder() {

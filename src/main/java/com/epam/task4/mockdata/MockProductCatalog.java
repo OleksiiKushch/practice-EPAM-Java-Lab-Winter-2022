@@ -1,14 +1,13 @@
 package com.epam.task4.mockdata;
 
+import com.epam.task1.entity.Audiobook;
+import com.epam.task1.entity.Book;
+import com.epam.task1.entity.Commodity;
+import com.epam.task1.entity.EReader;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
-
-import com.epam.task1.entity.Commodity;
-
 import java.util.List;
-import com.epam.task1.entity.Book;
-import com.epam.task1.entity.Audiobook;
-import com.epam.task1.entity.EReader;
 
 public class MockProductCatalog {
     private static MockProductCatalog instance;
@@ -50,5 +49,9 @@ public class MockProductCatalog {
         productList.forEach(commodity -> System.out.println("(id: " + commodity.getId() + ") "
                 + commodity.getClass().getSimpleName() + ": " + commodity.getFrontTitle() + ", price: "
                 + commodity.getPrice()));
+    }
+
+    public boolean isContainsProduct(Long id) {
+        return productList.stream().anyMatch(e -> e.getId().equals(id));
     }
 }
