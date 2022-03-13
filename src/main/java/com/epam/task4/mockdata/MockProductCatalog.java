@@ -9,6 +9,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class mock stub (imitation "data store") for store "product" (commodity) (some abstract entity ({@link Commodity})).
+ * {@link ArrayList} is used to store products ({@link #productList}), for data elements used are objects concrete
+ * implementation classes of the abstract class {@link Commodity}.
+ *
+ * @author Oleksii Kushch
+ */
 public class MockProductCatalog {
     private static MockProductCatalog instance;
 
@@ -19,6 +26,9 @@ public class MockProductCatalog {
         return instance;
     }
 
+    /**
+     * A container that stores objects concrete implementation classes of the abstract class {@link Commodity}.
+     */
     private final List<Commodity> productList  = new ArrayList<>();
 
     private MockProductCatalog() {
@@ -45,12 +55,21 @@ public class MockProductCatalog {
         return productList;
     }
 
+    /**
+     * Print to console all products ({@link Commodity}) from product catalog {@link #productList}
+     * to specific format.
+     */
     public void printProductList() {
         productList.forEach(commodity -> System.out.println("(id: " + commodity.getId() + ") "
                 + commodity.getClass().getSimpleName() + ": " + commodity.getFrontTitle() + ", price: "
                 + commodity.getPrice()));
     }
 
+    /**
+     * @param id product id ({@link Commodity})
+     * @return true if products with this id is exists to product catalog ({@link #productList}),
+     * false if is not exists
+     */
     public boolean isContainsProduct(Long id) {
         return productList.stream().anyMatch(e -> e.getId().equals(id));
     }

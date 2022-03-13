@@ -7,6 +7,9 @@ import com.epam.task4.util.Cart;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class ViewLatestProductsFromCartCommand implements Command {
     public static final int QUANTITY_LAST_PRODUCTS = 5;
 

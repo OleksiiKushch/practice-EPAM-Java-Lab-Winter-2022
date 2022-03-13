@@ -6,6 +6,9 @@ import com.epam.task4.controller.Command;
 
 import java.util.stream.Collectors;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class ViewCartCommand implements Command {
     @Override
     public void execute() {
@@ -19,6 +22,6 @@ public class ViewCartCommand implements Command {
 
     @Override
     public String getDescription() {
-        return "View the contents of the cart";
+        return "View the contents of the cart with its total sum";
     }
 }

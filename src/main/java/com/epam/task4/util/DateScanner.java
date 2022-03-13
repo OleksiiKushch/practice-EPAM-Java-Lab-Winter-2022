@@ -6,11 +6,21 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 
 /**
- * Class for reading data about dates from the console with built-in validation
- *
+ * Class for reading data about dates from the console with built-in validation.
+ * <p>
+ * Are directly called in the {@code execute()} method in the following classes:
+ * @see com.epam.task4.controller.command.ViewOrderByNearestDateCommand
+ * @see com.epam.task4.controller.command.ViewOrderCatalogFromToCommand
  * @author Oleksii Kushch
  */
 public class DateScanner {
+    /**
+     * Reading data (year) from the console with built-in validation.
+     * <p>
+     * Noted: return {@code null} if needed abort the entire operation
+     * (method execute in the corresponding command classes, see the detailed description of this class)
+     * @return year or {@code null} if abort the entire operation
+     */
     public static Integer inputYear() {
         int year = 1;
         boolean isYearSet = false;
@@ -30,6 +40,13 @@ public class DateScanner {
         return year;
     }
 
+    /**
+     * Reading data (month (month number)) from the console with built-in validation.
+     * <p>
+     * Noted: return {@code null} if needed abort the entire operation
+     * (method execute in the corresponding command classes, see the detailed description of this class)
+     * @return month (month number) or {@code null} if abort the entire operation
+     */
     public static Integer inputMonth(int year) {
         int month = 1;
         boolean isMonthSet = false;
@@ -40,7 +57,7 @@ public class DateScanner {
             }
             try {
                 month = Integer.parseInt(stringMonth);
-                if (isValidMonth(year, month)) {
+                if (isValidMonth(month)) {
                     isMonthSet = true;
                 }
             } catch(NumberFormatException exception) {
@@ -50,6 +67,13 @@ public class DateScanner {
         return month;
     }
 
+    /**
+     * Reading data (day) from the console with built-in validation.
+     * <p>
+     * Noted: return {@code null} if needed abort the entire operation
+     * (method execute in the corresponding command classes, see the detailed description of this class)
+     * @return day or {@code null} if abort the entire operation
+     */
     public static Integer inputDay(int year, int month) {
         int day = 1;
         boolean isDaySet = false;
@@ -70,9 +94,14 @@ public class DateScanner {
         return day;
     }
 
-    private static boolean isValidMonth(int year, int month) {
+    /**
+     * Validates the entered month.
+     * @param month month (month number) in integer format
+     * @return true if month is valid, false if month is invalid
+     */
+    private static boolean isValidMonth(int month) {
         try {
-            LocalDate.of(year, month, 1);
+            LocalDate.of(1970, month, 1);
         } catch (DateTimeException exception) {
             System.out.println("Invalid value for month of year (valid values 1 - 12): " + month + ", try again:");
             return false;
@@ -80,6 +109,13 @@ public class DateScanner {
         return true;
     }
 
+    /**
+     * Based on the entered year and month, validates the entered day accordingly.
+     * @param year year in integer format
+     * @param month month (month number) in integer format
+     * @param day day in integer format
+     * @return true if day is valid, false if day is invalid
+     */
     private static boolean isValidDay(int year, int month, int day) {
         try {
             LocalDate.of(year, month, day);

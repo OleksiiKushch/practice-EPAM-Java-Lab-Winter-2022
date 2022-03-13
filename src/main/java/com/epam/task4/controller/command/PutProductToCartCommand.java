@@ -5,10 +5,13 @@ import com.epam.task4.controller.Command;
 import com.epam.task4.mockdata.MockProductCatalog;
 import com.epam.task4.util.Cart;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class PutProductToCartCommand implements Command {
     @Override
     public void execute() {
-        System.out.println("If you want to stop the operation type '--back' or '-b'");
+        System.out.println("If you want to stop (abort) the operation type '--back' or '-b'");
         Long id = inputId();
         if (id == null) { return; }   // abort the entire operation
         Integer amount = inputAmount();
@@ -23,6 +26,12 @@ public class PutProductToCartCommand implements Command {
         return "Add product to cart";
     }
 
+    /**
+     * Reading data (product id) from the console with built-in validation.
+     * <p>
+     * Noted: return {@code null} if needed abort the entire operation (method {@link #execute()})
+     * @return product ({@link com.epam.task1.entity.Commodity}) id<br>or {@code null} if abort the entire operation
+     */
     private Long inputId() {
         System.out.println("Please, enter id product which do you want add to cart:");
         Long id = null;
@@ -48,6 +57,12 @@ public class PutProductToCartCommand implements Command {
         return id;
     }
 
+    /**
+     * Reading data (amount of products) from the console with built-in validation.
+     * <p>
+     * Noted: return {@code null} if needed abort the entire operation (method {@link #execute()})
+     * @return amount of products ({@link com.epam.task1.entity.Commodity})<br>or {@code null} if abort the entire operation
+     */
     private Integer inputAmount() {
         System.out.println("Please, enter amount of this product:");
         Integer amount = null;

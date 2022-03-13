@@ -8,10 +8,25 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class ViewOrderByNearestDateCommand implements Command {
+    /**
+     * Noted: The interactive part of the operation execution consists of three parts:
+     * <ul>
+     *     <li> Entering the year from the console
+     *     <li> Entering the month (month number) from the console
+     *     <li> Entering the day from the console
+     * </ul>
+     * On any of these three parts, it is possible to stop execution of all operation (this method execute())
+     * if the corresponding methods for reading data from the console ({@link DateScanner#inputYear}, {@link DateScanner#inputMonth},
+     * {@link DateScanner#inputDay}) return {@code null}.
+     */
     @Override
     public void execute() {
-        System.out.println("If you want to stop the operation type '--back' or '-b'");
+        System.out.println("If you want to stop (abort) the operation type '--back' or '-b'");
+
         System.out.println("Please, enter the nearest date (year):");
         Integer year = DateScanner.inputYear();
         if (year == null) { return; }   // abort the entire operation

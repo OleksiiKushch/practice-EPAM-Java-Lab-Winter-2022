@@ -3,6 +3,9 @@ package com.epam.task4.controller.command;
 import com.epam.task4.mockdata.MockProductCatalog;
 import com.epam.task4.controller.Command;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class ViewProductCatalogCommand implements Command {
     @Override
     public void execute() {
