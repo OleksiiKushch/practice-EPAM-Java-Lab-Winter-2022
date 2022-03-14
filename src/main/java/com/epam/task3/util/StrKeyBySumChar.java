@@ -7,16 +7,16 @@ package com.epam.task3.util;
  * @author Oleksii Kushch
  */
 public class StrKeyBySumChar extends StrKey {
+    /** Quantity first char of string key for generate hashcode */
+    private static final int QUANTITY_FIRST_CHAR_FOR_HASHCODE = 4;
+
     public StrKeyBySumChar(String key) {
         super(key);
     }
 
-    /** Quantity first char of string key for generate hashcode */
-    private static final int QUANTITY_FIRST_CHAR_FOR_HASHCODE = 4;
-
     /** hashcode equals sum of the first {@link #QUANTITY_FIRST_CHAR_FOR_HASHCODE} characters of the string key */
     @Override
     public int hashCode() {
-        return getKey() != null ? getKey().chars().limit(QUANTITY_FIRST_CHAR_FOR_HASHCODE).sum() : 0;
+        return getKey() != null ? getKey().chars().limit(QUANTITY_FIRST_CHAR_FOR_HASHCODE).sum() : HASHCODE_FOR_NULL;
     }
 }

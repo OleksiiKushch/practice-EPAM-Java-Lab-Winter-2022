@@ -14,6 +14,6 @@ public class StrKeyByLength extends StrKey {
     /** hashcode equals length of the string key */
     @Override
     public int hashCode() {
-        return getKey() != null ? getKey().length() : 0;
+        return getKey() != null ? getKey().length() : HASHCODE_FOR_NULL;
     }
 }

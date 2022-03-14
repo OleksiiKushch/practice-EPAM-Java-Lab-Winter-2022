@@ -16,8 +16,14 @@ class MyUniqueElementsListTest {
 
     @BeforeEach
     void setUp() {
-        list = new MyUniqueElementsList<>();
-        list.addAll(Arrays.asList(1, 2, 3));
+        list = new MyUniqueElementsList<>(Arrays.asList(1, 2, 3));
+    }
+
+    @Test
+    void constructorWithParamCollection_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> new MyUniqueElementsList<>(Arrays.asList(1, 2, 2)));
+
+        assertThrows(NullPointerException.class, () -> new MyUniqueElementsList<>(null));
     }
 
     @Test
@@ -61,6 +67,9 @@ class MyUniqueElementsListTest {
         assertTrue(list.addAll(Arrays.asList(99, null)));
         assertThrows(IllegalArgumentException.class, () -> list.addAll(Arrays.asList(100, null)));
 
+        assertThrows(IllegalArgumentException.class, () -> list.addAll(Arrays.asList(4, 5, 5)));
+        assertThrows(IllegalArgumentException.class, () -> list.addAll(Arrays.asList(4, null, null)));
+
         assertThrows(NullPointerException.class, () -> list.addAll(null));
     }
 
@@ -79,5 +88,17 @@ class MyUniqueElementsListTest {
 
         assertThrows(NullPointerException.class, () -> list.addAll(0, null));
         assertThrows(IndexOutOfBoundsException.class, () -> list.addAll(-1, new ArrayList<>()));
+    }
+
+    @Test
+    void isUniqueElementsCollection() {
+        assertTrue(MyUniqueElementsList.isUniqueElementsCollection(Arrays.asList(1, 2, 3)));
+        assertFalse(MyUniqueElementsList.isUniqueElementsCollection(Arrays.asList(1, 2, 2)));
+        assertFalse(MyUniqueElementsList.isUniqueElementsCollection(Arrays.asList(null, 2, null)));
+    }
+
+    @Test
+    void isUniqueElementsCollection_shouldThrowException() {
+        assertThrows(NullPointerException.class, () -> MyUniqueElementsList.isUniqueElementsCollection(null));
     }
 }
