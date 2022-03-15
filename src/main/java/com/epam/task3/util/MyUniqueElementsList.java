@@ -3,6 +3,7 @@ package com.epam.task3.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.function.UnaryOperator;
 
 /**
  * Extends variant of {@link ArrayList} which stores only one instance of each object.
@@ -100,6 +101,18 @@ public class MyUniqueElementsList<E> extends ArrayList<E> {
     public boolean addAll(int index, Collection<? extends E> collection) {
         checkUniquenessCollectionForAddAll(collection);
         return super.addAll(index, collection);
+    }
+
+    /**
+     * @throws IllegalArgumentException if the resulting list does not have unique elements
+     * @throws NullPointerException     if operator is null
+     */
+    @Override
+    public void replaceAll(UnaryOperator<E> operator) {
+        super.replaceAll(operator);
+        if (!isUniqueElementsCollection(this)) {
+            throw new IllegalArgumentException(MSG_CANT_BE_DUPLICATES);
+        }
     }
 
     /**

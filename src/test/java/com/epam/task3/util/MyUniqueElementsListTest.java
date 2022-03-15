@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MyUniqueElementsListTest {
 
@@ -107,6 +106,19 @@ class MyUniqueElementsListTest {
 
         assertThrows(NullPointerException.class, () -> list.addAll(0, null));
         assertThrows(IndexOutOfBoundsException.class, () -> list.addAll(-1, new ArrayList<>()));
+    }
+
+    @Test
+    public void replaceAll() {
+        list.replaceAll(element -> element * 2);
+        assertEquals("[2, 4, 6]", list.toString());
+    }
+
+    @Test
+    public void replaceAll_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.replaceAll(element -> element / 2));
+
+        assertThrows(NullPointerException.class, () -> list.replaceAll(null));
     }
 
     @Test
