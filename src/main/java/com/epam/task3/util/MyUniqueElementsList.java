@@ -2,6 +2,7 @@ package com.epam.task3.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Extends variant of {@link ArrayList} which stores only one instance of each object.
@@ -46,6 +47,21 @@ public class MyUniqueElementsList<E> extends ArrayList<E> {
             throw new IllegalArgumentException(MSG_CANT_BE_DUPLICATES);
         }
         return collection;
+    }
+
+    /**
+     * Noted: The inserted element can be contained in this list, if only its index matches the insertion index
+     * of the new element.
+     * @throws IllegalArgumentException if the element is not unique to this list
+     */
+    @Override
+    public E set(int index, E element) {
+        if (!contains(element) ||
+                indexOf(element) == index && stream().filter(e -> Objects.equals(e, element)).count() == 1) {
+            return super.set(index, element);
+        } else {
+            throw new IllegalArgumentException(MSG_CANT_BE_DUPLICATES);
+        }
     }
 
     /**

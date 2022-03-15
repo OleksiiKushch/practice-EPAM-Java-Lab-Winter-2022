@@ -27,6 +27,25 @@ class MyUniqueElementsListTest {
     }
 
     @Test
+    void set() {
+        assertEquals(3, list.set(2, 4));
+        assertEquals(1, list.set(0, 1));
+
+        list.add(null);
+        assertNull(list.set(3, null));
+    }
+
+    @Test
+    void set_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> list.set(2, 2));
+
+        list.add(null);
+        assertThrows(IllegalArgumentException.class, () -> list.set(0, null));
+
+        assertThrows(IndexOutOfBoundsException.class, () -> list.set(4, 5));
+    }
+
+    @Test
     void add() {
         assertTrue(list.add(4));
         assertEquals("[1, 2, 3, 4]", list.toString());
