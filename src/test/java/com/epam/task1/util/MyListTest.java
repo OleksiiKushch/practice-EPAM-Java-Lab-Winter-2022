@@ -19,9 +19,12 @@ class MyListTest {
     @BeforeEach
     void init() {
         list = new MyList<>();
-        list.add(new Book(1L, new BigDecimal("10.99"), "Verity", "Colleen Hoover", "English", 239));
-        list.add(new Book(2L, new BigDecimal("14.99"), "Abandoned in Death", "J.D. Robb", "English", 615));
-        list.add(new Audiobook(3L, new BigDecimal("9.68"), "Ugly Love", "Colleen Hoover", "English", 415,
+        list.add(new Book(1L, "Verity (Colleen H.)", new BigDecimal("10.99"),
+                "Verity", "Colleen Hoover", "English", 239));
+        list.add(new Book(2L, "Abandoned in Death (Robb J.D.)", new BigDecimal("14.99"),
+                "Abandoned in Death", "J.D. Robb", "English", 615));
+        list.add(new Audiobook(3L, "Colleen Hoover (Colleen H.)", new BigDecimal("9.68"),
+                "Ugly Love", "Colleen Hoover", "English", 415,
                 12863, 612, "Jim Dale"));
     }
 
@@ -66,7 +69,8 @@ class MyListTest {
 
     @Test
     void remove() {
-        assertTrue(list.remove(new Book(1L, new BigDecimal("10.99"), "Verity", "Colleen Hoover", "English", 239)));
+        assertTrue(list.remove(new Book(1L, "Verity (Colleen H.)", new BigDecimal("10.99"),
+                "Verity", "Colleen Hoover", "English", 239)));
         assertEquals(2, list.size());
 
         assertFalse(list.remove(new Audiobook()));

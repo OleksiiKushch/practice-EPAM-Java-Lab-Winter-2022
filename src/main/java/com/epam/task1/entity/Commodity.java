@@ -13,19 +13,18 @@ import java.util.Objects;
 public abstract class Commodity implements Serializable {
     private static final long serialVersionUID = 5773634382252297178L;
 
-    /**
-     * the identifier concrete commodity (unique value)
-     */
+    /** the identifier concrete commodity (unique value) */
     private Long id;
-    /**
-     * the price concrete commodity (used BigDecimal because need the precision for money values)
-     */
+    /** the front (external) title concrete commodity */
+    private String frontTitle;
+    /** the price concrete commodity (used BigDecimal because need the precision for money values) */
     private BigDecimal price;
 
     public Commodity() {}
 
-    public Commodity(Long id, BigDecimal price) {
+    public Commodity(Long id, String frontTitle, BigDecimal price) {
         this.id = id;
+        this.frontTitle = frontTitle;
         this.price = price;
     }
 
@@ -37,6 +36,14 @@ public abstract class Commodity implements Serializable {
         this.id = id;
     }
 
+    public String getFrontTitle() {
+        return frontTitle;
+    }
+
+    public void setFrontTitle(String frontTitle) {
+        this.frontTitle = frontTitle;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }
@@ -46,23 +53,25 @@ public abstract class Commodity implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Commodity)) return false;
-        Commodity commodity = (Commodity) o;
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Commodity)) return false;
+        Commodity commodity = (Commodity) object;
         return Objects.equals(id, commodity.id) &&
+                Objects.equals(frontTitle, commodity.frontTitle) &&
                 Objects.equals(price, commodity.price);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, price);
+        return Objects.hash(id, frontTitle, price);
     }
 
     @Override
     public String toString() {
         return "Commodity{" +
                 "id=" + id +
+                ", frontTitle='" + frontTitle + '\'' +
                 ", price=" + price +
                 '}';
     }
