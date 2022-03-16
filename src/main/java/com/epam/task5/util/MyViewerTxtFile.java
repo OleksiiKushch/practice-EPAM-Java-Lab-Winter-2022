@@ -20,7 +20,12 @@ public class MyViewerTxtFile {
 
     /** Message notifying about bumping into the edge of the file. */
     private static final String MSG_EDGE_FILE =
-            "**********\nEdge file!\n**********";
+            ConsoleColor.RED + "**********\nEdge file!\n**********" + ConsoleColor.RESET;
+
+    /** A message notifying that the command entered is invalid (incorrect),
+     * (the command entered is not supported by this application). */
+    private static final String MSG_UNSUPPORTED_CMD =
+            ConsoleColor.RED + "********************\nUnsupported command!\n********************" + ConsoleColor.RESET;
 
     public MyViewerTxtFile(String filename) {
         try {
@@ -56,16 +61,19 @@ public class MyViewerTxtFile {
                 }
                 lastLine = iterator.hasNext() ? iterator.next() : MSG_EDGE_FILE;
                 lastCommand = command;
+                System.out.print(lastLine);
             } else if (command.equals("--back") || command.equals("-b")) {
                 if (lastCommand != null && lastLine != null) { // skip first iteration
                     rotationAdjustmentForPrevious(iterator, lastCommand, lastLine);
                 }
                 lastLine = iterator.hasPrevious() ? iterator.previous() : MSG_EDGE_FILE;
                 lastCommand = command;
+                System.out.print(lastLine);
             } else if (command.equals("--stop") || command.equals("-s")) {
                 isRunning = false;
+            } else {
+                System.out.println(MSG_UNSUPPORTED_CMD);
             }
-            System.out.print(lastLine);
         }
         scanner.close();
     }
@@ -133,5 +141,16 @@ public class MyViewerTxtFile {
             }
         }
         scanner.close();
+    }
+
+    public static void main(String[] args) {
+        MyViewerTxtFile fileViewer =
+                new MyViewerTxtFile("src/main/resources/task5_demo_test_data/for_MyViewerTxtFile.txt");
+
+        fileViewer.viewAll();
+
+        // fileViewer.runSimpleViewerEachLine();
+
+        fileViewer.runInteractViewerEachLine();
     }
 }

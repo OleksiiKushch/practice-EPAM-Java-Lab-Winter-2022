@@ -19,7 +19,17 @@ import java.util.Scanner;
 /**
  * An application that executes search files for a specified set of options in a specified directory and subdirectories.
  * As search parameters, use the file name, extension, file size range, file modification date range.
- * Noted: To form a search filter, use the "Chain of Responsibilities" pattern.
+ * Noted: To form a search filter, use the "Chain of Responsibilities" pattern.<br>
+ * The chain of filter links (elements) is as follows:
+ * <ul>
+ *     <li>by file name ({@link FilterByName})
+ *     <li>by file extension ({@link FilterByExtension})
+ *     <li>by file size range ({@link FilterBySize})
+ *     <li>by file modification date range ({@link FilterByLastModifiedDate})
+ * </ul>
+ * Through the implementation of the "chain of responsibility" pattern, this allows you to potentially change the order
+ * of the filters as you like, spending a minimum amount of effort.
+ *
  * @author Oleksii Kushch
  */
 public class MyAppFileSearcher {
@@ -153,5 +163,11 @@ public class MyAppFileSearcher {
 
             filterLayer.linkWith(new FilterByLastModifiedDate(fromDate, toDate));
         }
+    }
+
+    public static void main(String[] args) {
+        MyAppFileSearcher fileSearcher =
+                new MyAppFileSearcher("src/main/resources/task5_demo_test_data");
+        fileSearcher.run();
     }
 }

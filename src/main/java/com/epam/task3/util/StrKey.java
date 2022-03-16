@@ -10,7 +10,7 @@ package com.epam.task3.util;
  * @author Oleksii Kushch
  */
 public class StrKey {
-    public static final int HASHCODE_FOR_NULL = 0;
+    protected static final int HASHCODE_FOR_NULL = 0;
     private final String key;
 
     public StrKey(String key) {
