@@ -29,6 +29,15 @@ public class Audiobook extends Book {
         this.narrator = narrator;
     }
 
+    public Audiobook(Long id, String frontTitle, BigDecimal price, Integer amount,
+                     String title, String author, String language, int numberOfPages,
+                     int sizeMB, int listeningLength, String narrator) {
+        super(id, frontTitle, price, amount, title, author, language, numberOfPages);
+        this.sizeMB = sizeMB;
+        this.listeningLength = listeningLength;
+        this.narrator = narrator;
+    }
+
     public int getSizeMB() {
         return sizeMB;
     }
@@ -75,6 +84,7 @@ public class Audiobook extends Book {
                 "id=" + getId() +
                 ", frontTitle='" + getFrontTitle() + '\'' +
                 ", price=" + getPrice() +
+                ", amount=" + getAmount() +
                 ", title='" + getTitle() + '\'' +
                 ", author='" + getAuthor() + '\'' +
                 ", language='" + getLanguage() + '\'' +

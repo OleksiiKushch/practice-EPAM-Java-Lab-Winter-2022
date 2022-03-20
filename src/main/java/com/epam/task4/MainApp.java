@@ -1,6 +1,8 @@
 package com.epam.task4;
 
-import com.epam.task4.controller.CommandHolder;
+import com.epam.task4.controller.CommandContainer;
+import com.epam.task4.dal.RepositoryFactory;
+import com.epam.task4.dal.impl.mock.MockRepoFactory;
 
 import java.util.Scanner;
 
@@ -10,54 +12,50 @@ import java.util.Scanner;
  * @author Oleksii Kushch
  */
 public class MainApp {
-    private boolean isRunning;
+    private static Scanner scanner;
+    private static boolean isRunning;
 
-    /** initialization application commands */
-    private final CommandHolder commandHolder = CommandHolder.getInstance();
-
-    public static final Scanner SCANNER = new Scanner(System.in);
-
-    private MainApp() {
-        // hide
-    }
+    private static final String MSG_UNSUPPORTED_COMMAND = "Unsupported command";
+    private static final String MSG_WHEN_APP_RUN =
+            "Enter '--help' to see a list of possible commands, or '--stop' to stop the application.";
 
     /** main interact method */
-    public void run() {
-        isRunning = true;
-        System.out.println("Enter '--help' to see a list of possible commands, or '--stop' to stop the application.");
+    public static void run() {
+        initContextApp();
+        System.out.println(MSG_WHEN_APP_RUN);
         while (isRunning) {
-            String command = SCANNER.nextLine().trim();
-            if (command.equals("--help")) {
-                printHelpCommand();
-            } else if (commandHolder.isContain(command)) {
-                commandHolder.getCommandByKey(command).execute();
-            } else if (command.equals("--stop")) {
-                stop();
+            String command = scanner.nextLine().trim();
+            if (CommandContainer.getInstance().isContain(command)) {
+                CommandContainer.getInstance().getCommandByKey(command).execute();
             } else if (command.isBlank()) {
                 // do nothing if the command entered is empty or contains only white space codepoints
                 // was mostly added due to accidental pressing 'Enter'
             } else {
-                System.out.println("Unsupported command");
+                System.out.println(MSG_UNSUPPORTED_COMMAND);
             }
         }
-        SCANNER.close();
+        scanner.close();
     }
 
-    public void stop() {
+    private static void initContextApp() {
+        scanner = new Scanner(System.in);
+        isRunning = true;
+        initDataSource();
+    }
+
+    private static void initDataSource() {
+        RepositoryFactory.setRepositoryFactory(MockRepoFactory.class);
+    }
+
+    public static Scanner getScanner() {
+        return scanner;
+    }
+
+    public static void stop() {
         isRunning = false;
     }
 
     public static void main(String[] args) {
-        MainApp app = new MainApp();
-        app.run();
-    }
-
-    /**
-     * Print description all commands and base command like '--help' and '--stop'.
-     */
-    private void printHelpCommand() {
-        commandHolder.viewDescriptionAllCommands();
-        System.out.println("\n'--help' See a list of possible commands" +
-                            "\n'--stop' Stop the application");
+        MainApp.run();
     }
 }

@@ -11,12 +11,17 @@ import java.util.List;
 
 /**
  * Class mock stub (imitation "data store") for store "product" (commodity) (some abstract entity ({@link Commodity})).
- * {@link ArrayList} is used to store products ({@link #productList}), for data elements used are objects concrete
+ * {@link ArrayList} is used to store products ({@link #productCatalog}), for data elements used are objects concrete
  * implementation classes of the abstract class {@link Commodity}.
  *
  * @author Oleksii Kushch
  */
 public class MockProductCatalog {
+    /**
+     * A container that stores objects concrete implementation classes of the abstract class {@link Commodity}.
+     */
+    private final List<Commodity> productCatalog = new ArrayList<>();
+
     private static MockProductCatalog instance;
 
     public static MockProductCatalog getInstance() {
@@ -26,51 +31,27 @@ public class MockProductCatalog {
         return instance;
     }
 
-    /**
-     * A container that stores objects concrete implementation classes of the abstract class {@link Commodity}.
-     */
-    private final List<Commodity> productList  = new ArrayList<>();
-
     private MockProductCatalog() {
         initProductCatalog();
     }
 
     private void initProductCatalog() {
-        productList.add(new Book(1L, "Verity (Colleen H.)", new BigDecimal("10.99"),
+        productCatalog.add(new Book(1L, "Verity (Colleen H.)", new BigDecimal("10.99"), 100,
                         "Verity", "Colleen Hoover", "English", 239));
-        productList.add(new Book(2L, "Abandoned in Death (J.D. Robb)", new BigDecimal("14.99"),
+        productCatalog.add(new Book(2L, "Abandoned in Death (J.D. Robb)", new BigDecimal("14.99"), 30,
                 "Abandoned in Death", "J.D. Robb", "English", 615));
-        productList.add(new Audiobook(3L, "Ugly Love (Colleen H.)", new BigDecimal("9.68"),
+        productCatalog.add(new Audiobook(3L, "Ugly Love (Colleen H.)", new BigDecimal("9.68"), 45,
                 "Ugly Love", "Colleen Hoover", "English", 415,
                 12863, 612, "Jim Dale"));
-        productList.add(new EReader(4L, "E-Reader12 (GDr-512)", new BigDecimal("28.98"),
+        productCatalog.add(new EReader(4L, "E-Reader12 (GDr-512)", new BigDecimal("28.98"), 70,
                 "GDr-512", 7.2F, 8, 320));
-        productList.add(new EReader(5L, "E-Reader13a+ (GDr-513a)", new BigDecimal("36.68"),
+        productCatalog.add(new EReader(5L, "E-Reader13a+ (GDr-513a)", new BigDecimal("36.68"), 30,
                 "GDr-513a", 8.0F, 8, 360));
-        productList.add(new Book(6L, "Family Money (Chad Z.)", new BigDecimal("4.99"),
+        productCatalog.add(new Book(6L, "Family Money (Chad Z.)", new BigDecimal("4.99"), 10,
                 "Family Money", "Chad Zunker", "English", 239));
     }
 
-    public List<Commodity> getProductList() {
-        return productList;
-    }
-
-    /**
-     * Print to console all products ({@link Commodity}) from product catalog {@link #productList}
-     * to specific format.
-     */
-    public void printProductList() {
-        productList.forEach(commodity -> System.out.println("(id: " + commodity.getId() + ") "
-                + commodity.getClass().getSimpleName() + ": " + commodity.getFrontTitle() + ", price: "
-                + commodity.getPrice()));
-    }
-
-    /**
-     * @param id product id ({@link Commodity})
-     * @return true if products with this id is exists to product catalog ({@link #productList}),
-     * false if is not exists
-     */
-    public boolean isContainsProduct(Long id) {
-        return productList.stream().anyMatch(e -> e.getId().equals(id));
+    public List<Commodity> getProductCatalog() {
+        return productCatalog;
     }
 }

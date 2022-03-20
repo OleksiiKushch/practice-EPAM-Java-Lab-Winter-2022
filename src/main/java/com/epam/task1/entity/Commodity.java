@@ -10,7 +10,7 @@ import java.util.Objects;
  *
  * @author Oleksii Kushch
  */
-public abstract class Commodity implements Serializable {
+public abstract class Commodity implements Cloneable, Serializable {
     private static final long serialVersionUID = 5773634382252297178L;
 
     /** the identifier concrete commodity (unique value) */
@@ -19,6 +19,8 @@ public abstract class Commodity implements Serializable {
     private String frontTitle;
     /** the price concrete commodity (used BigDecimal because need the precision for money values) */
     private BigDecimal price;
+    /** the amount concrete commodity */
+    private Integer amount;
 
     public Commodity() {}
 
@@ -26,6 +28,13 @@ public abstract class Commodity implements Serializable {
         this.id = id;
         this.frontTitle = frontTitle;
         this.price = price;
+    }
+
+    public Commodity(Long id, String frontTitle, BigDecimal price, Integer amount) {
+        this.id = id;
+        this.frontTitle = frontTitle;
+        this.price = price;
+        this.amount = amount;
     }
 
     public Long getId() {
@@ -52,6 +61,14 @@ public abstract class Commodity implements Serializable {
         this.price = price;
     }
 
+    public Integer getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
@@ -59,12 +76,18 @@ public abstract class Commodity implements Serializable {
         Commodity commodity = (Commodity) object;
         return Objects.equals(id, commodity.id) &&
                 Objects.equals(frontTitle, commodity.frontTitle) &&
-                Objects.equals(price, commodity.price);
+                Objects.equals(price, commodity.price) &&
+                Objects.equals(amount, commodity.amount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, frontTitle, price);
+        return Objects.hash(id, frontTitle, price, amount);
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 
     @Override
@@ -73,6 +96,19 @@ public abstract class Commodity implements Serializable {
                 "id=" + id +
                 ", frontTitle='" + frontTitle + '\'' +
                 ", price=" + price +
+                ", amount=" + amount +
                 '}';
+    }
+
+    public String toStringOptional() {
+        return "(id: " + id + ") " +
+                getClass().getSimpleName() + ": " + frontTitle +
+                ", price: " + price +
+                ", amount: " + amount +
+                "; ";
+    }
+
+    public String toStringWithAmount() {
+        return amount + "x - \"" + frontTitle + "\"";
     }
 }

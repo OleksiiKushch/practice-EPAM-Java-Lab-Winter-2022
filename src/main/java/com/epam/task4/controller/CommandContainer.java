@@ -26,47 +26,50 @@ import java.util.stream.Collectors;
  *
  * @author Oleksii Kushch
  */
-public class CommandHolder {
-    private static CommandHolder instance;
+public class CommandContainer {
+    private static CommandContainer instance;
 
-    public static CommandHolder getInstance() {
+    public static CommandContainer getInstance() {
         if (instance == null) {
-            instance = new CommandHolder();
+            instance = new CommandContainer();
         }
         return instance;
     }
 
     private final Map<String, Command> commands = new LinkedHashMap<>();
 
-    private CommandHolder() {
+    private CommandContainer() {
         initCommands();
     }
 
     private void initCommands() {
         // full cast
-        commands.put("--product-list", new ViewProductCatalogCommand());
-        commands.put("--put-to-cart", new PutProductToCartCommand());
-        commands.put("--cart", new ViewCartCommand());
-        commands.put("--checkout", new CheckoutCommand());
-        commands.put("--latest-products", new ViewLatestProductsFromCartCommand());
+        commands.put(ViewProductCatalogCMD.FULL_KEY, new ViewProductCatalogCMD());
+        commands.put(PutProductToCartCMD.FULL_KEY, new PutProductToCartCMD());
+        commands.put(ViewCartCMD.FULL_KEY, new ViewCartCMD());
+        commands.put(CheckoutCMD.FULL_KEY, new CheckoutCMD());
+        commands.put(ViewLatestProductsFromCartCMD.FULL_KEY, new ViewLatestProductsFromCartCMD());
 
-        commands.put("--order-list-from-to", new ViewOrderCatalogFromToCommand());
-        commands.put("--order-list", new ViewOrderCatalogCommand());
-        commands.put("--order-nearest-date", new ViewOrderByNearestDateCommand());
+        commands.put(ViewOrderCatalogFromToCMD.FULL_KEY, new ViewOrderCatalogFromToCMD());
+        commands.put(ViewOrderCatalogCMD.FULL_KEY, new ViewOrderCatalogCMD());
+        commands.put(ViewOrderByNearestDateCMD.FULL_KEY, new ViewOrderByNearestDateCMD());
+
+        commands.put(HelpCMD.FULL_KEY, new HelpCMD());
+        commands.put(StopCMD.FULL_KEY, new StopCMD());
 
         // short cast
-        commands.put("-pl", new ViewProductCatalogCommand());
-        commands.put("-ptc", new PutProductToCartCommand());
-        commands.put("-lp", new ViewLatestProductsFromCartCommand());
+        commands.put(ViewProductCatalogCMD.SHORT_KEY, new ViewProductCatalogCMD());
+        commands.put(PutProductToCartCMD.SHORT_KEY, new PutProductToCartCMD());
+        commands.put(ViewLatestProductsFromCartCMD.SHORT_KEY, new ViewLatestProductsFromCartCMD());
 
-        commands.put("-olft", new ViewOrderCatalogFromToCommand());
-        commands.put("-ol", new ViewOrderCatalogCommand());
-        commands.put("-ond", new ViewOrderByNearestDateCommand());
+        commands.put(ViewOrderCatalogFromToCMD.SHORT_KEY, new ViewOrderCatalogFromToCMD());
+        commands.put(ViewOrderCatalogCMD.SHORT_KEY, new ViewOrderCatalogCMD());
+        commands.put(ViewOrderByNearestDateCMD.SHORT_KEY, new ViewOrderByNearestDateCMD());
     }
 
     /**
      * @param commandKey full or short command cast in string format
-     * @return true if command is exists in this class ({@link CommandHolder}) with this
+     * @return true if command is exists in this class ({@link CommandContainer}) with this
      * string cast (full or short command cast), and false if is not exists
      */
     public boolean isContain(String commandKey) {
@@ -82,7 +85,7 @@ public class CommandHolder {
     }
 
     /**
-     * A method that displays the description of all commands from this class ({@link CommandHolder})
+     * A method that displays the description of all commands from this class ({@link CommandContainer})
      * in the appropriate format: 'full cast command' 'short cast command' command logic description
      * Output commands in sorted order according to the lexicography of the 'full cast command'.
      * <p>

@@ -1,6 +1,8 @@
 package com.epam.task4.util;
 
 import com.epam.task4.MainApp;
+import com.epam.task4.controller.command.ViewOrderByNearestDateCMD;
+import com.epam.task4.controller.command.ViewOrderCatalogFromToCMD;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -9,8 +11,8 @@ import java.time.LocalDate;
  * Class for reading data about dates from the console with built-in validation.
  * <p>
  * Are directly called in the {@code execute()} method in the following classes:
- * @see com.epam.task4.controller.command.ViewOrderByNearestDateCommand
- * @see com.epam.task4.controller.command.ViewOrderCatalogFromToCommand
+ * @see ViewOrderByNearestDateCMD
+ * @see ViewOrderCatalogFromToCMD
  * @author Oleksii Kushch
  */
 public class DateScanner {
@@ -25,7 +27,7 @@ public class DateScanner {
         int year = 1;
         boolean isYearSet = false;
         while (!isYearSet) {
-            String stringYear = MainApp.SCANNER.nextLine();
+            String stringYear = MainApp.getScanner().nextLine();
             if (stringYear.equals("--back") || stringYear.equals("-b")) {
                 return null;     // abort the entire operation
             }
@@ -51,7 +53,7 @@ public class DateScanner {
         int month = 1;
         boolean isMonthSet = false;
         while (!isMonthSet) {
-            String stringMonth = MainApp.SCANNER.nextLine();
+            String stringMonth = MainApp.getScanner().nextLine();
             if (stringMonth.equals("--back") || stringMonth.equals("-b")) {
                 return null;     // abort the entire operation
             }
@@ -78,7 +80,7 @@ public class DateScanner {
         int day = 1;
         boolean isDaySet = false;
         while (!isDaySet) {
-            String stringDay = MainApp.SCANNER.nextLine();
+            String stringDay = MainApp.getScanner().nextLine();
             if (stringDay.equals("--back") || stringDay.equals("-b")) {
                 return null;     // abort the entire operation
             }
