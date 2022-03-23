@@ -108,7 +108,11 @@ public abstract class Commodity implements Cloneable, Serializable {
                 "; ";
     }
 
+    public String toStringWithoutPriceAndAmount() {
+        return "(id: " + id + ") " + getClass().getSimpleName() + ": " + frontTitle;
+    }
+
     public String toStringWithAmount() {
-        return amount + "x - \"" + frontTitle + "\"";
+        return amount + "x - \"" + frontTitle + "\";";
     }
 }

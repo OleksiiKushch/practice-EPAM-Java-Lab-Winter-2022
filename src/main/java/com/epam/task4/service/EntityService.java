@@ -1,11 +1,14 @@
 package com.epam.task4.service;
 
-import com.epam.task4.dal.RepositoryFactory;
-import com.epam.task4.dal.impl.mock.MockRepoFactory;
+import com.epam.task4.repository.factory.RepositoryFactory;
+import com.epam.task4.repository.factory.MockRepoFactory;
 
+/**
+ * @author Oleksii Kushch
+ */
 public interface EntityService {
     default void initRepository() {
-        if (RepositoryFactory.getRepositoryFactoryClass().equals(MockRepoFactory.class)) {
+        if (RepositoryFactory.getRepositoryFactory().getClass() == MockRepoFactory.class) {
             initMockRepository();
         }
     }

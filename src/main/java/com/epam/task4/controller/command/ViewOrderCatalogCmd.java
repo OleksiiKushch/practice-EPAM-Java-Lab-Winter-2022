@@ -2,22 +2,26 @@ package com.epam.task4.controller.command;
 
 import com.epam.task4.controller.Command;
 import com.epam.task4.service.OrderService;
-import com.epam.task4.service.impl.OrderServiceImpl;
 
 /**
  * @author Oleksii Kushch
  */
-public class ViewOrderCatalogCMD implements Command {
+public class ViewOrderCatalogCmd implements Command {
     public static final String FULL_KEY = "--order-list";
     public static final String SHORT_KEY = "-ol";
 
     public static final String DESCRIPTION = "Display a list of orders";
 
+    private final OrderService orderService;
+
+    public ViewOrderCatalogCmd(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
     @Override
     public void execute() {
-        OrderService orderService = new OrderServiceImpl();
         orderService.initRepository();
-        orderService.getAllOrders().forEach(System.out::println);
+        orderService.getAllOrders().forEach(order -> System.out.println(order.toStringWithoutId()));
     }
 
     @Override

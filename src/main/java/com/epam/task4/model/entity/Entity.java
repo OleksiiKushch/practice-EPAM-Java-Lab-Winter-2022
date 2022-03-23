@@ -2,6 +2,9 @@ package com.epam.task4.model.entity;
 
 import java.io.Serializable;
 
+/**
+ * @author Oleksii Kushch
+ */
 public abstract class Entity implements Serializable {
     private static final long serialVersionUID = -7029860350047351728L;
 

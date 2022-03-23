@@ -1,8 +1,7 @@
 package com.epam.task4;
 
 import com.epam.task4.controller.CommandContainer;
-import com.epam.task4.dal.RepositoryFactory;
-import com.epam.task4.dal.impl.mock.MockRepoFactory;
+import com.epam.task4.util.ConsoleColor;
 
 import java.util.Scanner;
 
@@ -15,13 +14,13 @@ public class MainApp {
     private static Scanner scanner;
     private static boolean isRunning;
 
-    private static final String MSG_UNSUPPORTED_COMMAND = "Unsupported command";
-    private static final String MSG_WHEN_APP_RUN =
-            "Enter '--help' to see a list of possible commands, or '--stop' to stop the application.";
+    private static final String MSG_WHEN_APP_RUN = ConsoleColor.CYAN + "Application is start! (shop is opening).\n" +
+            "Enter '--help' to see a list of possible commands, or '--stop' to stop the application." + ConsoleColor.RESET;
+    private static final String MSG_UNSUPPORTED_COMMAND = ConsoleColor.RED + "Unsupported command" + ConsoleColor.RESET;
 
     /** main interact method */
     public static void run() {
-        initContextApp();
+        initAppContext();
         System.out.println(MSG_WHEN_APP_RUN);
         while (isRunning) {
             String command = scanner.nextLine().trim();
@@ -37,14 +36,10 @@ public class MainApp {
         scanner.close();
     }
 
-    private static void initContextApp() {
+    private static void initAppContext() {
+        new AppContext().init();
         scanner = new Scanner(System.in);
         isRunning = true;
-        initDataSource();
-    }
-
-    private static void initDataSource() {
-        RepositoryFactory.setRepositoryFactory(MockRepoFactory.class);
     }
 
     public static Scanner getScanner() {

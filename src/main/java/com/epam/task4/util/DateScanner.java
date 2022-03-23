@@ -1,8 +1,8 @@
 package com.epam.task4.util;
 
 import com.epam.task4.MainApp;
-import com.epam.task4.controller.command.ViewOrderByNearestDateCMD;
-import com.epam.task4.controller.command.ViewOrderCatalogFromToCMD;
+import com.epam.task4.controller.command.ViewOrderByNearestDateCmd;
+import com.epam.task4.controller.command.ViewOrderCatalogFromToCmd;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
@@ -11,11 +11,24 @@ import java.time.LocalDate;
  * Class for reading data about dates from the console with built-in validation.
  * <p>
  * Are directly called in the {@code execute()} method in the following classes:
- * @see ViewOrderByNearestDateCMD
- * @see ViewOrderCatalogFromToCMD
+ * @see ViewOrderByNearestDateCmd
+ * @see ViewOrderCatalogFromToCmd
  * @author Oleksii Kushch
  */
 public class DateScanner {
+    private static final String MSG_INVALID_FORMAT_YEAR = ConsoleColor.RED +
+            "Invalid format year '%s', (valid format, number of year, example: 2022), try again:%n" + ConsoleColor.RESET;
+
+    private static final String MSG_INVALID_FORMAT_MONTH = ConsoleColor.RED +
+            "Invalid format month '%s', try again:&n" + ConsoleColor.RESET;
+    private static final String MSG_INVALID_NUMERIC_FORMAT_MONTH = ConsoleColor.RED +
+            "Invalid value for month of year (valid values 1 - 12): %d, try again:%n" + ConsoleColor.RESET;
+
+    private static final String MSG_INVALID_FORMAT_DAY = ConsoleColor.RED +
+            "Invalid format day '%s', try again:%n" + ConsoleColor.RESET;
+    private static final String MSG_INVALID_NUMERIC_FORMAT_DAY = ConsoleColor.RED +
+            "Invalid value for DayOfMonth (valid values 1 - 28/31): %d, try again:%n" + ConsoleColor.RESET;
+
     /**
      * Reading data (year) from the console with built-in validation.
      * <p>
@@ -28,15 +41,15 @@ public class DateScanner {
         boolean isYearSet = false;
         while (!isYearSet) {
             String stringYear = MainApp.getScanner().nextLine();
-            if (stringYear.equals("--back") || stringYear.equals("-b")) {
+            if (stringYear.equals(AppLiteral.BACK_CMD_FULL_CAST) ||
+                    stringYear.equals(AppLiteral.BACK_CMD_SHORT_CAST)) {
                 return null;     // abort the entire operation
             }
             try {
                 year = Integer.parseInt(stringYear);
                 isYearSet = true;
             } catch(NumberFormatException exception) {
-                System.out.println("Invalid format year '" + stringYear + "', " +
-                        "(valid format, number of year, example: 2022), try again:");
+                System.out.printf(MSG_INVALID_FORMAT_YEAR, stringYear);
             }
         }
         return year;
@@ -49,12 +62,13 @@ public class DateScanner {
      * (method execute in the corresponding command classes, see the detailed description of this class)
      * @return month (month number) or {@code null} if abort the entire operation
      */
-    public static Integer inputMonth(int year) {
+    public static Integer inputMonth() {
         int month = 1;
         boolean isMonthSet = false;
         while (!isMonthSet) {
             String stringMonth = MainApp.getScanner().nextLine();
-            if (stringMonth.equals("--back") || stringMonth.equals("-b")) {
+            if (stringMonth.equals(AppLiteral.BACK_CMD_FULL_CAST) ||
+                    stringMonth.equals(AppLiteral.BACK_CMD_SHORT_CAST)) {
                 return null;     // abort the entire operation
             }
             try {
@@ -63,7 +77,7 @@ public class DateScanner {
                     isMonthSet = true;
                 }
             } catch(NumberFormatException exception) {
-                System.out.println("Invalid format month '" + stringMonth + "', try again:");
+                System.out.printf(MSG_INVALID_FORMAT_MONTH, stringMonth);
             }
         }
         return month;
@@ -81,7 +95,8 @@ public class DateScanner {
         boolean isDaySet = false;
         while (!isDaySet) {
             String stringDay = MainApp.getScanner().nextLine();
-            if (stringDay.equals("--back") || stringDay.equals("-b")) {
+            if (stringDay.equals(AppLiteral.BACK_CMD_FULL_CAST) ||
+                    stringDay.equals(AppLiteral.BACK_CMD_SHORT_CAST)) {
                 return null;     // abort the entire operation
             }
             try {
@@ -90,7 +105,7 @@ public class DateScanner {
                     isDaySet = true;
                 }
             } catch(NumberFormatException exception) {
-                System.out.println("Invalid format day '" + stringDay + "', try again:");
+                System.out.printf(MSG_INVALID_FORMAT_DAY, stringDay);
             }
         }
         return day;
@@ -102,13 +117,14 @@ public class DateScanner {
      * @return true if month is valid, false if month is invalid
      */
     private static boolean isValidMonth(int month) {
+        boolean result = false;
         try {
             LocalDate.of(1970, month, 1);
+            result = true;
         } catch (DateTimeException exception) {
-            System.out.println("Invalid value for month of year (valid values 1 - 12): " + month + ", try again:");
-            return false;
+            System.out.printf(MSG_INVALID_NUMERIC_FORMAT_MONTH, month);
         }
-        return true;
+        return result;
     }
 
     /**
@@ -119,12 +135,13 @@ public class DateScanner {
      * @return true if day is valid, false if day is invalid
      */
     private static boolean isValidDay(int year, int month, int day) {
+        boolean result = false;
         try {
             LocalDate.of(year, month, day);
+            result = true;
         } catch (DateTimeException exception) {
-            System.out.println("Invalid value for DayOfMonth (valid values 1 - 28/31): " + day + ", try again:");
-            return false;
+            System.out.printf(MSG_INVALID_NUMERIC_FORMAT_DAY, day);
         }
-        return true;
+        return result;
     }
 }

@@ -1,12 +1,12 @@
 package com.epam.task4.service.impl;
 
-import com.epam.task4.dal.OrderRepository;
-import com.epam.task4.dal.RepositoryFactory;
+import com.epam.task4.repository.OrderRepository;
+import com.epam.task4.repository.factory.RepositoryFactory;
 import com.epam.task4.model.entity.Order;
 import com.epam.task4.service.OrderService;
+import com.epam.task4.util.ConsoleColor;
 import com.epam.task4.util.DateScanner;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -14,13 +14,38 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static com.epam.task4.util.AppLiteral.MSG_ABILITY_CANCEL_OPERATION;
+import static com.epam.task4.util.AppLiteral.MSG_WHEN_OPERATION_ABORT;
+
+/**
+ * @author Oleksii Kushch
+ */
 public class OrderServiceImpl implements OrderService {
-    private static final String MSG_WHEN_OPERATION_ABORT = "Abort operation successful!";
+    private static final String MSG_ENTER_AFTER_YEAR = ConsoleColor.CYAN +
+            "Please, enter FROM (after) date (year):" + ConsoleColor.RESET;
+    private static final String MSG_ENTER_AFTER_MONTH = ConsoleColor.CYAN +
+            "Please, enter FROM (after) date (month number):" + ConsoleColor.RESET;
+    private static final String MSG_ENTER_AFTER_DAY = ConsoleColor.CYAN +
+            "Please, enter FROM (after) date (day):" + ConsoleColor.RESET;
+
+    private static final String MSG_ENTER_BEFORE_YEAR = ConsoleColor.CYAN +
+            "Please, enter TO (before) date (year):" + ConsoleColor.RESET;
+    private static final String MSG_ENTER_BEFORE_MONTH = ConsoleColor.CYAN +
+            "Please, enter TO (before) date (month number):" + ConsoleColor.RESET;
+    private static final String MSG_ENTER_BEFORE_DAY = ConsoleColor.CYAN +
+            "Please, enter TO (before) date (day):" + ConsoleColor.RESET;
+
+    private static final String MSG_ENTER_NEAREST_YEAR = ConsoleColor.CYAN +
+            "Please, enter the nearest date (year):" + ConsoleColor.RESET;
+    private static final String MSG_ENTER_NEAREST_MONTH = ConsoleColor.CYAN +
+            "Please, enter the nearest date (month number):" + ConsoleColor.RESET;
+    private static final String MSG_ENTER_NEAREST_DAY = ConsoleColor.CYAN +
+            "Please, enter the nearest date (day):" + ConsoleColor.RESET;
 
     private OrderRepository orderRepository;
 
     public OrderServiceImpl() {
-
+        // default constructor
     }
 
     public OrderServiceImpl(OrderRepository orderRepository) {
@@ -29,14 +54,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void initMockRepository() {
-        RepositoryFactory repositoryFactory = null;
-        try {
-            repositoryFactory = RepositoryFactory.getInstance();
-        } catch (NoSuchMethodException | IllegalAccessException |
-                InvocationTargetException | InstantiationException exception) {
-            exception.printStackTrace();
-        }
-        Objects.requireNonNull(repositoryFactory);
+        RepositoryFactory repositoryFactory = RepositoryFactory.getInstance();
         orderRepository = repositoryFactory.getOrderRepository();
     }
 
@@ -61,47 +79,13 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public List<Order> getOrdersFromToByDate() {
-        System.out.println("If you want to stop (abort) the operation type '--back' or '-b'");
+        System.out.println(MSG_ABILITY_CANCEL_OPERATION);
 
-        System.out.println("Please, enter FROM (after) date (year):");
-        Integer fromYear = DateScanner.inputYear();
-        if (fromYear == null) {
-            System.out.println(MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        System.out.println("Please, enter FROM (after) date (month number):");
-        Integer fromMonth = DateScanner.inputMonth(fromYear);
-        if (fromMonth == null) {
-            System.out.println(MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        System.out.println("Please, enter FROM (after) date (day):");
-        Integer fromDay = DateScanner.inputDay(fromYear, fromMonth);
-        if (fromDay == null) {
-            System.out.println(MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        LocalDateTime fromDate = LocalDateTime.of(fromYear, fromMonth, fromDay, 0, 0, 0);
+        LocalDateTime fromDate = Objects.requireNonNull(interactiveConsoleInputDate(
+                MSG_ENTER_AFTER_YEAR, MSG_ENTER_AFTER_MONTH, MSG_ENTER_AFTER_DAY));
 
-        System.out.println("Please, enter TO (before) date (year):");
-        Integer toYear = DateScanner.inputYear();
-        if (toYear == null) {
-            System.out.println(MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        System.out.println("Please, enter TO (before) date (month number):");
-        Integer toMonth = DateScanner.inputMonth(toYear);
-        if (toMonth == null) {
-            System.out.println(MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        System.out.println("Please, enter TO (before) date (day):");
-        Integer toDay = DateScanner.inputDay(toYear, toMonth);
-        if (toDay == null) {
-            System.out.println(MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        LocalDateTime toDate = LocalDateTime.of(toYear, toMonth, toDay, 0, 0, 0);
+        LocalDateTime toDate = Objects.requireNonNull(interactiveConsoleInputDate(
+                MSG_ENTER_BEFORE_YEAR, MSG_ENTER_BEFORE_MONTH, MSG_ENTER_BEFORE_DAY));
 
         return orderRepository.getAll().stream()
                 .filter(order -> order.getDateTime().isAfter(fromDate) && order.getDateTime().isBefore(toDate))
@@ -121,31 +105,36 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Order getOrderByNearestDate() {
-        System.out.println("If you want to stop (abort) the operation type '--back' or '-b'");
+        System.out.println(MSG_ABILITY_CANCEL_OPERATION);
 
-        System.out.println("Please, enter the nearest date (year):");
+        LocalDateTime nearestDate = interactiveConsoleInputDate(
+                MSG_ENTER_NEAREST_YEAR, MSG_ENTER_NEAREST_MONTH, MSG_ENTER_NEAREST_DAY);
+
+        return orderRepository.getAll().stream()
+                .min(Comparator.comparing(order ->
+                        Math.abs(Duration.between(order.getDateTime(), nearestDate).toDays()))).orElse(null);
+    }
+
+    private LocalDateTime interactiveConsoleInputDate(
+            String msgAppealForInputYear, String msgAppealForInputMonth, String msgAppealForInputDay) {
+        System.out.println(msgAppealForInputYear);
         Integer year = DateScanner.inputYear();
         if (year == null) {
             System.out.println(MSG_WHEN_OPERATION_ABORT);
             return null;
         }
-        System.out.println("Please, enter the nearest date (month number):");
-        Integer month = DateScanner.inputMonth(year);
+        System.out.println(msgAppealForInputMonth);
+        Integer month = DateScanner.inputMonth();
         if (month == null) {
             System.out.println(MSG_WHEN_OPERATION_ABORT);
             return null;
         }
-        System.out.println("Please, enter the nearest date (day):");
+        System.out.println(msgAppealForInputDay);
         Integer day = DateScanner.inputDay(year, month);
         if (day == null) {
             System.out.println(MSG_WHEN_OPERATION_ABORT);
             return null;
         }
-
-        LocalDateTime nearestDate = LocalDateTime.of(year, month, day, 0, 0, 0);
-
-        return orderRepository.getAll().stream()
-                .min(Comparator.comparing(order ->
-                        Math.abs(Duration.between(order.getDateTime(), nearestDate).toDays()))).orElse(null);
+        return LocalDateTime.of(year, month, day, 0, 0, 0);
     }
 }

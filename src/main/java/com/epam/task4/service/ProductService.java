@@ -4,8 +4,9 @@ import com.epam.task1.entity.Commodity;
 
 import java.util.List;
 
+/**
+ * @author Oleksii Kushch
+ */
 public interface ProductService extends EntityService {
-    Commodity getProductById(Long id);
     List<Commodity> getAllProducts();
-    boolean isContainProduct(Long id);
 }

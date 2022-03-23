@@ -4,6 +4,8 @@ package com.epam.task4.controller;
  * Command is the base interface for all commands which allow an application
  * {@link com.epam.task4.MainApp}.
  *
+ * Important: cast command cannot contains parentheses ['(', ')'].
+ *
  * @author Oleksii Kushch
  */
 public interface Command {
