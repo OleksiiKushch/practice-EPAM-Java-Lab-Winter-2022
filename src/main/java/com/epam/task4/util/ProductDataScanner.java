@@ -14,7 +14,7 @@ import com.epam.task4.repository.ProductRepository;
  */
 public class ProductDataScanner {
     private static final String MSG_ENTER_ID_PRODUCT = ConsoleColor.CYAN +
-            "Please, enter id product which do you want add to cart:" + ConsoleColor.RESET;
+            "Please, enter id product which do you want to put to cart:" + ConsoleColor.RESET;
     private static final String MSG_INVALID_NUMERIC_FORMAT_ID_PRODUCT = ConsoleColor.RED +
             "Invalid format id (cannot be negative or equals zero), try again:" + ConsoleColor.RESET;
     private static final String MSG_PRODUCT_DOES_NOT_EXISTS = ConsoleColor.RED +
@@ -33,7 +33,7 @@ public class ProductDataScanner {
     private static final String MSG_TOO_MUCH_VALUE_AMOUNT_IN_STOCK_PRODUCT = ConsoleColor.RED +
             ", amount products in stock: %d, try again:%n" + ConsoleColor.RESET;
     private static final String MSG_INVALID_FORMAT_AMOUNT_PRODUCT = ConsoleColor.RED +
-            "Invalid format amount '%s', try again:" + ConsoleColor.RESET;
+            "Invalid format amount '%s', try again:%n" + ConsoleColor.RESET;
 
     /**
      * Reading data (product id) from the console with built-in validation.
@@ -42,30 +42,27 @@ public class ProductDataScanner {
      * (method {@link PutProductToCartCmd#execute()})
      * @return product ({@link com.epam.task1.entity.Commodity}) id<br>or {@code null} if abort the entire operation
      */
-    public static Long inputId(ProductRepository productRepository) {
+    public static Long inputIdForCart(ProductRepository productRepository) {
         System.out.println(MSG_ENTER_ID_PRODUCT);
-        Long id = null;
-        boolean isIdSet = false;
-        while (!isIdSet) {
+        while (true) {
             String stringId = MainApp.getScanner().nextLine();
             if (stringId.equals(AppLiteral.BACK_CMD_FULL_CAST) ||
                     stringId.equals(AppLiteral.BACK_CMD_SHORT_CAST)) {
                 return null;     // abort the entire operation
             }
             try {
-                id = Long.valueOf(stringId);
+                Long id = Long.valueOf(stringId);
                 if (isNegativeOrZero(id)) {
                     System.out.println(MSG_INVALID_NUMERIC_FORMAT_ID_PRODUCT);
                 } else if (productRepository.getById(id) == null) {
                     System.out.printf(MSG_PRODUCT_DOES_NOT_EXISTS, id);
                 } else {
-                    isIdSet = true;
+                    return id;
                 }
             } catch(NumberFormatException exception) {
                 System.out.printf(MSG_INVALID_FORMAT_ID_PRODUCT, stringId);
             }
         }
-        return id;
     }
 
     /**
@@ -83,16 +80,14 @@ public class ProductDataScanner {
 
         System.out.printf(MSG_ENTER_AMOUNT_PRODUCT, amountOnStock, amountOnCart);
 
-        Integer amount = null;
-        boolean isAmountSet = false;
-        while (!isAmountSet) {
+        while (true) {
             String stringAmount = MainApp.getScanner().nextLine();
             if (stringAmount.equals(AppLiteral.BACK_CMD_FULL_CAST)
                     || stringAmount.equals(AppLiteral.BACK_CMD_SHORT_CAST)) {
                 return null;     // abort the entire operation
             }
             try {
-                amount = Integer.valueOf(stringAmount);
+                Integer amount = Integer.valueOf(stringAmount);
                 if (isNegativeOrZero(amount)) {
                     System.out.println(MSG_INVALID_NUMERIC_FORMAT_AMOUNT_PRODUCT);
                 } else if (amountOnStock < amount + amountOnCart) {
@@ -102,13 +97,12 @@ public class ProductDataScanner {
                     }
                     System.out.printf(MSG_TOO_MUCH_VALUE_AMOUNT_IN_STOCK_PRODUCT, amountOnStock);
                 } else {
-                    isAmountSet = true;
+                    return amount;
                 }
             } catch(NumberFormatException exception) {
                 System.out.printf(MSG_INVALID_FORMAT_AMOUNT_PRODUCT, stringAmount);
             }
         }
-        return amount;
     }
 
     private static boolean isNegativeOrZero(Number number) {

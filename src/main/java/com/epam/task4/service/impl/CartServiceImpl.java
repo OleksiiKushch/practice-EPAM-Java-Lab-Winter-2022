@@ -73,7 +73,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void interactivePut() {
         System.out.println(MSG_ABILITY_CANCEL_OPERATION);
-        Long id = ProductDataScanner.inputId(productRepository);
+        Long id = ProductDataScanner.inputIdForCart(productRepository);
         if (id == null) {
             System.out.println(MSG_WHEN_OPERATION_ABORT);
             return;
@@ -107,7 +107,7 @@ public class CartServiceImpl implements CartService {
                 Commodity commodity = productRepository.getById(key);
                 commodity.setAmount(commodity.getAmount() - value);
             });
-            orderRepository.insert(new Order(null, LocalDateTime.now(), mapListProducts(cartRepository.getAll())));
+            orderRepository.insert(new Order(LocalDateTime.now(), mapListProducts(cartRepository.getAll())));
             System.out.println(MSG_CHECKOUT_SUCCESS);
             System.out.println(SUM + getSum());
             cartRepository.getAll().clear();

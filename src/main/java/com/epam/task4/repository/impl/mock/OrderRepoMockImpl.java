@@ -21,7 +21,7 @@ public class OrderRepoMockImpl implements OrderRepository {
     @Override
     public List<Order> getAll() {
         return orderCatalog.getOrderCatalog().entrySet().stream()
-                .map(entry -> new Order(null, entry.getKey(), entry.getValue()))
+                .map(entry -> new Order(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
 }

@@ -10,14 +10,13 @@ import java.util.stream.Collectors;
 /**
  * @author Oleksii Kushch
  */
-public class Order extends Entity {
+public class Order {
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private LocalDateTime dateTime;
     private List<Commodity> container;
 
-    public Order(Long id, LocalDateTime dateTime, List<Commodity> container) {
-        super(id);
+    public Order(LocalDateTime dateTime, List<Commodity> container) {
         this.dateTime = dateTime;
         this.container = container;
     }
