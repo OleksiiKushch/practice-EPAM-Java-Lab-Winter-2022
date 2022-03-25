@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class FileSearcher {
     /**
      * @param rootDirectory root directory pathname

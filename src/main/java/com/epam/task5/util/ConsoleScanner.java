@@ -11,6 +11,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+/**
+ * Contains static methods for interactively getting data from the console for the corresponding
+ * filters and returns them (filter).
+ *
+ * @author Oleksii Kushch
+ */
 public class ConsoleScanner {
     private static final int YES = 1;
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(FilterMessages.DATE_TIME_FORMAT);

@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.util.Iterator;
 
 /**
- * A wrapper class for viewing a text file.
+ * A wrapper class for viewing line-by-line a text file  with a loop 'for each'.
  * @author Oleksii Kushch
  */
 public class FileWrapper implements Iterable<String> {
@@ -21,7 +21,7 @@ public class FileWrapper implements Iterable<String> {
     public Iterator<String> iterator() {
         Iterator<String> result = null;
         try {
-            result = new BufferedReader(new FileReader(file)).lines().iterator();
+            return result = new BufferedReader(new FileReader(file)).lines().iterator();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
