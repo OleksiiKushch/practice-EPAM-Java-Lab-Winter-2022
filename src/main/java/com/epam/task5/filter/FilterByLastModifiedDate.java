@@ -1,4 +1,4 @@
-package com.epam.task5.util.filterware;
+package com.epam.task5.filter;
 
 import java.io.File;
 import java.time.LocalDateTime;
