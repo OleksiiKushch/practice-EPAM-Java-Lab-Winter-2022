@@ -1,6 +1,7 @@
 package com.epam.task4.model.entity;
 
 import com.epam.task1.entity.Commodity;
+import com.epam.task4.constants.ShopLiterals;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,8 +12,6 @@ import java.util.stream.Collectors;
  * @author Oleksii Kushch
  */
 public class Order {
-    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
     private LocalDateTime dateTime;
     private List<Commodity> container;
 
@@ -46,7 +45,7 @@ public class Order {
     }
 
     public String toStringWithoutId() {
-        return "(Date: " + dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT)) + ") { " +
+        return "(Date: " + dateTime.format(DateTimeFormatter.ofPattern(ShopLiterals.DATE_FORMAT)) + ") { " +
                 container.stream()
                         .map(product -> product.getAmount() + "x - \"" + product.getFrontTitle() + "\" ")
                         .collect(Collectors.joining()) + "};";

@@ -1,4 +1,4 @@
-package com.epam.task4.mockdata;
+package com.epam.task4.model.data_sources;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
  *
  * @author Oleksii Kushch
  */
-public class MockCart {
+public class Cart {
     /**
      * An associative container that stores the product id as a key and its amount as a value.
      */
@@ -29,16 +29,7 @@ public class MockCart {
      */
     private final LinkedHashMap<Long, LocalDateTime> history;
 
-    private static MockCart instance;
-
-    public static MockCart getInstance() {
-        if (instance == null) {
-            instance = new MockCart();
-        }
-        return instance;
-    }
-
-    private MockCart() {
+    public Cart() {
         container = new LinkedHashMap<>();
         history = new LinkedHashMap<>(16, 0.75f,true);
     }

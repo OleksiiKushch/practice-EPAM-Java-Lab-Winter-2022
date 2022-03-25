@@ -6,7 +6,7 @@ import com.epam.task4.repository.factory.MockRepoFactory;
 /**
  * @author Oleksii Kushch
  */
-public interface EntityService {
+public interface Service {
     default void initRepository() {
         if (RepositoryFactory.getRepositoryFactory().getClass() == MockRepoFactory.class) {
             initMockRepository();

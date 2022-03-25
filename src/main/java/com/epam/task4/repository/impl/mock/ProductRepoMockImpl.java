@@ -2,7 +2,7 @@ package com.epam.task4.repository.impl.mock;
 
 import com.epam.task1.entity.Commodity;
 import com.epam.task4.repository.ProductRepository;
-import com.epam.task4.mockdata.MockProductCatalog;
+import com.epam.task4.model.data_sources.ProductCatalog;
 
 import java.util.List;
 
@@ -10,7 +10,11 @@ import java.util.List;
  * @author Oleksii Kushch
  */
 public class ProductRepoMockImpl implements ProductRepository {
-    private final MockProductCatalog productCatalog = MockProductCatalog.getInstance();
+    private ProductCatalog productCatalog;
+
+    public ProductRepoMockImpl(ProductCatalog productCatalog) {
+        this.productCatalog = productCatalog;
+    }
 
     @Override
     public Commodity getById(Long id) {

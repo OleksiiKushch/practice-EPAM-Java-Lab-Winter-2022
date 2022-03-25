@@ -14,11 +14,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     public ProductServiceImpl() {
-        // default constructor
-    }
-
-    public ProductServiceImpl(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+        initRepository();
     }
 
     @Override

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author Oleksii Kushch
  */
-public interface OrderService extends EntityService {
+public interface OrderService extends Service {
     List<Order> getAllOrders();
     List<Order> getOrdersFromToByDate();
     Order getOrderByNearestDate();

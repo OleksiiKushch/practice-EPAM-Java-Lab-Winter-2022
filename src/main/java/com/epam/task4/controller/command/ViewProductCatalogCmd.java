@@ -1,7 +1,11 @@
 package com.epam.task4.controller.command;
 
+import com.epam.task1.entity.Commodity;
+import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
 import com.epam.task4.service.ProductService;
+
+import java.util.List;
 
 /**
  * @author Oleksii Kushch
@@ -20,8 +24,12 @@ public class ViewProductCatalogCmd implements Command {
 
     @Override
     public void execute() {
-        productService.initRepository();
-        productService.getAllProducts().forEach(product -> System.out.println(product.toStringOptional()));
+        List<Commodity> products = productService.getAllProducts();
+        if (products.isEmpty()) {
+            System.out.println(ShopLiterals.MSG_PRODUCT_CATALOG_IS_EMPTY);
+        } else {
+            products.forEach(product -> System.out.println(product.toStringOptional()));
+        }
     }
 
     @Override

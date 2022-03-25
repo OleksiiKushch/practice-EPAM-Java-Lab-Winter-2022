@@ -1,7 +1,7 @@
 package com.epam.task4.repository.impl.mock;
 
 import com.epam.task4.repository.CartRepository;
-import com.epam.task4.mockdata.MockCart;
+import com.epam.task4.model.data_sources.Cart;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -10,7 +10,11 @@ import java.util.Map;
  * @author Oleksii Kushch
  */
 public class CartRepoMockImpl implements CartRepository {
-    private final MockCart cart = MockCart.getInstance();
+    private Cart cart;
+
+    public CartRepoMockImpl(Cart cart) {
+        this.cart = cart;
+    }
 
     @Override
     public Map<Long, Integer> getAll() {

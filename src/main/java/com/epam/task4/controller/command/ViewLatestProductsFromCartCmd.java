@@ -1,10 +1,14 @@
 package com.epam.task4.controller.command;
 
+import com.epam.task1.entity.Commodity;
+import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
-import com.epam.task4.model.entity.Order;
 import com.epam.task4.service.CartService;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Oleksii Kushch
@@ -18,8 +22,6 @@ public class ViewLatestProductsFromCartCmd implements Command {
     public static final String DESCRIPTION = "View information about the last " + QUANTITY_LAST_PRODUCTS
             + " product that were added to the cart in all shopping sessions";
 
-    private static final String OUTPUT_FORMAT = "%s [date last put to cart: %s];%n";
-
     private final CartService cartService;
 
     public ViewLatestProductsFromCartCmd(CartService cartService) {
@@ -28,12 +30,17 @@ public class ViewLatestProductsFromCartCmd implements Command {
 
     @Override
     public void execute() {
-        cartService.initRepository();
-        long skip = cartService.getHistory().size() - QUANTITY_LAST_PRODUCTS;
-        skip = skip  > 0 ? skip : 0;
-        cartService.getHistory().stream().skip(skip)
-                .forEach(entry -> System.out.printf(OUTPUT_FORMAT, entry.getKey().toStringWithoutPriceAndAmount(),
-                                entry.getValue().format(DateTimeFormatter.ofPattern(Order.DATE_FORMAT))));
+        List<Map.Entry<Commodity, LocalDateTime>> cartHistory = cartService.getHistory();
+        if (cartHistory.isEmpty()) {
+            System.out.println(ShopLiterals.MSG_HISTORY_IS_EMPTY);
+        } else {
+            long skip = cartHistory.size() - QUANTITY_LAST_PRODUCTS;
+            skip = skip > 0 ? skip : 0;
+            cartService.getHistory().stream().skip(skip)
+                    .forEach(entry -> System.out.printf(ShopLiterals.OUTPUT_FORMAT_LATEST_PRODUCTS,
+                            entry.getKey().toStringWithoutPriceAndAmount(),
+                            entry.getValue().format(DateTimeFormatter.ofPattern(ShopLiterals.DATE_FORMAT))));
+        }
     }
 
     @Override

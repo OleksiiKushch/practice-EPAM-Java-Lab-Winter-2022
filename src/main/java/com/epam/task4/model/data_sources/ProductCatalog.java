@@ -1,4 +1,4 @@
-package com.epam.task4.mockdata;
+package com.epam.task4.model.data_sources;
 
 import com.epam.task1.entity.Commodity;
 
@@ -12,24 +12,14 @@ import java.util.List;
  *
  * @author Oleksii Kushch
  */
-public class MockProductCatalog {
+public class ProductCatalog {
     /**
      * A container that stores objects concrete implementation classes of the abstract class {@link Commodity}.
      */
     private final List<Commodity> productCatalog;
 
-    private static MockProductCatalog instance;
-
-    public static MockProductCatalog getInstance() {
-        if (instance == null) {
-            instance = new MockProductCatalog();
-        }
-        return instance;
-    }
-
-    private MockProductCatalog() {
+    public ProductCatalog() {
         productCatalog = new ArrayList<>();
-        InitMockResources.initProductCatalog(productCatalog);
     }
 
     public List<Commodity> getProductCatalog() {

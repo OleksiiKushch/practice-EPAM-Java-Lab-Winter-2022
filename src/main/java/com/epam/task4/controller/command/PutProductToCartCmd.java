@@ -20,7 +20,6 @@ public class PutProductToCartCmd implements Command {
 
     @Override
     public void execute() {
-        cartService.initRepository();
         cartService.interactivePut();
     }
 

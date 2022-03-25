@@ -19,7 +19,6 @@ public class CheckoutCmd implements Command {
 
     @Override
     public void execute() {
-        cartService.initRepository();
         cartService.checkout();
     }
 

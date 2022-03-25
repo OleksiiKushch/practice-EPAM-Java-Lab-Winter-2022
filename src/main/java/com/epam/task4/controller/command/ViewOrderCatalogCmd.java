@@ -1,7 +1,11 @@
 package com.epam.task4.controller.command;
 
+import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
+import com.epam.task4.model.entity.Order;
 import com.epam.task4.service.OrderService;
+
+import java.util.List;
 
 /**
  * @author Oleksii Kushch
@@ -20,8 +24,12 @@ public class ViewOrderCatalogCmd implements Command {
 
     @Override
     public void execute() {
-        orderService.initRepository();
-        orderService.getAllOrders().forEach(order -> System.out.println(order.toStringWithoutId()));
+        List<Order> orders = orderService.getAllOrders();
+        if (orders.isEmpty()) {
+            System.out.println(ShopLiterals.MSG_ORDER_CATALOG_IS_EMPTY);
+        } else {
+            orders.forEach(order -> System.out.println(order.toStringWithoutId()));
+        }
     }
 
     @Override

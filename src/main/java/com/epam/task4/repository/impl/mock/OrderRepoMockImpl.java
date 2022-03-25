@@ -1,7 +1,7 @@
 package com.epam.task4.repository.impl.mock;
 
 import com.epam.task4.repository.OrderRepository;
-import com.epam.task4.mockdata.MockOrderCatalog;
+import com.epam.task4.model.data_sources.OrderCatalog;
 import com.epam.task4.model.entity.Order;
 
 import java.util.List;
@@ -11,7 +11,11 @@ import java.util.stream.Collectors;
  * @author Oleksii Kushch
  */
 public class OrderRepoMockImpl implements OrderRepository {
-    private final MockOrderCatalog orderCatalog = MockOrderCatalog.getInstance();
+    private OrderCatalog orderCatalog;
+
+    public OrderRepoMockImpl(OrderCatalog orderCatalog) {
+        this.orderCatalog = orderCatalog;
+    }
 
     @Override
     public int insert(Order order) {

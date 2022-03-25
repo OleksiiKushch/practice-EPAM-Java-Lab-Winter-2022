@@ -1,18 +1,6 @@
 package com.epam.task4.controller;
 
-import com.epam.task4.controller.command.CheckoutCmd;
-import com.epam.task4.controller.command.HelpCmd;
-import com.epam.task4.controller.command.PutProductToCartCmd;
-import com.epam.task4.controller.command.StopCmd;
-import com.epam.task4.controller.command.ViewCartCmd;
-import com.epam.task4.controller.command.ViewLatestProductsFromCartCmd;
-import com.epam.task4.controller.command.ViewOrderByNearestDateCmd;
-import com.epam.task4.controller.command.ViewOrderCatalogCmd;
-import com.epam.task4.controller.command.ViewOrderCatalogFromToCmd;
-import com.epam.task4.controller.command.ViewProductCatalogCmd;
-import com.epam.task4.service.impl.CartServiceImpl;
-import com.epam.task4.service.impl.OrderServiceImpl;
-import com.epam.task4.service.impl.ProductServiceImpl;
+import com.epam.task4.constants.ShopLiterals;
 
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -39,10 +27,6 @@ import java.util.stream.Collectors;
  * @author Oleksii Kushch
  */
 public class CommandContainer {
-    private static final String SPACE = " ";
-    private static final String LEFT_PARENTHESIS = "(";
-    private static final String RIGHT_PARENTHESIS = ")";
-
     /**
      * Is actually equal to one tabulation (4 spaces) because during the separate of the command casts in the method
      * {@link #separateCmdCasts} parentheses (i.e. 2 spaces out of 6) are substituted around the short command cast
@@ -50,45 +34,14 @@ public class CommandContainer {
      */
     private static final int INDENT_BETWEEN_LONGEST_CMD_AND_DESC = 6;
 
-    private static CommandContainer instance;
-
-    public static CommandContainer getInstance() {
-        if (instance == null) {
-            instance = new CommandContainer();
-        }
-        return instance;
-    }
-
     private final Map<String, Command> commands;
 
-    private CommandContainer() {
+    public CommandContainer() {
         commands = new LinkedHashMap<>();
-        initCommands();
     }
 
-    private void initCommands() {
-        // full cast
-        commands.put(ViewProductCatalogCmd.FULL_KEY, new ViewProductCatalogCmd(new ProductServiceImpl()));
-        commands.put(PutProductToCartCmd.FULL_KEY, new PutProductToCartCmd(new CartServiceImpl()));
-        commands.put(ViewCartCmd.FULL_KEY, new ViewCartCmd(new CartServiceImpl()));
-        commands.put(CheckoutCmd.FULL_KEY, new CheckoutCmd(new CartServiceImpl()));
-        commands.put(ViewLatestProductsFromCartCmd.FULL_KEY, new ViewLatestProductsFromCartCmd(new CartServiceImpl()));
-
-        commands.put(ViewOrderCatalogFromToCmd.FULL_KEY, new ViewOrderCatalogFromToCmd(new OrderServiceImpl()));
-        commands.put(ViewOrderCatalogCmd.FULL_KEY, new ViewOrderCatalogCmd(new OrderServiceImpl()));
-        commands.put(ViewOrderByNearestDateCmd.FULL_KEY, new ViewOrderByNearestDateCmd(new OrderServiceImpl()));
-
-        commands.put(HelpCmd.FULL_KEY, new HelpCmd());
-        commands.put(StopCmd.FULL_KEY, new StopCmd());
-
-        // short cast
-        commands.put(ViewProductCatalogCmd.SHORT_KEY, new ViewProductCatalogCmd(new ProductServiceImpl()));
-        commands.put(PutProductToCartCmd.SHORT_KEY, new PutProductToCartCmd(new CartServiceImpl()));
-        commands.put(ViewLatestProductsFromCartCmd.SHORT_KEY, new ViewLatestProductsFromCartCmd(new CartServiceImpl()));
-
-        commands.put(ViewOrderCatalogFromToCmd.SHORT_KEY, new ViewOrderCatalogFromToCmd(new OrderServiceImpl()));
-        commands.put(ViewOrderCatalogCmd.SHORT_KEY, new ViewOrderCatalogCmd(new OrderServiceImpl()));
-        commands.put(ViewOrderByNearestDateCmd.SHORT_KEY, new ViewOrderByNearestDateCmd(new OrderServiceImpl()));
+    public Map<String, Command> getCommands() {
+        return commands;
     }
 
     /**
@@ -96,7 +49,7 @@ public class CommandContainer {
      * @return true if command is exists in this class ({@link CommandContainer}) with this
      * string cast (main (full) or short command cast), and false if is not exists
      */
-    public boolean isContain(String commandKey) {
+    public boolean isContainCommand(String commandKey) {
         return commands.containsKey(commandKey);
     }
 
@@ -127,7 +80,7 @@ public class CommandContainer {
                 .forEach((description, commands) -> {
                     String cmdCasts = commands.stream()
                             .map(Map.Entry::getKey)
-                            .collect(Collectors.joining(SPACE));
+                            .collect(Collectors.joining(ShopLiterals.SPACE));
                     cmdCasts = separateCmdCasts(cmdCasts);
                     int indent = indentLength - cmdCasts.length();
                     System.out.printf("%s%-" + indent + "s%s%n", cmdCasts, " ", description);
@@ -143,7 +96,7 @@ public class CommandContainer {
         return commands.entrySet().stream()
                 .collect(Collectors.groupingBy(c -> c.getValue().getDescription()))
                 .values().stream()
-                .map(c -> c.stream().map(Map.Entry::getKey).collect(Collectors.joining(SPACE)).length())
+                .map(c -> c.stream().map(Map.Entry::getKey).collect(Collectors.joining(ShopLiterals.SPACE)).length())
                 .max(Integer::compareTo).orElse(null);
     }
 
@@ -153,9 +106,9 @@ public class CommandContainer {
      * @return all cast options except for the main surrounds with parentheses, example: '--product-list (-pl)'
      */
     private String separateCmdCasts(String cmdCasts) {
-        cmdCasts = cmdCasts.replaceFirst(SPACE, SPACE + LEFT_PARENTHESIS);
-        if (cmdCasts.contains(LEFT_PARENTHESIS)) {
-            cmdCasts = cmdCasts.concat(RIGHT_PARENTHESIS);
+        cmdCasts = cmdCasts.replaceFirst(ShopLiterals.SPACE, ShopLiterals.SPACE + ShopLiterals.LEFT_PARENTHESIS);
+        if (cmdCasts.contains(ShopLiterals.LEFT_PARENTHESIS)) {
+            cmdCasts = cmdCasts.concat(ShopLiterals.RIGHT_PARENTHESIS);
         }
         return cmdCasts;
     }

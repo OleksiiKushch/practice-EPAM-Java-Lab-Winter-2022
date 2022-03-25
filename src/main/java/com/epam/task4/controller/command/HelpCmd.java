@@ -1,7 +1,7 @@
 package com.epam.task4.controller.command;
 
+import com.epam.task4.MainApp;
 import com.epam.task4.controller.Command;
-import com.epam.task4.controller.CommandContainer;
 
 /**
  * @author Oleksii Kushch
@@ -13,8 +13,7 @@ public class HelpCmd implements Command {
 
     @Override
     public void execute() {
-        CommandContainer commandContainer = CommandContainer.getInstance();
-        commandContainer.viewDescriptionAllCommands();
+        MainApp.getContext().getCommandContainer().viewDescriptionAllCommands();
     }
 
     @Override
