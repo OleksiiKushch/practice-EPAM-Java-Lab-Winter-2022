@@ -1,8 +1,6 @@
 package com.epam.task5.filter;
 
 import java.io.File;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Specific element of the file list filter chain. Filters the list of files by their name.
@@ -16,9 +14,10 @@ public class FilterByName extends FilterLayer {
     }
 
     @Override
-    public List<File> filterOut(List<File> listFiles) {
-        return filterOutNext(listFiles.stream()
-                .filter(file -> file.getName().replaceFirst("[.][^.]+$", "")
-                        .equals(name)).collect(Collectors.toList()));
+    public boolean filterOut(File file) {
+        if (file.getName().replaceFirst("[.][^.]+$", "").equals(name)) {
+            return filterOutNext(file);
+        }
+        return false;
     }
 }

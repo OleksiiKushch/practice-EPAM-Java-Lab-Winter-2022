@@ -4,8 +4,6 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Specific element of the file list filter chain. Filters the list of files by their change date range.
@@ -21,12 +19,12 @@ public class FilterByLastModifiedDate extends FilterLayer {
     }
 
     @Override
-    public List<File> filterOut(List<File> listFiles) {
+    public boolean filterOut(File file) {
         Date fromDate = Date.from(this.fromDate.atZone(ZoneId.systemDefault()).toInstant());
         Date toDate = Date.from(this.toDate.atZone(ZoneId.systemDefault()).toInstant());
-        return filterOutNext(listFiles.stream()
-                .filter(file -> fromDate.getTime() <= file.lastModified()
-                        && file.lastModified() <= toDate.getTime())
-                .collect(Collectors.toList()));
+        if (fromDate.getTime() <= file.lastModified() && file.lastModified() <= toDate.getTime()) {
+            return filterOutNext(file);
+        }
+        return false;
     }
 }

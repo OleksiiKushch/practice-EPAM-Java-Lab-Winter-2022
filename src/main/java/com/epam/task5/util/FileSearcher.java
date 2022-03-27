@@ -1,5 +1,7 @@
 package com.epam.task5.util;
 
+import com.epam.task5.filter.FilterLayer;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +15,9 @@ public class FileSearcher {
      * @param rootDirectory root directory pathname
      * @return list of all files from the specified directory and its subdirectory
      */
-    public static List<File> getAllFiles(File rootDirectory) {
+    public static List<File> getAllFiles(File rootDirectory, FilterLayer filterLayer) {
         List<File> result = new ArrayList<>();
-        recursiveFileCollector(Objects.requireNonNull(rootDirectory.listFiles()), result);
+        recursiveFileCollector(Objects.requireNonNull(rootDirectory.listFiles()), filterLayer, result);
         return result;
     }
 
@@ -24,12 +26,12 @@ public class FileSearcher {
      * @param fileArray array of file and directory pathnames
      * @param result list of all files from the {@code fileArray}
      */
-    private static void recursiveFileCollector(File[] fileArray, List<File> result) {
+    private static void recursiveFileCollector(File[] fileArray, FilterLayer filterLayer, List<File> result) {
         for (File file : fileArray) {
-            if (file.isFile()) {
+            if (file.isFile() && filterLayer.filterOut(file)) {
                 result.add(file);
             } else if (file.isDirectory()) {
-                recursiveFileCollector(Objects.requireNonNull(file.listFiles()), result);
+                recursiveFileCollector(Objects.requireNonNull(file.listFiles()), filterLayer, result);
             }
         }
     }

@@ -24,8 +24,7 @@ public class Demo {
         filterLayer.linkWith(ConsoleScanner.getFilterSearchBySize(scanner));
         filterLayer.linkWith(ConsoleScanner.getFilterByUpdateDate(scanner));
 
-        filterLayer.filterOut(
-                FileSearcher.getAllFiles(new File("src/main/resources/task5_demo_test_data")))
+        FileSearcher.getAllFiles(new File("src/main/resources/task5_demo_test_data"), filterLayer)
                 .forEach(file -> System.out.printf("%s (size: %d bytes) (last modified: %s)%n", file.getPath(), file.length(),
                         new SimpleDateFormat(FilterMessages.DATE_TIME_FORMAT).format(file.lastModified())));
         scanner.close();

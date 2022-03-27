@@ -1,7 +1,6 @@
 package com.epam.task5.filter;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * Specific element of the file list filter chain. Does not filter the list of files,
@@ -10,7 +9,7 @@ import java.util.List;
  */
 public class FilterByNone extends FilterLayer {
     @Override
-    public List<File> filterOut(List<File> listFiles) {
-        return filterOutNext(listFiles);
+    public boolean filterOut(File file) {
+        return filterOutNext(file);
     }
 }
