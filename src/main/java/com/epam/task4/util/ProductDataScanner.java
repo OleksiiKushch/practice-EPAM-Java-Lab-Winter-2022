@@ -22,7 +22,7 @@ public class ProductDataScanner {
      * @return product ({@link com.epam.task1.entity.Commodity}) id<br>or {@code null} if abort the entire operation
      */
     public static Long inputIdForCart(ProductRepository productRepository) {
-        System.out.println(ShopLiterals.MSG_ENTER_ID_PRODUCT);
+        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_ID);
         while (true) {
             String stringId = MainApp.getContext().getScanner().nextLine();
             if (stringId.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
@@ -32,14 +32,14 @@ public class ProductDataScanner {
             try {
                 Long id = Long.valueOf(stringId);
                 if (isNegativeOrZero(id)) {
-                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID_PRODUCT);
+                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
                 } else if (productRepository.getById(id) == null) {
                     System.out.printf(ShopLiterals.MSG_PRODUCT_DOES_NOT_EXISTS, id);
                 } else {
                     return id;
                 }
             } catch(NumberFormatException exception) {
-                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_ID_PRODUCT, stringId);
+                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_ID, stringId);
             }
         }
     }

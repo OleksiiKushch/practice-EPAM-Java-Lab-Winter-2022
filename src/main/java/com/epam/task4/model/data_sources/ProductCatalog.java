@@ -22,6 +22,10 @@ public class ProductCatalog {
         productCatalog = new ArrayList<>();
     }
 
+    public ProductCatalog(List<Commodity> productCatalog) {
+        this.productCatalog = productCatalog;
+    }
+
     public List<Commodity> getProductCatalog() {
         return productCatalog;
     }

@@ -8,7 +8,6 @@ import com.epam.task4.model.entity.Order;
 import com.epam.task4.repository.CartRepository;
 import com.epam.task4.repository.OrderRepository;
 import com.epam.task4.repository.ProductRepository;
-import com.epam.task4.repository.factory.RepositoryFactory;
 import com.epam.task4.service.CartService;
 import com.epam.task4.util.ProductDataScanner;
 
@@ -26,20 +25,14 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
     private static final String DEFAULT_SUM_IF_CART_IS_EMPTY = "0.0";
 
-    private CartRepository cartRepository;
-    private OrderRepository orderRepository;
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
+    private final OrderRepository orderRepository;
+    private final CartRepository cartRepository;
 
-    public CartServiceImpl() {
-        initRepository();
-    }
-
-    @Override
-    public void initMockRepository() {
-        RepositoryFactory repositoryFactory = RepositoryFactory.getInstance();
-        cartRepository = repositoryFactory.getCartRepository();
-        orderRepository = repositoryFactory.getOrderRepository();
-        productRepository = repositoryFactory.getProductRepository();
+    public CartServiceImpl(ProductRepository productRepository, OrderRepository orderRepository, CartRepository cartRepository) {
+        this.productRepository = productRepository;
+        this.orderRepository = orderRepository;
+        this.cartRepository = cartRepository;
     }
 
     @Override

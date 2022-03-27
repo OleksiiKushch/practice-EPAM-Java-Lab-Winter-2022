@@ -3,7 +3,6 @@ package com.epam.task4.service.impl;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.model.entity.Order;
 import com.epam.task4.repository.OrderRepository;
-import com.epam.task4.repository.factory.RepositoryFactory;
 import com.epam.task4.service.OrderService;
 import com.epam.task4.util.DateScanner;
 
@@ -18,16 +17,10 @@ import java.util.stream.Collectors;
  * @author Oleksii Kushch
  */
 public class OrderServiceImpl implements OrderService {
-    private OrderRepository orderRepository;
+    private final OrderRepository orderRepository;
 
-    public OrderServiceImpl() {
-        initRepository();
-    }
-
-    @Override
-    public void initMockRepository() {
-        RepositoryFactory repositoryFactory = RepositoryFactory.getInstance();
-        orderRepository = repositoryFactory.getOrderRepository();
+    public OrderServiceImpl(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
     }
 
     @Override

@@ -34,6 +34,11 @@ public class Cart {
         history = new LinkedHashMap<>(16, 0.75f,true);
     }
 
+    public Cart(Map<Long, Integer> container, LinkedHashMap<Long, LocalDateTime> history) {
+        this.container = container;
+        this.history = history;
+    }
+
     public Map<Long, Integer> getContainer() {
         return container;
     }

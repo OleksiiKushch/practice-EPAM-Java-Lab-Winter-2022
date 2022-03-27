@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * @author Oleksii Kushch
  */
-public interface CartService extends Service {
+public interface CartService {
     List<Commodity> getContent();
     List<Map.Entry<Commodity, LocalDateTime>> getHistory();
     void interactivePut();

@@ -7,6 +7,6 @@ import java.util.List;
 /**
  * @author Oleksii Kushch
  */
-public interface ProductService extends Service {
+public interface ProductService {
     List<Commodity> getAllProducts();
 }

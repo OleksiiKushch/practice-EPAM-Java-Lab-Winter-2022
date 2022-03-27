@@ -1,5 +1,8 @@
 package com.epam.task4.constants;
 
+/**
+ * @author Oleksii Kushch
+ */
 public interface ShopLiterals {
     String BACK_CMD_FULL_CAST = "--back";
     String BACK_CMD_SHORT_CAST = "-b";
@@ -64,18 +67,19 @@ public interface ShopLiterals {
     String MSG_INVALID_NUMERIC_FORMAT_DAY = ConsoleColor.RED +
             "Invalid value for DayOfMonth (valid values 1 - 28/31): %d, try again:%n" + ConsoleColor.RESET;
 
-    String MSG_ENTER_ID_PRODUCT = ConsoleColor.CYAN +
-            "Please, enter id product which do you want to put to cart:" + ConsoleColor.RESET;
-    String MSG_INVALID_NUMERIC_FORMAT_ID_PRODUCT = ConsoleColor.RED +
+    String MSG_INVALID_FORMAT_ID = ConsoleColor.RED + "Invalid format id '%s', try again:%n" + ConsoleColor.RESET;
+
+    String MSG_ENTER_PRODUCT_ID = ConsoleColor.CYAN +
+            "Please, enter product id which do you want to put to cart:" + ConsoleColor.RESET;
+    String MSG_INVALID_NUMERIC_FORMAT_ID = ConsoleColor.RED +
             "Invalid format id (cannot be negative or equals zero), try again:" + ConsoleColor.RESET;
     String MSG_PRODUCT_DOES_NOT_EXISTS = ConsoleColor.RED +
             "Product with this id: %d does not exists, try again:%n" + ConsoleColor.RESET;
-    String MSG_INVALID_FORMAT_ID_PRODUCT = ConsoleColor.RED + "Invalid format id '%s', try again:%n" + ConsoleColor.RESET;
 
     String MSG_ENTER_AMOUNT_PRODUCT = ConsoleColor.CYAN +
             "Please, enter amount of this product (amount in stock - %d, amount in your cart - %d):%n" + ConsoleColor.RESET;
     String MSG_INVALID_NUMERIC_FORMAT_AMOUNT_PRODUCT = ConsoleColor.RED +
-            "Invalid format amount (cannot be negative or equals zero, try again:" + ConsoleColor.RESET;
+            "Invalid format amount (cannot be negative or equals zero), try again:" + ConsoleColor.RESET;
     String MSG_TOO_MUCH_VALUE_AMOUNT_PRODUCT = ConsoleColor.RED +
             "Too much value (amount for this product (with id: %d)): %d" + ConsoleColor.RESET;
     String MSG_TOO_MUCH_VALUE_AMOUNT_IN_CART_PRODUCT = ConsoleColor.RED +

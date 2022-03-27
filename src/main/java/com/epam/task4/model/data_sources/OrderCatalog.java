@@ -27,6 +27,10 @@ public class OrderCatalog {
         orderCatalog = new TreeMap<>();
     }
 
+    public OrderCatalog(Map<LocalDateTime, List<Commodity>> orderCatalog) {
+        this.orderCatalog = orderCatalog;
+    }
+
     public Map<LocalDateTime, List<Commodity>> getOrderCatalog() {
         return orderCatalog;
     }

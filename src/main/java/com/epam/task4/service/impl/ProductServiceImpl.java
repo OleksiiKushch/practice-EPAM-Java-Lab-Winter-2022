@@ -2,7 +2,6 @@ package com.epam.task4.service.impl;
 
 import com.epam.task1.entity.Commodity;
 import com.epam.task4.repository.ProductRepository;
-import com.epam.task4.repository.factory.RepositoryFactory;
 import com.epam.task4.service.ProductService;
 
 import java.util.List;
@@ -11,16 +10,10 @@ import java.util.List;
  * @author Oleksii Kushch
  */
 public class ProductServiceImpl implements ProductService {
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public ProductServiceImpl() {
-        initRepository();
-    }
-
-    @Override
-    public void initMockRepository() {
-        RepositoryFactory repositoryFactory = RepositoryFactory.getInstance();
-        productRepository = repositoryFactory.getProductRepository();
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
     @Override

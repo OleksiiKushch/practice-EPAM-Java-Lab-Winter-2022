@@ -9,10 +9,10 @@ import java.util.Map;
 /**
  * @author Oleksii Kushch
  */
-public class CartRepoMockImpl implements CartRepository {
-    private Cart cart;
+public class CartRepositoryImpl implements CartRepository {
+    private final Cart cart;
 
-    public CartRepoMockImpl(Cart cart) {
+    public CartRepositoryImpl(Cart cart) {
         this.cart = cart;
     }
 

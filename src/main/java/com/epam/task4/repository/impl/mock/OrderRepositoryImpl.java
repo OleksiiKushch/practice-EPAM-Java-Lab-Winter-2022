@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 /**
  * @author Oleksii Kushch
  */
-public class OrderRepoMockImpl implements OrderRepository {
-    private OrderCatalog orderCatalog;
+public class OrderRepositoryImpl implements OrderRepository {
+    private final OrderCatalog orderCatalog;
 
-    public OrderRepoMockImpl(OrderCatalog orderCatalog) {
+    public OrderRepositoryImpl(OrderCatalog orderCatalog) {
         this.orderCatalog = orderCatalog;
     }
 

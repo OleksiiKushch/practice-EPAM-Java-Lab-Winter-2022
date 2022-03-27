@@ -17,6 +17,8 @@ import java.time.LocalDate;
  * @author Oleksii Kushch
  */
 public class DateScanner {
+    private static final int MOCK_VALUE_FOR_YEAR_AND_DAY = 1;
+
     /**
      * Reading data (year) from the console with built-in validation.
      * <p>
@@ -104,7 +106,7 @@ public class DateScanner {
     private static boolean isValidMonth(int month) {
         boolean result = false;
         try {
-            LocalDate.of(1970, month, 1);
+            LocalDate.of(MOCK_VALUE_FOR_YEAR_AND_DAY, month, MOCK_VALUE_FOR_YEAR_AND_DAY);
             result = true;
         } catch (DateTimeException exception) {
             System.out.printf(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_MONTH, month);

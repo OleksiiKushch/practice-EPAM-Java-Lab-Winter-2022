@@ -9,10 +9,10 @@ import java.util.List;
 /**
  * @author Oleksii Kushch
  */
-public class ProductRepoMockImpl implements ProductRepository {
-    private ProductCatalog productCatalog;
+public class ProductRepositoryImpl implements ProductRepository {
+    private final ProductCatalog productCatalog;
 
-    public ProductRepoMockImpl(ProductCatalog productCatalog) {
+    public ProductRepositoryImpl(ProductCatalog productCatalog) {
         this.productCatalog = productCatalog;
     }
 
