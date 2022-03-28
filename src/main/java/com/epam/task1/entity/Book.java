@@ -32,6 +32,15 @@ public class Book extends Commodity {
         this.numberOfPages = numberOfPages;
     }
 
+    public Book(Long id, String frontTitle, BigDecimal price, Integer amount,
+                String title, String author, String language, int numberOfPages) {
+        super(id, frontTitle, price, amount);
+        this.title = title;
+        this.author = author;
+        this.language = language;
+        this.numberOfPages = numberOfPages;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -87,6 +96,7 @@ public class Book extends Commodity {
                 "id=" + getId() +
                 ", frontTitle='" + getFrontTitle() + '\'' +
                 ", price=" + getPrice() +
+                ", amount=" + getAmount() +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", language='" + language + '\'' +

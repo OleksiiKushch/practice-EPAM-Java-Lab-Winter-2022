@@ -32,6 +32,15 @@ public class EReader extends Commodity {
         this.resolutionPPI = resolutionPPI;
     }
 
+    public EReader(Long id, String frontTitle, BigDecimal price, Integer amount,
+                   String model, float displaySize, int storageGB, int resolutionPPI) {
+        super(id, frontTitle, price, amount);
+        this.model = model;
+        this.displaySize = displaySize;
+        this.storageGB = storageGB;
+        this.resolutionPPI = resolutionPPI;
+    }
+
     public String getModel() {
         return model;
     }
@@ -87,6 +96,7 @@ public class EReader extends Commodity {
                 "id=" + getId() +
                 ", frontTitle='" + getFrontTitle() + '\'' +
                 ", price=" + getPrice() +
+                ", amount=" + getAmount() +
                 ", model='" + model + '\'' +
                 ", displaySize=" + displaySize +
                 ", storageGB=" + storageGB +
