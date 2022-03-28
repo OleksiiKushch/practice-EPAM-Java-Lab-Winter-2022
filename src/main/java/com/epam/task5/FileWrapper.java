@@ -1,13 +1,9 @@
 package com.epam.task5;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
+import java.util.Scanner;
 
 /**
  * A wrapper class for viewing line-by-line a text file  with a loop 'for each'.
@@ -26,28 +22,24 @@ public class FileWrapper implements Iterable<String> {
     }
 
     public class FileIterator implements Iterator<String> {
-        private int cursor;
-        private List<String> lines;
+        private Scanner scanner;
 
         public FileIterator() {
             try {
-                lines = new BufferedReader(new FileReader(file)).lines().collect(Collectors.toList());
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
+                scanner = new Scanner(new File("src/main/resources/task5_demo_test_data/for_MyViewerTxtFile.txt"));
+            } catch (FileNotFoundException exception) {
+                exception.printStackTrace();
             }
         }
 
         @Override
         public boolean hasNext() {
-            return cursor < lines.size();
+            return scanner.hasNextLine();
         }
 
         @Override
         public String next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            return lines.get(cursor++);
+            return scanner.nextLine();
         }
     }
 }
