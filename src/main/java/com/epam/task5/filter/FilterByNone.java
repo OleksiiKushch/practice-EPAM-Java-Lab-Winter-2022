@@ -8,6 +8,19 @@ import java.io.File;
  * @author Oleksii Kushch
  */
 public class FilterByNone extends FilterLayer {
+    public FilterByNone() {
+
+    }
+
+    public FilterByNone(FilterLayer next) {
+        linkWith(next);
+    }
+
+    @Override
+    public boolean isNullData() {
+        return false;
+    }
+
     @Override
     public boolean filterOut(File file) {
         return filterOutNext(file);

@@ -7,10 +7,24 @@ import java.io.File;
  * @author Oleksii Kushch
  */
 public class FilterByName extends FilterLayer {
-    private final String name;
+    private String name;
+
+    public FilterByName() {
+
+    }
 
     public FilterByName(String name) {
         this.name = name;
+    }
+
+    public FilterByName(FilterLayer next, String name) {
+        this(name);
+        linkWith(next);
+    }
+
+    @Override
+    public boolean isNullData() {
+        return name == null;
     }
 
     @Override

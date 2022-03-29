@@ -3,6 +3,7 @@ package com.epam.task5;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -26,7 +27,7 @@ public class FileWrapper implements Iterable<String> {
 
         public FileIterator() {
             try {
-                scanner = new Scanner(new File("src/main/resources/task5_demo_test_data/for_MyViewerTxtFile.txt"));
+                scanner = new Scanner(file);
             } catch (FileNotFoundException exception) {
                 exception.printStackTrace();
             }
@@ -39,6 +40,9 @@ public class FileWrapper implements Iterable<String> {
 
         @Override
         public String next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
             return scanner.nextLine();
         }
     }

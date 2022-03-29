@@ -7,10 +7,24 @@ import java.io.File;
  * @author Oleksii Kushch
  */
 public class FilterByExtension extends FilterLayer {
-    private final String extension;
+    private String extension;
+
+    public FilterByExtension() {
+
+    }
 
     public FilterByExtension(String extension) {
         this.extension = extension;
+    }
+
+    public FilterByExtension(FilterLayer next, String extension) {
+        this(extension);
+        linkWith(next);
+    }
+
+    @Override
+    public boolean isNullData() {
+        return extension == null;
     }
 
     @Override

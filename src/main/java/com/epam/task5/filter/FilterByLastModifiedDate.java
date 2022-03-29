@@ -4,18 +4,35 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Specific element of the file list filter chain. Filters the list of files by their change date range.
  * @author Oleksii Kushch
  */
 public class FilterByLastModifiedDate extends FilterLayer {
-    private final LocalDateTime fromDate;
-    private final LocalDateTime toDate;
+    private LocalDateTime fromDate;
+    private LocalDateTime toDate;
 
-    public FilterByLastModifiedDate(LocalDateTime fromDate, LocalDateTime toDate) {
-        this.fromDate = fromDate;
-        this.toDate = toDate;
+    public FilterByLastModifiedDate() {
+
+    }
+
+    public FilterByLastModifiedDate(Map.Entry<LocalDateTime, LocalDateTime> fromToDate) {
+        if (fromToDate != null) {
+            this.fromDate = fromToDate.getKey();
+            this.toDate = fromToDate.getValue();
+        }
+    }
+
+    public FilterByLastModifiedDate(FilterLayer next, Map.Entry<LocalDateTime, LocalDateTime> fromToDate) {
+        this(fromToDate);
+        linkWith(next);
+    }
+
+    @Override
+    public boolean isNullData() {
+        return fromDate == null || toDate == null;
     }
 
     @Override

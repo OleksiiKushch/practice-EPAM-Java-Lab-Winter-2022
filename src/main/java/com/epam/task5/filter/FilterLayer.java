@@ -18,16 +18,14 @@ public abstract class FilterLayer {
      * @param next the next link (element) in the chain of filter objects
      */
     public void linkWith(FilterLayer next) {
-        if (this.next == null) {
+        if (this.next == null || this.next.isNullData()) {
             this.next = next;
         } else {
             this.next.linkWith(next);
         }
     }
 
-    public FilterLayer getNext() {
-        return next;
-    }
+    public abstract boolean isNullData();
 
     /**
      * Subclasses implement specific logic (filtering) in this method.
@@ -38,7 +36,7 @@ public abstract class FilterLayer {
      * Starts filtering on the next object, or ends filtering if we're on the last element in the chain.
      */
     protected boolean filterOutNext(File file) {
-        if (next == null) {
+        if (next == null || next.isNullData()) {
             return true;
         }
         return next.filterOut(file);
