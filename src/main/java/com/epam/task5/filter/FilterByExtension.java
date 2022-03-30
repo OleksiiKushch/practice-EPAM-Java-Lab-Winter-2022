@@ -29,9 +29,12 @@ public class FilterByExtension extends FilterLayer {
 
     @Override
     public boolean filterOut(File file) {
-        if (file.getName().endsWith(extension)) {
+        if (isNullData()) { // skip this chain link if its data is null
             return filterOutNext(file);
         }
-        return false;
+        if (!file.getName().endsWith(extension)) {
+            return false;
+        }
+        return filterOutNext(file);
     }
 }

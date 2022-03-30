@@ -3,6 +3,7 @@ package com.epam.task5.constants;
 public interface FilterMessages {
     String DATE_TIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
 
+    String INVALID_INPUT = "Некорректный ввод, выберите 1 (да) или 0 (нет), попробуйте еще раз:";
     String SEARCH_BY_NAME = "искать по имени файла? (0/1)";
     String INPUT_NAME = "Введите имя";
     String SEARCH_BY_EXTENSION = "искать по расширению файла? (0/1)";

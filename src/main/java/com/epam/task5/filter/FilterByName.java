@@ -29,9 +29,12 @@ public class FilterByName extends FilterLayer {
 
     @Override
     public boolean filterOut(File file) {
-        if (file.getName().replaceFirst("[.][^.]+$", "").equals(name)) {
+        if (isNullData()) { // skip this chain link if its data is null
             return filterOutNext(file);
         }
-        return false;
+        if (!file.getName().replaceFirst("[.][^.]+$", "").equals(name)) {
+            return false;
+        }
+        return filterOutNext(file);
     }
 }

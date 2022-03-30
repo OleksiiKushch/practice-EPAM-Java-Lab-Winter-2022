@@ -29,7 +29,7 @@ public class FileWrapper implements Iterable<String> {
             try {
                 scanner = new Scanner(file);
             } catch (FileNotFoundException exception) {
-                exception.printStackTrace();
+                System.out.println(exception.getMessage());
             }
         }
 

@@ -1,7 +1,6 @@
 package com.epam.task5.filter;
 
 import java.io.File;
-import java.util.Map;
 
 /**
  * Specific element of the file list filter chain. Filters the list of files by their size in bytes.
@@ -15,15 +14,15 @@ public class FilterBySize extends FilterLayer {
 
     }
 
-    public FilterBySize(Map.Entry<Long, Long> rangeSize) {
-        if (rangeSize != null) {
-            this.minSize = rangeSize.getKey();
-            this.maxSize = rangeSize.getValue();
+    public FilterBySize(Long minSize, Long maxSize) {
+        if (minSize != null && maxSize != null) {
+            this.minSize = minSize;
+            this.maxSize = maxSize;
         }
     }
 
-    public FilterBySize(FilterLayer next, Map.Entry<Long, Long> rangeSize) {
-        this(rangeSize);
+    public FilterBySize(FilterLayer next, Long minSize, Long maxSize) {
+        this(minSize, maxSize);
         linkWith(next);
     }
 
@@ -34,9 +33,12 @@ public class FilterBySize extends FilterLayer {
 
     @Override
     public boolean filterOut(File file) {
-        if (minSize <= file.length() && file.length() <= maxSize) {
+        if (isNullData()) { // skip this chain link if its data is null
             return filterOutNext(file);
         }
-        return false;
+        if (!isNullData() && !(minSize <= file.length() && file.length() <= maxSize)) {
+            return false;
+        }
+        return filterOutNext(file);
     }
 }

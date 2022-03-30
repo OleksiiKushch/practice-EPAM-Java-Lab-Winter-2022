@@ -4,7 +4,6 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * Specific element of the file list filter chain. Filters the list of files by their change date range.
@@ -18,15 +17,15 @@ public class FilterByLastModifiedDate extends FilterLayer {
 
     }
 
-    public FilterByLastModifiedDate(Map.Entry<LocalDateTime, LocalDateTime> fromToDate) {
-        if (fromToDate != null) {
-            this.fromDate = fromToDate.getKey();
-            this.toDate = fromToDate.getValue();
+    public FilterByLastModifiedDate(LocalDateTime fromDate, LocalDateTime toDate) {
+        if (fromDate != null && toDate != null) {
+            this.fromDate = fromDate;
+            this.toDate = toDate;
         }
     }
 
-    public FilterByLastModifiedDate(FilterLayer next, Map.Entry<LocalDateTime, LocalDateTime> fromToDate) {
-        this(fromToDate);
+    public FilterByLastModifiedDate(FilterLayer next, LocalDateTime fromDate, LocalDateTime toDate) {
+        this(fromDate, toDate);
         linkWith(next);
     }
 
@@ -37,11 +36,14 @@ public class FilterByLastModifiedDate extends FilterLayer {
 
     @Override
     public boolean filterOut(File file) {
-        Date fromDate = Date.from(this.fromDate.atZone(ZoneId.systemDefault()).toInstant());
-        Date toDate = Date.from(this.toDate.atZone(ZoneId.systemDefault()).toInstant());
-        if (fromDate.getTime() <= file.lastModified() && file.lastModified() <= toDate.getTime()) {
+        if (isNullData()) { // skip this chain link if its data is null
             return filterOutNext(file);
         }
-        return false;
+        Date fromDate = Date.from(this.fromDate.atZone(ZoneId.systemDefault()).toInstant());
+        Date toDate = Date.from(this.toDate.atZone(ZoneId.systemDefault()).toInstant());
+        if (!(fromDate.getTime() <= file.lastModified() && file.lastModified() <= toDate.getTime())) {
+            return false;
+        }
+        return filterOutNext(file);
     }
 }
