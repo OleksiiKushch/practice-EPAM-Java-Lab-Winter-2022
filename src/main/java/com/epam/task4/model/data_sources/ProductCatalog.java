@@ -2,6 +2,7 @@ package com.epam.task4.model.data_sources;
 
 import com.epam.task1.entity.Commodity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * @author Oleksii Kushch
  */
-public class ProductCatalog {
+public class ProductCatalog implements Serializable {
     /**
      * A container that stores objects concrete implementation classes of the abstract class {@link Commodity}.
      */

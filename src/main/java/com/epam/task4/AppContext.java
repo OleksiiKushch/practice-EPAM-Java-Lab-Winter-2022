@@ -1,6 +1,7 @@
 package com.epam.task4;
 
 import com.epam.task4.controller.CommandContainer;
+import com.epam.task4.controller.command.AddProductToCatalogCmd;
 import com.epam.task4.controller.command.CheckoutCmd;
 import com.epam.task4.controller.command.HelpCmd;
 import com.epam.task4.controller.command.PutProductToCartCmd;
@@ -27,6 +28,7 @@ import com.epam.task4.service.ProductService;
 import com.epam.task4.service.impl.CartServiceImpl;
 import com.epam.task4.service.impl.OrderServiceImpl;
 import com.epam.task4.service.impl.ProductServiceImpl;
+import com.epam.task4.util.UtilProductCatalog;
 
 import java.util.Scanner;
 
@@ -34,6 +36,8 @@ import java.util.Scanner;
  * @author Oleksii Kushch
  */
 public class AppContext {
+    public static final String PATH_PRODUCT_CATALOG = "product_catalog";
+
     private ProductCatalog productCatalog;
     private OrderCatalog orderCatalog;
     private Cart cart;
@@ -67,7 +71,7 @@ public class AppContext {
     }
 
     private void initDataSource() {
-        productCatalog = InitMockResources.initProductCatalog(new ProductCatalog());
+        productCatalog = UtilProductCatalog.loadProductCatalog(PATH_PRODUCT_CATALOG);
         orderCatalog = InitMockResources.initOrderCatalog(new OrderCatalog());
         cart = new Cart();
     }
@@ -101,6 +105,8 @@ public class AppContext {
         commandContainer.getCommands().put(ViewOrderCatalogCmd.FULL_KEY, new ViewOrderCatalogCmd(orderService));
         commandContainer.getCommands().put(ViewOrderByNearestDateCmd.FULL_KEY, new ViewOrderByNearestDateCmd(orderService));
 
+        commandContainer.getCommands().put(AddProductToCatalogCmd.FULL_KEY, new AddProductToCatalogCmd(productService));
+
         commandContainer.getCommands().put(HelpCmd.FULL_KEY, new HelpCmd());
         commandContainer.getCommands().put(StopCmd.FULL_KEY, new StopCmd());
 
@@ -113,6 +119,12 @@ public class AppContext {
         commandContainer.getCommands().put(ViewOrderCatalogCmd.SHORT_KEY, new ViewOrderCatalogCmd(orderService));
         commandContainer.getCommands().put(ViewOrderByNearestDateCmd.SHORT_KEY, new ViewOrderByNearestDateCmd(orderService));
 
+        commandContainer.getCommands().put(AddProductToCatalogCmd.SHORT_KEY, new AddProductToCatalogCmd(productService));
+
         return commandContainer;
+    }
+
+    public ProductCatalog getProductCatalog() {
+        return productCatalog;
     }
 }
