@@ -20,7 +20,7 @@ public class AddProductToCatalogCmd implements Command {
 
     @Override
     public void execute() {
-
+        productService.addProductToCatalog();
     }
 
     @Override

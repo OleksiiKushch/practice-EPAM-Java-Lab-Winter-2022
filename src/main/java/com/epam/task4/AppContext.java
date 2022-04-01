@@ -28,6 +28,7 @@ import com.epam.task4.service.ProductService;
 import com.epam.task4.service.impl.CartServiceImpl;
 import com.epam.task4.service.impl.OrderServiceImpl;
 import com.epam.task4.service.impl.ProductServiceImpl;
+import com.epam.task6.strategy.create_product.ProductCreatingStrategy;
 import com.epam.task4.util.UtilProductCatalog;
 
 import java.util.Scanner;
@@ -36,7 +37,7 @@ import java.util.Scanner;
  * @author Oleksii Kushch
  */
 public class AppContext {
-    public static final String PATH_PRODUCT_CATALOG = "product_catalog";
+    public static final String PATH_PRODUCT_CATALOG = "src/main/java/com/epam/task4/product_catalog";
 
     private ProductCatalog productCatalog;
     private OrderCatalog orderCatalog;
@@ -45,6 +46,8 @@ public class AppContext {
     private ProductRepository productRepository;
     private OrderRepository orderRepository;
     private CartRepository cartRepository;
+
+    private ProductCreatingStrategy productCreatingStrategy;
 
     private ProductService productService;
     private OrderService orderService;
@@ -55,11 +58,12 @@ public class AppContext {
     private final Scanner scanner;
 
     public AppContext() {
+        scanner = new Scanner(System.in);
         initDataSource();
         initRepository();
+        initStrategyCreatingProduct();
         initService();
         initController();
-        scanner = new Scanner(System.in);
     }
 
     public Scanner getScanner() {
@@ -82,8 +86,12 @@ public class AppContext {
         cartRepository = new CartRepositoryImpl(cart);
     }
 
+    private void initStrategyCreatingProduct() {
+
+    }
+
     private void initService() {
-        productService = new ProductServiceImpl(productRepository);
+        productService = new ProductServiceImpl(productRepository, productCreatingStrategy);
         orderService = new OrderServiceImpl(orderRepository);
         cartService = new CartServiceImpl(productRepository, orderRepository, cartRepository);
     }

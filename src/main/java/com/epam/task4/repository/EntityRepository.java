@@ -7,4 +7,5 @@ import java.util.List;
  */
 public interface EntityRepository<T> {
     List<T> getAll();
+    int insert(T entity);
 }

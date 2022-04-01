@@ -24,6 +24,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public int insert(Commodity commodity) {
+        productCatalog.getProductCatalog().add(commodity);
+        return 1;
+    }
+
+    @Override
     public List<Commodity> getAll() {
         return productCatalog.getProductCatalog();
     }

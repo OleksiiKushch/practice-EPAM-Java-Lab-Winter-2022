@@ -4,6 +4,10 @@ package com.epam.task4.constants;
  * @author Oleksii Kushch
  */
 public interface ShopLiterals {
+    String BOOK_LITERAL_TYPE = "book";
+    String AUDIOBOOK_LITERAL_TYPE = "audiobook";
+    String E_READER_LITERAL_TYPE = "e-reader";
+
     String BACK_CMD_FULL_CAST = "--back";
     String BACK_CMD_SHORT_CAST = "-b";
 
@@ -69,12 +73,17 @@ public interface ShopLiterals {
 
     String MSG_INVALID_FORMAT_ID = ConsoleColor.RED + "Invalid format id '%s', try again:%n" + ConsoleColor.RESET;
 
-    String MSG_ENTER_PRODUCT_ID = ConsoleColor.CYAN +
+    String MSG_ENTER_PRODUCT_ID_FOR_CART = ConsoleColor.CYAN +
             "Please, enter product id which do you want to put to cart:" + ConsoleColor.RESET;
     String MSG_INVALID_NUMERIC_FORMAT_ID = ConsoleColor.RED +
             "Invalid format id (cannot be negative or equals zero), try again:" + ConsoleColor.RESET;
     String MSG_PRODUCT_DOES_NOT_EXISTS = ConsoleColor.RED +
             "Product with this id: %d does not exists, try again:%n" + ConsoleColor.RESET;
+
+    String MSG_ENTER_PRODUCT_ID_FOR_CATALOG = ConsoleColor.CYAN +
+            "Please, enter product id which do you want to add to catalog:" + ConsoleColor.RESET;
+    String MSG_PRODUCT_ALREADY_EXISTS = ConsoleColor.RED +
+            "Product with this id: %d already exists in the catalog, try again:%n" + ConsoleColor.RESET;
 
     String MSG_ENTER_AMOUNT_PRODUCT = ConsoleColor.CYAN +
             "Please, enter amount of this product (amount in stock - %d, amount in your cart - %d):%n" + ConsoleColor.RESET;
