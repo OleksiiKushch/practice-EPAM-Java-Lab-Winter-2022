@@ -9,7 +9,7 @@ import com.epam.task4.repository.CartRepository;
 import com.epam.task4.repository.OrderRepository;
 import com.epam.task4.repository.ProductRepository;
 import com.epam.task4.service.CartService;
-import com.epam.task4.util.ProductDataScanner;
+import com.epam.task4.util.ProductDataConsoleScanner;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -50,12 +50,12 @@ public class CartServiceImpl implements CartService {
     @Override
     public void interactivePut() {
         System.out.println(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
-        Long id = ProductDataScanner.inputIdForCart(productRepository);
+        Long id = ProductDataConsoleScanner.inputIdForCart(productRepository);
         if (id == null) {
             System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
             return;
         }
-        Integer amount = ProductDataScanner.inputAmountForCart(id, productRepository, cartRepository);
+        Integer amount = ProductDataConsoleScanner.inputAmountForCart(id, productRepository, cartRepository);
         if (amount == null) {
             System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
             return;

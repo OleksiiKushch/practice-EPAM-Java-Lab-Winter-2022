@@ -14,7 +14,7 @@ public class ViewOrdersFromToByDateCmd implements Command {
     public static final String FULL_KEY = "--order-list-from-to";
     public static final String SHORT_KEY = "-olft";
 
-    public static final String DESCRIPTION = "Display a list of orders for a certain period of time";
+    private static final String DESCRIPTION = "Display a list of orders for a certain period of time";
 
     private final OrderService orderService;
 

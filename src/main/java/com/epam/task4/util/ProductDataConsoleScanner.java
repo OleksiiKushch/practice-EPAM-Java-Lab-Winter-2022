@@ -11,6 +11,7 @@ import com.epam.task4.repository.CartRepository;
 import com.epam.task4.repository.ProductRepository;
 
 import java.math.BigDecimal;
+import java.util.function.Function;
 
 /**
  * Class for reading data about product (like id or amount) from the console with built-in validation.
@@ -19,7 +20,7 @@ import java.math.BigDecimal;
  * @see PutProductToCartCmd
  * @author Oleksii Kushch
  */
-public class ProductDataScanner {
+public class ProductDataConsoleScanner {
     /**
      * Reading data (product id) from the console with built-in validation.
      * <p>
@@ -37,7 +38,7 @@ public class ProductDataScanner {
             }
             try {
                 Long id = Long.valueOf(stringId);
-                if (isNegativeOrZero(id)) {
+                if (!MyValidator.isNotNegativeOrNotZero(id)) {
                     System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
                 } else if (productRepository.getById(id) == null) {
                     System.out.printf(ShopLiterals.MSG_PRODUCT_DOES_NOT_EXISTS, id);
@@ -63,7 +64,7 @@ public class ProductDataScanner {
         Integer amountOnCart = cartRepository.getAll().get(id);
         amountOnCart = amountOnCart != null ? amountOnCart : 0;
 
-        System.out.printf(ShopLiterals.MSG_ENTER_AMOUNT_PRODUCT, amountOnStock, amountOnCart);
+        System.out.printf(ShopLiterals.MSG_ENTER_PRODUCT_AMOUNT_FOR_CART, amountOnStock, amountOnCart);
 
         while (true) {
             String stringAmount = MainApp.getContext().getScanner().nextLine();
@@ -73,24 +74,22 @@ public class ProductDataScanner {
             }
             try {
                 Integer amount = Integer.valueOf(stringAmount);
-                if (isNegativeOrZero(amount)) {
-                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT_PRODUCT);
+                if (!MyValidator.isNotNegativeOrNotZero(amount)) {
+                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT);
                 } else if (amountOnStock < amount + amountOnCart) {
-                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_AMOUNT_PRODUCT, id, amount + amountOnCart);
+                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT, id, amount + amountOnCart);
                     if (amountOnCart > 0) {
-                        System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_AMOUNT_IN_CART_PRODUCT, amount, amountOnCart);
+                        System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT_FOR_CART, amount, amountOnCart);
                     }
-                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_AMOUNT_IN_STOCK_PRODUCT, amountOnStock);
+                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT_FOR_CATALOG, amountOnStock);
                 } else {
                     return amount;
                 }
             } catch(NumberFormatException exception) {
-                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_AMOUNT_PRODUCT, stringAmount);
+                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_AMOUNT, stringAmount);
             }
         }
     }
-
-
 
     public static Long inputIdForCatalog(ProductRepository productRepository) {
         System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_ID_FOR_CATALOG);
@@ -102,7 +101,7 @@ public class ProductDataScanner {
             }
             try {
                 Long id = Long.valueOf(stringId);
-                if (isNegativeOrZero(id)) {
+                if (!MyValidator.isNotNegativeOrNotZero(id)) {
                     System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
                 } else if (productRepository.getById(id) != null) {
                     System.out.printf(ShopLiterals.MSG_PRODUCT_ALREADY_EXISTS, id);
@@ -116,12 +115,12 @@ public class ProductDataScanner {
     }
 
     public static String inputFrontTitle() {
-        System.out.println("Please, enter a front title for new product:");
+        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_FRONT_TITLE);
         return inputStringParameter();
     }
 
     public static BigDecimal inputPrice() {
-        System.out.println("Please, enter new product price:");
+        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_PRICE);
         while(true) {
             String stringPrice = MainApp.getContext().getScanner().nextLine().trim();
             if (stringPrice.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
@@ -130,26 +129,29 @@ public class ProductDataScanner {
             }
             try {
                 BigDecimal price = new BigDecimal(stringPrice);
-                if (price.compareTo(BigDecimal.ZERO) >= 0) {
-                    System.out.println("Invalid format price (cannot be negative), try again:");
+                if (!(price.compareTo(BigDecimal.ZERO) >= 0)) {
+                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_PRICE);
                 } else {
                     return price;
                 }
             } catch(NumberFormatException exception) {
-                System.out.printf("Invalid format price '%s', try again:%n", stringPrice);
+                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_PRICE, stringPrice);
             }
         }
     }
 
-    public static Integer inputAmountForStock() {
-        System.out.println("Please, enter amount in stock for new product:");
-        return inputUnsignedIntParameter(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT_PRODUCT,
-                ShopLiterals.MSG_INVALID_FORMAT_AMOUNT_PRODUCT);
+    public static Integer inputAmountForCatalog() {
+        System.out.println(ShopLiterals.MSG_ENTER_AMOUNT_PRODUCT_FOR_CATALOG);
+        return (Integer) inputNumericParameter(
+                MyValidator::isNotNegative,
+                Integer::valueOf,
+                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT,
+                ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_AMOUNT);
     }
 
     public static Class<? extends Commodity> inputType() {
-        System.out.println("Please, enter type product which do you want to add to catalog:");
-        System.out.printf("Existing types of products: %s, %s, %S%n", ShopLiterals.BOOK_LITERAL_TYPE,
+        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_TYPE);
+        System.out.printf(ShopLiterals.MSG_FORMAT_EXISTING_PRODUCT_TYPES, ShopLiterals.BOOK_LITERAL_TYPE,
                 ShopLiterals.AUDIOBOOK_LITERAL_TYPE, ShopLiterals.E_READER_LITERAL_TYPE);
         while (true) {
             String stringType = MainApp.getContext().getScanner().nextLine().trim();
@@ -163,77 +165,93 @@ public class ProductDataScanner {
             } else if (stringType.equals(ShopLiterals.E_READER_LITERAL_TYPE)) {
                 return EReader.class;
             } else {
-                System.out.printf("Invalid input '%s', choose from a %s, %s and %s,try again:", stringType,
+                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_TYPE, stringType,
                         ShopLiterals.BOOK_LITERAL_TYPE, ShopLiterals.AUDIOBOOK_LITERAL_TYPE, ShopLiterals.E_READER_LITERAL_TYPE);
             }
         }
     }
 
     public static String inputTitle() {
-        System.out.println("Please, enter a title for new product (book):");
+        System.out.println(ShopLiterals.MSG_ENTER_BOOK_TITlE);
         return inputStringParameter();
     }
 
     public static String inputAuthor() {
-        System.out.println("Please, enter a title for new product (book):");
+        System.out.println(ShopLiterals.MSG_ENTER_BOOK_AUTHOR);
         return inputStringParameter();
     }
 
     public static String inputLanguage() {
-        System.out.println("Please, enter a language for new product (book):");
+        System.out.println(ShopLiterals.MSG_ENTER_BOOK_LANGUAGE);
         return inputStringParameter();
     }
 
     public static Integer inputNumberOfPages() {
-        System.out.println("Please, enter a number of pages for new product (book):");
-        return inputUnsignedIntParameter(
-                "Invalid number of pages (cannot be negative), try again:",
-                "Invalid format number of pages '%s', try again:%n");
+        System.out.println(ShopLiterals.MSG_ENTER_BOOK_NUMBER_PAGES);
+        return (Integer) inputNumericParameter(
+                MyValidator::isNotNegativeOrNotZero,
+                Integer::valueOf,
+                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_NUMBER_PAGES,
+                ShopLiterals.MSG_INVALID_FORMAT_NUMBER_PAGES);
     }
 
     public static Integer inputSizeMB() {
-        System.out.println("Please, enter a size in MB for new product (audiobook):");
-        return inputUnsignedIntParameter(
-                "Invalid size (cannot be negative), try again:",
-                "Invalid format size '%s', try again:%n");
+        System.out.println(ShopLiterals.MSG_ENTER_AUDIOBOOK_SIZE_MB);
+        return (Integer) inputNumericParameter(
+                MyValidator::isNotNegativeOrNotZero,
+                Integer::valueOf,
+                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_SIZE_MB,
+                ShopLiterals.MSG_INVALID_FORMAT_SIZE_MB);
     }
 
     public static Integer inputListeningLength() {
-        System.out.println("Please, enter a listening length in minutes for new product (audiobook):");
-        return inputUnsignedIntParameter(
-                "Invalid listening length (cannot be negative), try again:",
-                "Invalid format listening length '%s', try again:%n");
+        System.out.println(ShopLiterals.MSG_ENTER_AUDIOBOOK_LISTENING_LENGTH);
+        return (Integer) inputNumericParameter(
+                MyValidator::isNotNegativeOrNotZero,
+                Integer::valueOf,
+                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_LISTENING_LENGTH,
+                ShopLiterals.MSG_INVALID_FORMAT_LISTENING_LENGTH);
     }
 
     public static String inputNarrator() {
-        System.out.println("Please, enter the narrator for new product (book):");
+        System.out.println(ShopLiterals.MSG_ENTER_AUDIOBOOK_NARRATOR);
         return inputStringParameter();
     }
 
     public static String inputModel() {
-        System.out.println("Please, enter the model for new product (E-Reader):");
+        System.out.println(ShopLiterals.MSG_ENTER_E_READER_MODEL);
         return inputStringParameter();
     }
 
     public static Float inputDisplaySize() {
-        return null;
+        System.out.println(ShopLiterals.MSG_ENTER_E_READER_DISPLAY_SIZE);
+        return (Float) inputNumericParameter(
+                MyValidator::isNotNegativeOrNotZero,
+                Float::valueOf,
+                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_DISPLAY_SIZE,
+                ShopLiterals.MSG_INVALID_FORMAT_DISPLAY_SIZE);
     }
 
     public static Integer inputStorageGB() {
-        System.out.println("Please, enter a storage in GB for new product (E-Reader):");
-        return inputUnsignedIntParameter(
-                "Invalid storage (cannot be negative), try again:",
-                "Invalid format storage '%s', try again:%n");
+        System.out.println(ShopLiterals.MSG_ENTER_E_READER_STORAGE_CAPACITY_GB);
+        return (Integer) inputNumericParameter(
+                MyValidator::isNotNegativeOrNotZero,
+                Integer::valueOf,
+                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_STORAGE_CAPACITY_GB,
+                ShopLiterals.MSG_INVALID_FORMAT_STORAGE_CAPACITY_GB);
     }
 
     public static Integer inputResolutionPPI() {
-        System.out.println("Please, enter a resolution in PPI for new product (E-Reader):");
-        return inputUnsignedIntParameter(
-                "Invalid resolution (cannot be negative), try again:",
-                "Invalid format resolution '%s', try again:%n");
+        System.out.println(ShopLiterals.MSG_ENTER_E_READER_RESOLUTION_PPI);
+        return (Integer) inputNumericParameter(
+                MyValidator::isNotNegativeOrNotZero,
+                Integer::valueOf,
+                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_RESOLUTION_PPI,
+                ShopLiterals.MSG_INVALID_FORMAT_RESOLUTION_PPI);
     }
 
-    private static Integer inputUnsignedIntParameter(String msgInvalidNumericFormat, String msgInvalidFormat) {
+    private static Number inputNumericParameter(Function<Number, Boolean> validator, Function<String, Number> convertor,
+                                                 String msgInvalidNumericFormat, String msgInvalidFormat) {
         while (true) {
             String stringResult = MainApp.getContext().getScanner().nextLine();
             if (stringResult.equals(ShopLiterals.BACK_CMD_FULL_CAST)
@@ -241,8 +259,8 @@ public class ProductDataScanner {
                 return null;     // abort the entire operation
             }
             try {
-                Integer result = Integer.valueOf(stringResult);
-                if (result <= 0) {
+                Number result = convertor.apply(stringResult);
+                if (!validator.apply(result)) {
                     System.out.println(msgInvalidNumericFormat);
                 } else {
                     return result;
@@ -260,9 +278,5 @@ public class ProductDataScanner {
             return null;     // abort the entire operation
         }
         return result;
-    }
-
-    private static boolean isNegativeOrZero(Number number) {
-        return number.longValue() <= 0;
     }
 }

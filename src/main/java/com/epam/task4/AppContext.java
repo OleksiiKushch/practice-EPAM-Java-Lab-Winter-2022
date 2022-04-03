@@ -1,5 +1,6 @@
 package com.epam.task4;
 
+import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.CommandContainer;
 import com.epam.task4.controller.command.AddProductToCatalogCmd;
 import com.epam.task4.controller.command.CheckoutCmd;
@@ -28,7 +29,9 @@ import com.epam.task4.service.ProductService;
 import com.epam.task4.service.impl.CartServiceImpl;
 import com.epam.task4.service.impl.OrderServiceImpl;
 import com.epam.task4.service.impl.ProductServiceImpl;
-import com.epam.task6.strategy.create_product.ProductCreatingStrategy;
+import com.epam.task6.create_product.strategy.AutoProductCreatingStrategy;
+import com.epam.task6.create_product.strategy.ManualProductCreatingStrategy;
+import com.epam.task6.create_product.strategy.ProductCreatingStrategy;
 import com.epam.task4.util.UtilProductCatalog;
 
 import java.util.Scanner;
@@ -47,7 +50,8 @@ public class AppContext {
     private OrderRepository orderRepository;
     private CartRepository cartRepository;
 
-    private ProductCreatingStrategy productCreatingStrategy;
+    /** set the default mode as "manual", however it can be changed in the method {@link #initStrategyCreatingProduct()} */
+    private ProductCreatingStrategy productCreatingStrategy = new ManualProductCreatingStrategy();
 
     private ProductService productService;
     private OrderService orderService;
@@ -74,6 +78,10 @@ public class AppContext {
         return commandContainer;
     }
 
+    public ProductCatalog getProductCatalog() {
+        return productCatalog;
+    }
+
     private void initDataSource() {
         productCatalog = UtilProductCatalog.loadProductCatalog(PATH_PRODUCT_CATALOG);
         orderCatalog = InitMockResources.initOrderCatalog(new OrderCatalog());
@@ -87,7 +95,37 @@ public class AppContext {
     }
 
     private void initStrategyCreatingProduct() {
-
+        System.out.printf(ShopLiterals.MSG_WHEN_INIT_PRODUCT_CREATING_STRATEGY,
+                ManualProductCreatingStrategy.getFullDescription(), AutoProductCreatingStrategy.getFullDescription());
+        System.out.println(ShopLiterals.MSG_ABILITY_SKIP_OPERATION);
+        System.out.println(ShopLiterals.MSG_DEFAULT_PRODUCT_CREATING_STRATEGY);
+        while (true) {
+            String command = scanner.nextLine().trim();
+            if (command.equals(ManualProductCreatingStrategy.CODE_KEY.toString()) ||
+                    command.equals(ManualProductCreatingStrategy.FULL_KEY) ||
+                    command.equals(ManualProductCreatingStrategy.SHORT_KEY)) {
+                productCreatingStrategy = new ManualProductCreatingStrategy();
+                System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
+                        ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY);
+                return;
+            } else if (command.equals(AutoProductCreatingStrategy.CODE_KEY.toString()) ||
+                    command.equals(AutoProductCreatingStrategy.FULL_KEY) ||
+                    command.equals(AutoProductCreatingStrategy.SHORT_KEY)) {
+                productCreatingStrategy = new AutoProductCreatingStrategy();
+                System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
+                        ShopLiterals.AUTO_PRODUCT_CREATING_STRATEGY);
+                return;
+            } else if (command.equals(ShopLiterals.SKIP_CMD_FULL_CAST) ||
+                    command.equals(ShopLiterals.SKIP_CMD_SHORT_CAST)) {
+                System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
+                        ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY);
+                return;
+            } else {
+                System.out.println(ShopLiterals.MSG_UNSUPPORTED_COMMAND);
+                System.out.printf(ShopLiterals.MSG_INVALID_INPUT_PRODUCT_CREATING_STRATEGY, command,
+                        ManualProductCreatingStrategy.getHelpFullDescription(), AutoProductCreatingStrategy.getHelpFullDescription());
+            }
+        }
     }
 
     private void initService() {
@@ -101,7 +139,7 @@ public class AppContext {
     }
 
     private static CommandContainer initCommands(CommandContainer commandContainer,
-                                     ProductService productService, OrderService orderService, CartService cartService) {
+                                                 ProductService productService, OrderService orderService, CartService cartService) {
         // full cast
         commandContainer.getCommands().put(ViewProductCatalogCmd.FULL_KEY, new ViewProductCatalogCmd(productService));
         commandContainer.getCommands().put(PutProductToCartCmd.FULL_KEY, new PutProductToCartCmd(cartService));
@@ -130,9 +168,5 @@ public class AppContext {
         commandContainer.getCommands().put(AddProductToCatalogCmd.SHORT_KEY, new AddProductToCatalogCmd(productService));
 
         return commandContainer;
-    }
-
-    public ProductCatalog getProductCatalog() {
-        return productCatalog;
     }
 }

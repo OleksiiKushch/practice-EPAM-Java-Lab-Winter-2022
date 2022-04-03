@@ -14,7 +14,7 @@ public class ViewOrderCatalogCmd implements Command {
     public static final String FULL_KEY = "--order-list";
     public static final String SHORT_KEY = "-ol";
 
-    public static final String DESCRIPTION = "Display a list of orders";
+    private static final String DESCRIPTION = "Display a list of orders";
 
     private final OrderService orderService;
 

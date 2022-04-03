@@ -16,7 +16,7 @@ import java.time.LocalDate;
  * @see ViewOrdersFromToByDateCmd
  * @author Oleksii Kushch
  */
-public class DateScanner {
+public class DateConsoleScanner {
     private static final int MOCK_VALUE_FOR_YEAR_AND_DAY = 1;
 
     /**

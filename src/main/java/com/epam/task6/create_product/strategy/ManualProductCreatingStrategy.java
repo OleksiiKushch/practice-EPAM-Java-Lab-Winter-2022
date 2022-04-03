@@ -1,19 +1,40 @@
-package com.epam.task6.strategy.create_product;
+package com.epam.task6.create_product.strategy;
 
 import com.epam.task1.entity.Audiobook;
 import com.epam.task1.entity.Book;
 import com.epam.task1.entity.Commodity;
 import com.epam.task1.entity.EReader;
+import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.repository.ProductRepository;
-import com.epam.task4.util.ProductDataScanner;
+import com.epam.task4.util.ProductDataConsoleScanner;
 
 import java.math.BigDecimal;
 
-public class ManualConsoleProductCreatingStrategy implements ProductCreatingStrategy {
+/**
+ * Manual console (with validation logic) creating product
+ *
+ * @author Oleksii Kushch
+ */
+public class ManualProductCreatingStrategy implements ProductCreatingStrategy {
+    public static final Integer CODE_KEY = 1;
+
+    public static final String FULL_KEY = "--manual";
+    public static final String SHORT_KEY = "-m";
+
+    public static final String DESCRIPTION = "Manual mode via console";
+
+    public static String getFullDescription() {
+        return String.format(ShopLiterals.BASE_OUTPUT_FORMAT_PRODUCT_CREATING_STRATEGY, CODE_KEY, FULL_KEY, SHORT_KEY, DESCRIPTION);
+    }
+
+    public static String getHelpFullDescription() {
+        return String.format(ShopLiterals.HELP_OUTPUT_FORMAT_PRODUCT_CREATING_STRATEGY, CODE_KEY, FULL_KEY, SHORT_KEY, DESCRIPTION);
+    }
+
     @Override
     public Commodity createProduct(ProductRepository productRepository) {
         Commodity result = null;
-        Class type = ProductDataScanner.inputType();
+        Class<? extends Commodity> type = ProductDataConsoleScanner.inputType();
         if (type == Book.class) {
             result = new Book();
             result = setBaseParameters(result, productRepository);
@@ -23,6 +44,8 @@ public class ManualConsoleProductCreatingStrategy implements ProductCreatingStra
         } else if (type == Audiobook.class) {
             result = new Audiobook();
             result = setBaseParameters(result, productRepository);
+            if (result == null) { return null; }
+            result = setBookParameters(result);
             if (result == null) { return null; }
             result = setAudiobookParameters(result);
             if (result == null) { return null; }
@@ -37,19 +60,19 @@ public class ManualConsoleProductCreatingStrategy implements ProductCreatingStra
     }
 
     private Commodity setBaseParameters(Commodity product, ProductRepository productRepository) {
-        Long id = ProductDataScanner.inputIdForCatalog(productRepository);
+        Long id = ProductDataConsoleScanner.inputIdForCatalog(productRepository);
         if (id == null) { return null; }
         product.setId(id);
 
-        String frontTitle = ProductDataScanner.inputFrontTitle();
+        String frontTitle = ProductDataConsoleScanner.inputFrontTitle();
         if (frontTitle == null) { return null; }
         product.setFrontTitle(frontTitle);
 
-        BigDecimal price = ProductDataScanner.inputPrice();
+        BigDecimal price = ProductDataConsoleScanner.inputPrice();
         if (price == null) { return null; }
         product.setPrice(price);
 
-        Integer amount = ProductDataScanner.inputAmountForStock();
+        Integer amount = ProductDataConsoleScanner.inputAmountForCatalog();
         if (amount == null) { return null; }
         product.setAmount(amount);
 
@@ -59,19 +82,19 @@ public class ManualConsoleProductCreatingStrategy implements ProductCreatingStra
     private Commodity setBookParameters(Commodity product) {
         Book book = (Book) product;
 
-        String title = ProductDataScanner.inputTitle();
+        String title = ProductDataConsoleScanner.inputTitle();
         if (title == null) { return null; }
         book.setTitle(title);
 
-        String author = ProductDataScanner.inputAuthor();
+        String author = ProductDataConsoleScanner.inputAuthor();
         if (author == null) { return null; }
         book.setAuthor(author);
 
-        String language = ProductDataScanner.inputLanguage();
+        String language = ProductDataConsoleScanner.inputLanguage();
         if (language == null) { return null; }
         book.setLanguage(language);
 
-        Integer numberOfPages = ProductDataScanner.inputNumberOfPages();
+        Integer numberOfPages = ProductDataConsoleScanner.inputNumberOfPages();
         if (numberOfPages == null) { return null; }
         book.setNumberOfPages(numberOfPages);
 
@@ -81,15 +104,15 @@ public class ManualConsoleProductCreatingStrategy implements ProductCreatingStra
     private Commodity setAudiobookParameters(Commodity product) {
         Audiobook audiobook = (Audiobook) product;
 
-        Integer sizeMB = ProductDataScanner.inputSizeMB();
+        Integer sizeMB = ProductDataConsoleScanner.inputSizeMB();
         if (sizeMB == null) { return null; }
         audiobook.setSizeMB(sizeMB);
 
-        Integer listeningLength = ProductDataScanner.inputListeningLength();
+        Integer listeningLength = ProductDataConsoleScanner.inputListeningLength();
         if (listeningLength == null) { return null; }
         audiobook.setListeningLength(listeningLength);
 
-        String narrator = ProductDataScanner.inputNarrator();
+        String narrator = ProductDataConsoleScanner.inputNarrator();
         if (narrator == null) { return null; }
         audiobook.setNarrator(narrator);
 
@@ -99,19 +122,19 @@ public class ManualConsoleProductCreatingStrategy implements ProductCreatingStra
     private Commodity setEReaderParameters(Commodity product) {
         EReader eReader = (EReader) product;
 
-        String model = ProductDataScanner.inputModel();
+        String model = ProductDataConsoleScanner.inputModel();
         if (model == null) { return null; }
         eReader.setModel(model);
 
-        Float displaySize = ProductDataScanner.inputDisplaySize();
+        Float displaySize = ProductDataConsoleScanner.inputDisplaySize();
         if (displaySize == null) { return null; }
         eReader.setDisplaySize(displaySize);
 
-        Integer storageGB = ProductDataScanner.inputStorageGB();
+        Integer storageGB = ProductDataConsoleScanner.inputStorageGB();
         if (storageGB == null) { return null; }
         eReader.setStorageGB(storageGB);
 
-        Integer resolutionPPI = ProductDataScanner.inputResolutionPPI();
+        Integer resolutionPPI = ProductDataConsoleScanner.inputResolutionPPI();
         if (resolutionPPI == null) { return null; }
         eReader.setResolutionPPI(resolutionPPI);
 

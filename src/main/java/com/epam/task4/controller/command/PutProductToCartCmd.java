@@ -10,7 +10,7 @@ public class PutProductToCartCmd implements Command {
     public static final String FULL_KEY = "--put-to-cart";
     public static final String SHORT_KEY = "-ptc";
 
-    public static final String DESCRIPTION = "Add product to cart";
+    private static final String DESCRIPTION = "Add product to cart";
 
     private final CartService cartService;
 

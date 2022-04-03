@@ -13,7 +13,7 @@ import java.util.List;
 public class ViewCartCmd implements Command {
     public static final String FULL_KEY = "--cart";
 
-    public static final String DESCRIPTION = "View the contents of the cart with its total sum";
+    private static final String DESCRIPTION = "View the contents of the cart with its total sum";
 
     private final CartService cartService;
 

@@ -10,7 +10,7 @@ public class AddProductToCatalogCmd implements Command {
     public static final String FULL_KEY = "--add-product-to-catalog";
     public static final String SHORT_KEY = "-aptc";
 
-    public static final String DESCRIPTION = "Add product to catalog";
+    private static final String DESCRIPTION = "Add product to catalog";
 
     private final ProductService productService;
 

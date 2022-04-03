@@ -19,7 +19,7 @@ public class ViewLatestProductsFromCartCmd implements Command {
     public static final String FULL_KEY = "--latest-products";
     public static final String SHORT_KEY = "-lp";
 
-    public static final String DESCRIPTION = "View information about the last " + QUANTITY_LAST_PRODUCTS
+    private static final String DESCRIPTION = "View information about the last " + QUANTITY_LAST_PRODUCTS
             + " product that were added to the cart in all shopping sessions";
 
     private final CartService cartService;
@@ -32,7 +32,7 @@ public class ViewLatestProductsFromCartCmd implements Command {
     public void execute() {
         List<Map.Entry<Commodity, LocalDateTime>> cartHistory = cartService.getHistory();
         if (cartHistory.isEmpty()) {
-            System.out.println(ShopLiterals.MSG_HISTORY_IS_EMPTY);
+            System.out.println(ShopLiterals.MSG_CART_HISTORY_IS_EMPTY);
         } else {
             long skip = cartHistory.size() - QUANTITY_LAST_PRODUCTS;
             skip = skip > 0 ? skip : 0;

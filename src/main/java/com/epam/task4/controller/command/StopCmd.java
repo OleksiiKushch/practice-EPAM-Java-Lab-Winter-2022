@@ -11,7 +11,8 @@ import com.epam.task4.util.UtilProductCatalog;
  */
 public class StopCmd implements Command {
     public static final String FULL_KEY = "--stop";
-    public static final String DESCRIPTION = "Stop the application";
+
+    private static final String DESCRIPTION = "Stop the application";
 
     @Override
     public void execute() {

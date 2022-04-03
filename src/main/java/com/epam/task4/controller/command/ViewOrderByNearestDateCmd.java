@@ -12,7 +12,7 @@ public class ViewOrderByNearestDateCmd implements Command {
     public static final String FULL_KEY = "--order-nearest-date";
     public static final String SHORT_KEY = "-ond";
 
-    public static final String DESCRIPTION = "Displays the order by the nearest date";
+    private static final String DESCRIPTION = "Displays the order by the nearest date";
 
     private final OrderService orderService;
 
