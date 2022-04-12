@@ -1,4 +1,4 @@
-package com.epam.task4.util;
+package com.epam.task6.util;
 
 import com.epam.task4.model.data_sources.ProductCatalog;
 

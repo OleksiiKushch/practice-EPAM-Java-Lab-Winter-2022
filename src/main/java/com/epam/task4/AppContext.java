@@ -1,5 +1,8 @@
 package com.epam.task4;
 
+import com.epam.task1.entity.Audiobook;
+import com.epam.task1.entity.Book;
+import com.epam.task1.entity.EReader;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.CommandContainer;
 import com.epam.task4.controller.command.AddProductToCatalogCmd;
@@ -29,10 +32,16 @@ import com.epam.task4.service.ProductService;
 import com.epam.task4.service.impl.CartServiceImpl;
 import com.epam.task4.service.impl.OrderServiceImpl;
 import com.epam.task4.service.impl.ProductServiceImpl;
+import com.epam.task4.util.ProductDataConsoleScannerForCart;
+import com.epam.task6.create_product.EntityContainer;
+import com.epam.task6.create_product.mirror_wrapper_entity.InitAudiobook;
+import com.epam.task6.create_product.mirror_wrapper_entity.InitBook;
+import com.epam.task6.create_product.mirror_wrapper_entity.InitEReader;
 import com.epam.task6.create_product.strategy.AutoProductCreatingStrategy;
 import com.epam.task6.create_product.strategy.ManualProductCreatingStrategy;
 import com.epam.task6.create_product.strategy.ProductCreatingStrategy;
-import com.epam.task4.util.UtilProductCatalog;
+import com.epam.task6.util.ProductDataConsoleScanner;
+import com.epam.task6.util.UtilProductCatalog;
 
 import java.util.Scanner;
 
@@ -40,7 +49,7 @@ import java.util.Scanner;
  * @author Oleksii Kushch
  */
 public class AppContext {
-    public static final String PATH_PRODUCT_CATALOG = "src/main/java/com/epam/task4/product_catalog";
+    public static final String PATH_PRODUCT_CATALOG = "src/main/resources/product_catalog";
 
     private ProductCatalog productCatalog;
     private OrderCatalog orderCatalog;
@@ -49,6 +58,8 @@ public class AppContext {
     private ProductRepository productRepository;
     private OrderRepository orderRepository;
     private CartRepository cartRepository;
+
+    private EntityContainer entityContainer;
 
     /** set the default mode as "manual", however it can be changed in the method {@link #initStrategyCreatingProduct()} */
     private ProductCreatingStrategy productCreatingStrategy = new ManualProductCreatingStrategy();
@@ -61,10 +72,17 @@ public class AppContext {
 
     private final Scanner scanner;
 
+    private ProductDataConsoleScanner productDataConsoleScanner;
+
+    private ProductDataConsoleScannerForCart productDataConsoleScannerForCart;
+
     public AppContext() {
         scanner = new Scanner(System.in);
         initDataSource();
         initRepository();
+        initEntityContainer();
+        initProductDataConsoleScanner();
+        initProductDataConsoleScannerForCart();
         initStrategyCreatingProduct();
         initService();
         initController();
@@ -72,6 +90,14 @@ public class AppContext {
 
     public Scanner getScanner() {
         return scanner;
+    }
+
+    public ProductDataConsoleScanner getProductDataConsoleScanner() {
+        return productDataConsoleScanner;
+    }
+
+    public ProductDataConsoleScannerForCart getProductDataConsoleScannerForCart() {
+        return productDataConsoleScannerForCart;
     }
 
     public CommandContainer getCommandContainer() {
@@ -92,6 +118,18 @@ public class AppContext {
         productRepository = new ProductRepositoryImpl(productCatalog);
         orderRepository = new OrderRepositoryImpl(orderCatalog);
         cartRepository = new CartRepositoryImpl(cart);
+    }
+
+    private void initEntityContainer() {
+        entityContainer = initEntities(new EntityContainer());
+    }
+
+    private void initProductDataConsoleScanner() {
+        productDataConsoleScanner = new ProductDataConsoleScanner(productRepository, entityContainer);
+    }
+
+    private void initProductDataConsoleScannerForCart() {
+        productDataConsoleScannerForCart = new ProductDataConsoleScannerForCart(productRepository, cartRepository);
     }
 
     private void initStrategyCreatingProduct() {
@@ -136,6 +174,14 @@ public class AppContext {
 
     private void initController() {
         commandContainer = initCommands(new CommandContainer(), productService, orderService, cartService);
+    }
+
+    private static EntityContainer initEntities(EntityContainer entityContainer) {
+        entityContainer.getCommands().put(ShopLiterals.BOOK_LITERAL_TYPE, new InitBook(new Book()));
+        entityContainer.getCommands().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new InitAudiobook(new Audiobook()));
+        entityContainer.getCommands().put(ShopLiterals.E_READER_LITERAL_TYPE, new InitEReader(new EReader()));
+
+        return entityContainer;
     }
 
     private static CommandContainer initCommands(CommandContainer commandContainer,

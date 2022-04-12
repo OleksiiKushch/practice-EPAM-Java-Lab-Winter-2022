@@ -6,22 +6,31 @@ import java.util.Objects;
 /**
  * Bean class representation of the book.
  *
- * @see Audiobook
  * @author Oleksii Kushch
+ * @see Audiobook
  */
 public class Book extends Commodity {
     private static final long serialVersionUID = 4564726723641617117L;
 
-    /** the title concrete book (name) */
+    /**
+     * the title concrete book (name)
+     */
     private String title;
-    /** the author concrete book (main or first author to the list of book authors) */
+    /**
+     * the author concrete book (main or first author to the list of book authors)
+     */
     private String author;
-    /** the language concrete book */
+    /**
+     * the language concrete book
+     */
     private String language;
-    /** the number of pages concrete book */
+    /**
+     * the number of pages concrete book
+     */
     private int numberOfPages;
 
-    public Book() {}
+    public Book() {
+    }
 
     public Book(Long id, String frontTitle, BigDecimal price,
                 String title, String author, String language, int numberOfPages) {

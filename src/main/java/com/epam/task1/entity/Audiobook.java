@@ -11,14 +11,21 @@ import java.util.Objects;
 public class Audiobook extends Book {
     private static final long serialVersionUID = 7869732606451640629L;
 
-    /** the total size of the digital e-book (all its components (files)) */
+    /**
+     * the total size of the digital e-book (all its components (files))
+     */
     private int sizeMB;
-    /** the total time (duration or length) of listening concrete audiobook (measured in minutes) */
+    /**
+     * the total time (duration or length) of listening concrete audiobook (measured in minutes)
+     */
     private int listeningLength;
-    /** the narrator concrete digital audiobook (main or first narrator to the list of audiobook narrators) */
+    /**
+     * the narrator concrete digital audiobook (main or first narrator to the list of audiobook narrators)
+     */
     private String narrator;
 
-    public Audiobook() {}
+    public Audiobook() {
+    }
 
     public Audiobook(Long id, String frontTitle, BigDecimal price,
                      String title, String author, String language, int numberOfPages,

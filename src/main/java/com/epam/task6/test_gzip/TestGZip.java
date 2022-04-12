@@ -1,4 +1,4 @@
-package com.epam.task6.gzip;
+package com.epam.task6.test_gzip;
 
 import com.epam.task4.mockdata.InitMockResources;
 import com.epam.task4.model.data_sources.ProductCatalog;

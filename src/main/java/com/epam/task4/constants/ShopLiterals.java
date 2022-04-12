@@ -132,10 +132,9 @@ public interface ShopLiterals {
 
     String MSG_ENTER_PRODUCT_TYPE = ConsoleColor.CYAN +
             "Please, enter type product which do you want to add to catalog:" + ConsoleColor.RESET;
-    String MSG_FORMAT_EXISTING_PRODUCT_TYPES = ConsoleColor.CYAN +
-            "Existing types of products: %s, %s, %s%n" + ConsoleColor.RESET;
+    String MSG_EXISTING_PRODUCT_TYPES = ConsoleColor.CYAN + "Existing types of products: " + ConsoleColor.RESET;
     String MSG_INVALID_FORMAT_PRODUCT_TYPE = ConsoleColor.RED +
-            "Invalid input '%s', choose from a %s, %s and %s,try again:" + ConsoleColor.RESET;
+            "Invalid input '%s', choose from existing product types,try again:%n" + ConsoleColor.RESET;
 
     String MSG_ENTER_BOOK_TITlE = ConsoleColor.CYAN + "Please, enter a title for new book:" + ConsoleColor.RESET;
 

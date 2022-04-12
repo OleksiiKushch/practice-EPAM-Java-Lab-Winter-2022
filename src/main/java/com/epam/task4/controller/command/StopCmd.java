@@ -4,7 +4,7 @@ import com.epam.task4.AppContext;
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
-import com.epam.task4.util.UtilProductCatalog;
+import com.epam.task6.util.UtilProductCatalog;
 
 /**
  * @author Oleksii Kushch

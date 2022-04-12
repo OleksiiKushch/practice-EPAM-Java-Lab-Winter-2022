@@ -13,16 +13,25 @@ import java.util.Objects;
 public abstract class Commodity implements Cloneable, Serializable {
     private static final long serialVersionUID = 5773634382252297178L;
 
-    /** the identifier concrete commodity (unique value) */
+    /**
+     * the identifier concrete commodity (unique value)
+     */
     private Long id;
-    /** the front (external) title concrete commodity */
+    /**
+     * the front (external) title concrete commodity
+     */
     private String frontTitle;
-    /** the price concrete commodity (used BigDecimal because need the precision for money values) */
+    /**
+     * the price concrete commodity (used BigDecimal because need the precision for money values)
+     */
     private BigDecimal price;
-    /** the amount concrete commodity */
+    /**
+     * the amount concrete commodity
+     */
     private Integer amount;
 
-    public Commodity() {}
+    public Commodity() {
+    }
 
     public Commodity(Long id, String frontTitle, BigDecimal price) {
         this.id = id;

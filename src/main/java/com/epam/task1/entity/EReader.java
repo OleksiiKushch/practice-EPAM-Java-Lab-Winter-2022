@@ -12,16 +12,25 @@ import java.util.Objects;
 public class EReader extends Commodity {
     private static final long serialVersionUID = -5185587079239564593L;
 
-    /** the model concrete e-reader (title name) */
+    /**
+     * the model concrete e-reader (title name)
+     */
     private String model;
-    /** the display size concrete e-reader (measured in inches) */
+    /**
+     * the display size concrete e-reader (measured in inches)
+     */
     private float displaySize;
-    /** the on-device (e-reader) storage (measured in GB) */
+    /**
+     * the on-device (e-reader) storage (measured in GB)
+     */
     private int storageGB;
-    /** the display resolution concrete e-reader (measured in ppi) */
+    /**
+     * the display resolution concrete e-reader (measured in ppi)
+     */
     private int resolutionPPI;
 
-    public EReader() {}
+    public EReader() {
+    }
 
     public EReader(Long id, String frontTitle, BigDecimal price,
                    String model, float displaySize, int storageGB, int resolutionPPI) {

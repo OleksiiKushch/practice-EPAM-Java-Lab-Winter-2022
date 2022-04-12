@@ -1,12 +1,12 @@
-package com.epam.task4;
+package com.epam.task6.util;
 
+import com.epam.task4.AppContext;
 import com.epam.task4.mockdata.InitMockResources;
 import com.epam.task4.model.data_sources.ProductCatalog;
-import com.epam.task4.util.UtilProductCatalog;
 
 public class ResetMockSerializableProductCatalog {
     public static void main(String[] args) {
-        UtilProductCatalog.safeProductCatalog("src/main/java/com/epam/task4/product_catalog",
+        UtilProductCatalog.safeProductCatalog(AppContext.PATH_PRODUCT_CATALOG,
                 InitMockResources.initProductCatalog(new ProductCatalog()));
     }
 }
