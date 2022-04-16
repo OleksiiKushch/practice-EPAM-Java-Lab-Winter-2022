@@ -10,4 +10,5 @@ import java.util.List;
 public interface ProductService {
     List<Commodity> getAllProducts();
     void addProductToCatalog();
+    Commodity getProductById(Long id);
 }

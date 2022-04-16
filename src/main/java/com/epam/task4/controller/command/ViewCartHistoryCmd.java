@@ -13,18 +13,18 @@ import java.util.Map;
 /**
  * @author Oleksii Kushch
  */
-public class ViewLatestProductsFromCartCmd implements Command {
+public class ViewCartHistoryCmd implements Command {
     public static final int QUANTITY_LAST_PRODUCTS = 5;
 
-    public static final String FULL_KEY = "--latest-products";
-    public static final String SHORT_KEY = "-lp";
+    public static final String FULL_KEY = "--cart-history";
+    public static final String SHORT_KEY = "-ch";
 
-    private static final String DESCRIPTION = "View information about the last " + QUANTITY_LAST_PRODUCTS
-            + " product that were added to the cart in all shopping sessions";
+    private static final String DESCRIPTION = "Display information about the last " + QUANTITY_LAST_PRODUCTS
+            + " product that were added to the cart in all shopping sessions (cart history)";
 
     private final CartService cartService;
 
-    public ViewLatestProductsFromCartCmd(CartService cartService) {
+    public ViewCartHistoryCmd(CartService cartService) {
         this.cartService = cartService;
     }
 

@@ -11,7 +11,8 @@ import java.util.Map;
  * @author Oleksii Kushch
  */
 public interface CartService {
-    List<Commodity> getContent();
+    Map<Long, Integer> getContent();
+    List<Commodity> getContentList();
     List<Map.Entry<Commodity, LocalDateTime>> getHistory();
     void interactivePut();
     void checkout();

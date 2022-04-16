@@ -5,13 +5,13 @@ import com.epam.task1.entity.Book;
 import com.epam.task1.entity.EReader;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.CommandContainer;
-import com.epam.task4.controller.command.AddProductToCatalogCmd;
 import com.epam.task4.controller.command.CheckoutCmd;
+import com.epam.task4.controller.command.CloseShopCmd;
+import com.epam.task4.controller.command.CreateNewProductCmd;
 import com.epam.task4.controller.command.HelpCmd;
 import com.epam.task4.controller.command.PutProductToCartCmd;
-import com.epam.task4.controller.command.StopCmd;
 import com.epam.task4.controller.command.ViewCartCmd;
-import com.epam.task4.controller.command.ViewLatestProductsFromCartCmd;
+import com.epam.task4.controller.command.ViewCartHistoryCmd;
 import com.epam.task4.controller.command.ViewOrderByNearestDateCmd;
 import com.epam.task4.controller.command.ViewOrderCatalogCmd;
 import com.epam.task4.controller.command.ViewOrdersFromToByDateCmd;
@@ -33,10 +33,13 @@ import com.epam.task4.service.impl.CartServiceImpl;
 import com.epam.task4.service.impl.OrderServiceImpl;
 import com.epam.task4.service.impl.ProductServiceImpl;
 import com.epam.task4.util.ProductDataConsoleScannerForCart;
-import com.epam.task6.create_product.EntityContainer;
-import com.epam.task6.create_product.mirror_wrapper_entity.InitAudiobook;
-import com.epam.task6.create_product.mirror_wrapper_entity.InitBook;
-import com.epam.task6.create_product.mirror_wrapper_entity.InitEReader;
+import com.epam.task6.create_product.ProductCreatingContainer;
+import com.epam.task6.create_product.auto_creating.AutoCreateAudiobook;
+import com.epam.task6.create_product.auto_creating.AutoCreateBook;
+import com.epam.task6.create_product.auto_creating.AutoCreateEReader;
+import com.epam.task6.create_product.manual_creating.ManualCreateAudiobook;
+import com.epam.task6.create_product.manual_creating.ManualCreateBook;
+import com.epam.task6.create_product.manual_creating.ManualCreateEReader;
 import com.epam.task6.create_product.strategy.AutoProductCreatingStrategy;
 import com.epam.task6.create_product.strategy.ManualProductCreatingStrategy;
 import com.epam.task6.create_product.strategy.ProductCreatingStrategy;
@@ -59,10 +62,10 @@ public class AppContext {
     private OrderRepository orderRepository;
     private CartRepository cartRepository;
 
-    private EntityContainer entityContainer;
+    private ProductCreatingContainer productCreatingContainer;
 
     /** set the default mode as "manual", however it can be changed in the method {@link #initStrategyCreatingProduct()} */
-    private ProductCreatingStrategy productCreatingStrategy = new ManualProductCreatingStrategy();
+    private ProductCreatingStrategy productCreatingStrategy;
 
     private ProductService productService;
     private OrderService orderService;
@@ -80,11 +83,10 @@ public class AppContext {
         scanner = new Scanner(System.in);
         initDataSource();
         initRepository();
-        initEntityContainer();
-        initProductDataConsoleScanner();
-        initProductDataConsoleScannerForCart();
         initStrategyCreatingProduct();
         initService();
+        initProductDataConsoleScanner();
+        initProductDataConsoleScannerForCart();
         initController();
     }
 
@@ -104,8 +106,8 @@ public class AppContext {
         return commandContainer;
     }
 
-    public ProductCatalog getProductCatalog() {
-        return productCatalog;
+    public ProductService getProductService() {
+        return productService;
     }
 
     private void initDataSource() {
@@ -120,18 +122,6 @@ public class AppContext {
         cartRepository = new CartRepositoryImpl(cart);
     }
 
-    private void initEntityContainer() {
-        entityContainer = initEntities(new EntityContainer());
-    }
-
-    private void initProductDataConsoleScanner() {
-        productDataConsoleScanner = new ProductDataConsoleScanner(productRepository, entityContainer);
-    }
-
-    private void initProductDataConsoleScannerForCart() {
-        productDataConsoleScannerForCart = new ProductDataConsoleScannerForCart(productRepository, cartRepository);
-    }
-
     private void initStrategyCreatingProduct() {
         System.out.printf(ShopLiterals.MSG_WHEN_INIT_PRODUCT_CREATING_STRATEGY,
                 ManualProductCreatingStrategy.getFullDescription(), AutoProductCreatingStrategy.getFullDescription());
@@ -143,6 +133,7 @@ public class AppContext {
                     command.equals(ManualProductCreatingStrategy.FULL_KEY) ||
                     command.equals(ManualProductCreatingStrategy.SHORT_KEY)) {
                 productCreatingStrategy = new ManualProductCreatingStrategy();
+                productCreatingContainer = initManualProductCreatingEntities(new ProductCreatingContainer());
                 System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
                         ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY);
                 return;
@@ -150,11 +141,14 @@ public class AppContext {
                     command.equals(AutoProductCreatingStrategy.FULL_KEY) ||
                     command.equals(AutoProductCreatingStrategy.SHORT_KEY)) {
                 productCreatingStrategy = new AutoProductCreatingStrategy();
+                productCreatingContainer = initAutoProductCreatingEntities(new ProductCreatingContainer());
                 System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
                         ShopLiterals.AUTO_PRODUCT_CREATING_STRATEGY);
                 return;
             } else if (command.equals(ShopLiterals.SKIP_CMD_FULL_CAST) ||
                     command.equals(ShopLiterals.SKIP_CMD_SHORT_CAST)) {
+                productCreatingStrategy = new ManualProductCreatingStrategy();
+                productCreatingContainer = initManualProductCreatingEntities(new ProductCreatingContainer());
                 System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
                         ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY);
                 return;
@@ -164,6 +158,14 @@ public class AppContext {
                         ManualProductCreatingStrategy.getHelpFullDescription(), AutoProductCreatingStrategy.getHelpFullDescription());
             }
         }
+    }
+
+    private void initProductDataConsoleScanner() {
+        productDataConsoleScanner = new ProductDataConsoleScanner(productService, productCreatingContainer);
+    }
+
+    private void initProductDataConsoleScannerForCart() {
+        productDataConsoleScannerForCart = new ProductDataConsoleScannerForCart(productService, cartService);
     }
 
     private void initService() {
@@ -176,12 +178,20 @@ public class AppContext {
         commandContainer = initCommands(new CommandContainer(), productService, orderService, cartService);
     }
 
-    private static EntityContainer initEntities(EntityContainer entityContainer) {
-        entityContainer.getCommands().put(ShopLiterals.BOOK_LITERAL_TYPE, new InitBook(new Book()));
-        entityContainer.getCommands().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new InitAudiobook(new Audiobook()));
-        entityContainer.getCommands().put(ShopLiterals.E_READER_LITERAL_TYPE, new InitEReader(new EReader()));
+    private static ProductCreatingContainer initManualProductCreatingEntities(ProductCreatingContainer productCreatingContainer) {
+        productCreatingContainer.getCommands().put(ShopLiterals.BOOK_LITERAL_TYPE, new ManualCreateBook(new Book()));
+        productCreatingContainer.getCommands().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new ManualCreateAudiobook(new Audiobook()));
+        productCreatingContainer.getCommands().put(ShopLiterals.E_READER_LITERAL_TYPE, new ManualCreateEReader(new EReader()));
 
-        return entityContainer;
+        return productCreatingContainer;
+    }
+
+    private static ProductCreatingContainer initAutoProductCreatingEntities(ProductCreatingContainer productCreatingContainer) {
+        productCreatingContainer.getCommands().put(ShopLiterals.BOOK_LITERAL_TYPE, new AutoCreateBook(new Book()));
+        productCreatingContainer.getCommands().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new AutoCreateAudiobook(new Audiobook()));
+        productCreatingContainer.getCommands().put(ShopLiterals.E_READER_LITERAL_TYPE, new AutoCreateEReader(new EReader()));
+
+        return productCreatingContainer;
     }
 
     private static CommandContainer initCommands(CommandContainer commandContainer,
@@ -191,27 +201,27 @@ public class AppContext {
         commandContainer.getCommands().put(PutProductToCartCmd.FULL_KEY, new PutProductToCartCmd(cartService));
         commandContainer.getCommands().put(ViewCartCmd.FULL_KEY, new ViewCartCmd(cartService));
         commandContainer.getCommands().put(CheckoutCmd.FULL_KEY, new CheckoutCmd(cartService));
-        commandContainer.getCommands().put(ViewLatestProductsFromCartCmd.FULL_KEY, new ViewLatestProductsFromCartCmd(cartService));
+        commandContainer.getCommands().put(ViewCartHistoryCmd.FULL_KEY, new ViewCartHistoryCmd(cartService));
 
         commandContainer.getCommands().put(ViewOrdersFromToByDateCmd.FULL_KEY, new ViewOrdersFromToByDateCmd(orderService));
         commandContainer.getCommands().put(ViewOrderCatalogCmd.FULL_KEY, new ViewOrderCatalogCmd(orderService));
         commandContainer.getCommands().put(ViewOrderByNearestDateCmd.FULL_KEY, new ViewOrderByNearestDateCmd(orderService));
 
-        commandContainer.getCommands().put(AddProductToCatalogCmd.FULL_KEY, new AddProductToCatalogCmd(productService));
+        commandContainer.getCommands().put(CreateNewProductCmd.FULL_KEY, new CreateNewProductCmd(productService));
 
         commandContainer.getCommands().put(HelpCmd.FULL_KEY, new HelpCmd());
-        commandContainer.getCommands().put(StopCmd.FULL_KEY, new StopCmd());
+        commandContainer.getCommands().put(CloseShopCmd.FULL_KEY, new CloseShopCmd(productService));
 
         // short cast
         commandContainer.getCommands().put(ViewProductCatalogCmd.SHORT_KEY, new ViewProductCatalogCmd(productService));
         commandContainer.getCommands().put(PutProductToCartCmd.SHORT_KEY, new PutProductToCartCmd(cartService));
-        commandContainer.getCommands().put(ViewLatestProductsFromCartCmd.SHORT_KEY, new ViewLatestProductsFromCartCmd(cartService));
+        commandContainer.getCommands().put(ViewCartHistoryCmd.SHORT_KEY, new ViewCartHistoryCmd(cartService));
 
         commandContainer.getCommands().put(ViewOrdersFromToByDateCmd.SHORT_KEY, new ViewOrdersFromToByDateCmd(orderService));
         commandContainer.getCommands().put(ViewOrderCatalogCmd.SHORT_KEY, new ViewOrderCatalogCmd(orderService));
         commandContainer.getCommands().put(ViewOrderByNearestDateCmd.SHORT_KEY, new ViewOrderByNearestDateCmd(orderService));
 
-        commandContainer.getCommands().put(AddProductToCatalogCmd.SHORT_KEY, new AddProductToCatalogCmd(productService));
+        commandContainer.getCommands().put(CreateNewProductCmd.SHORT_KEY, new CreateNewProductCmd(productService));
 
         return commandContainer;
     }

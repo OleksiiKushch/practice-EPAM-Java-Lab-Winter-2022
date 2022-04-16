@@ -13,7 +13,7 @@ import java.util.List;
 public class ViewCartCmd implements Command {
     public static final String FULL_KEY = "--cart";
 
-    private static final String DESCRIPTION = "View the contents of the cart with its total sum";
+    private static final String DESCRIPTION = "Display the contents of the cart with its total sum";
 
     private final CartService cartService;
 
@@ -23,7 +23,7 @@ public class ViewCartCmd implements Command {
 
     @Override
     public void execute() {
-        List<Commodity> cartContainer = cartService.getContent();
+        List<Commodity> cartContainer = cartService.getContentList();
         if (cartContainer.isEmpty()) {
             System.out.println(ShopLiterals.MSG_CART_IS_EMPTY);
         } else {

@@ -1,19 +1,18 @@
 package com.epam.task6.create_product;
 
 import com.epam.task4.constants.ShopLiterals;
-import com.epam.task6.create_product.mirror_wrapper_entity.InitCommodity;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class EntityContainer {
-    private final Map<String, InitCommodity> container;
+public class ProductCreatingContainer {
+    private final Map<String, CreateProduct> container;
 
-    public EntityContainer() {
+    public ProductCreatingContainer() {
         container = new LinkedHashMap<>();
     }
 
-    public Map<String, InitCommodity> getCommands() {
+    public Map<String, CreateProduct> getCommands() {
         return container;
     }
 
@@ -21,7 +20,7 @@ public class EntityContainer {
         return container.containsKey(entityKey);
     }
 
-    public InitCommodity getEntityByKey(String entityKey) {
+    public CreateProduct getEntityByKey(String entityKey) {
         return container.get(entityKey);
     }
 

@@ -2,17 +2,17 @@ package com.epam.task4.util;
 
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
-import com.epam.task4.repository.CartRepository;
-import com.epam.task4.repository.ProductRepository;
+import com.epam.task4.service.CartService;
+import com.epam.task4.service.ProductService;
 import com.epam.task6.util.MyValidator;
 
 public class ProductDataConsoleScannerForCart {
-    private final ProductRepository productRepository;
-    private final CartRepository cartRepository;
+    private final ProductService productService;
+    private final CartService cartService;
 
-    public ProductDataConsoleScannerForCart(ProductRepository productRepository, CartRepository cartRepository) {
-        this.cartRepository = cartRepository;
-        this.productRepository = productRepository;
+    public ProductDataConsoleScannerForCart(ProductService productService, CartService cartService) {
+        this.productService = productService;
+        this.cartService = cartService;
     }
 
     /**
@@ -34,7 +34,7 @@ public class ProductDataConsoleScannerForCart {
                 Long id = Long.valueOf(stringId);
                 if (!MyValidator.isNotNegativeOrNotZero(id)) {
                     System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
-                } else if (productRepository.getById(id) == null) {
+                } else if (productService.getProductById(id) == null) {
                     System.out.printf(ShopLiterals.MSG_PRODUCT_DOES_NOT_EXISTS, id);
                 } else {
                     return id;
@@ -53,9 +53,9 @@ public class ProductDataConsoleScannerForCart {
      * @return amount of products ({@link com.epam.task1.entity.Commodity})<br>or {@code null} if abort the entire operation
      */
     public Integer inputAmount(Long product_id) {
-        Integer amountOnStock = productRepository.getById(product_id).getAmount();
+        Integer amountOnStock = productService.getProductById(product_id).getAmount();
 
-        Integer amountOnCart = cartRepository.getAll().get(product_id);
+        Integer amountOnCart = cartService.getContent().get(product_id);
         amountOnCart = amountOnCart != null ? amountOnCart : 0;
 
         System.out.printf(ShopLiterals.MSG_ENTER_PRODUCT_AMOUNT_FOR_CART, amountOnStock, amountOnCart);

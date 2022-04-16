@@ -29,6 +29,9 @@ public interface ShopLiterals {
     String BASE_OUTPUT_FORMAT_PRODUCT_CREATING_STRATEGY = "(%d) '%s' '%s' %s";
     String HELP_OUTPUT_FORMAT_PRODUCT_CREATING_STRATEGY = "'%d', '%s' and '%s' for %s";
 
+    String MSG_ALERT_PRODUCT_CATALOG_FILE_NOT_FOUND = ConsoleColor.YELLOW +
+            "Product catalog file not found! A new empty product catalog file has been created." + ConsoleColor.RESET;
+
     String MSG_WHEN_INIT_PRODUCT_CREATING_STRATEGY = ConsoleColor.CYAN +
             "Select the mode of how to create a new product, on command, respectively:%n%s%n%s%n" + ConsoleColor.RESET;
     String MSG_DEFAULT_PRODUCT_CREATING_STRATEGY = ConsoleColor.CYAN +

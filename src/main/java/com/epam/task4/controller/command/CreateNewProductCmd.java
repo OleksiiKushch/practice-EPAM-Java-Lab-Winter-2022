@@ -6,15 +6,15 @@ import com.epam.task4.service.ProductService;
 /**
  * @author Oleksii Kushch
  */
-public class AddProductToCatalogCmd implements Command {
-    public static final String FULL_KEY = "--add-product-to-catalog";
-    public static final String SHORT_KEY = "-aptc";
+public class CreateNewProductCmd implements Command {
+    public static final String FULL_KEY = "--create-new-product";
+    public static final String SHORT_KEY = "-cnp";
 
-    private static final String DESCRIPTION = "Add product to catalog";
+    private static final String DESCRIPTION = "Create new product and add it's to catalog";
 
     private final ProductService productService;
 
-    public AddProductToCatalogCmd(ProductService productService) {
+    public CreateNewProductCmd(ProductService productService) {
         this.productService = productService;
     }
 

@@ -37,7 +37,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Commodity> getContent() {
+    public Map<Long, Integer> getContent() {
+        return cartRepository.getAll();
+    }
+
+    @Override
+    public List<Commodity> getContentList() {
         return mapListProducts(cartRepository.getAll());
     }
 
@@ -126,7 +131,7 @@ public class CartServiceImpl implements CartService {
         cartRepository.insertInHistory(id, LocalDateTime.now());
     }
 
-    private List<Commodity> mapListProducts(Map<Long, Integer> container) {
+    public List<Commodity> mapListProducts(Map<Long, Integer> container) {
         return container.entrySet().stream()
                 .map(entry -> {
                     Commodity productCatalogCommodity = productRepository.getById(entry.getKey());

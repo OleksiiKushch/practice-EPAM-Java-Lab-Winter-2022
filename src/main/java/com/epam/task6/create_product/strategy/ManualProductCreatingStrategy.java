@@ -1,11 +1,6 @@
 package com.epam.task6.create_product.strategy;
 
-import com.epam.task1.entity.Commodity;
-import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
-import com.epam.task4.repository.ProductRepository;
-import com.epam.task6.create_product.mirror_wrapper_entity.InitCommodity;
-import com.epam.task6.util.ProductDataConsoleScanner;
 
 /**
  * Manual console (with validation logic) creating product
@@ -26,17 +21,5 @@ public class ManualProductCreatingStrategy implements ProductCreatingStrategy {
 
     public static String getHelpFullDescription() {
         return String.format(ShopLiterals.HELP_OUTPUT_FORMAT_PRODUCT_CREATING_STRATEGY, CODE_KEY, FULL_KEY, SHORT_KEY, DESCRIPTION);
-    }
-
-    @Override
-    public Commodity createProduct(ProductRepository productRepository) {
-        ProductDataConsoleScanner productDataConsoleScanner = MainApp.getContext().getProductDataConsoleScanner();
-
-        InitCommodity result = productDataConsoleScanner.inputType();
-        if (result == null) {
-            return null;
-        }
-
-        return result.initViaConsole(result.getCommodity(), productDataConsoleScanner);
     }
 }

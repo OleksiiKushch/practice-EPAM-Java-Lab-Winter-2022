@@ -11,10 +11,10 @@ import java.util.List;
  * @author Oleksii Kushch
  */
 public class ViewOrderCatalogCmd implements Command {
-    public static final String FULL_KEY = "--order-list";
-    public static final String SHORT_KEY = "-ol";
+    public static final String FULL_KEY = "--order-catalog";
+    public static final String SHORT_KEY = "-oc";
 
-    private static final String DESCRIPTION = "Display a list of orders";
+    private static final String DESCRIPTION = "Display a list of orders (order catalog)";
 
     private final OrderService orderService;
 

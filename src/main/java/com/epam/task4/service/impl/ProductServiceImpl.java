@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void addProductToCatalog() {
         System.out.println(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
-        Commodity newProduct = productCreatingStrategy.createProduct(productRepository);
+        Commodity newProduct = productCreatingStrategy.createProduct();
         if (newProduct == null) {
             System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
             return;
@@ -37,5 +37,10 @@ public class ProductServiceImpl implements ProductService {
         productRepository.insert(newProduct);
         System.out.println(ShopLiterals.MSG_ADD_NEW_PRODUCT_TO_CATALOG_SUCCESS);
         System.out.println(ConsoleColor.GREEN + newProduct + ConsoleColor.RESET);
+    }
+
+    @Override
+    public Commodity getProductById(Long id) {
+        return productRepository.getById(id);
     }
 }

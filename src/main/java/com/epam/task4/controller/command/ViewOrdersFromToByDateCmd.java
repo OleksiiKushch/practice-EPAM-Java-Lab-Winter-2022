@@ -11,10 +11,10 @@ import java.util.List;
  * @author Oleksii Kushch
  */
 public class ViewOrdersFromToByDateCmd implements Command {
-    public static final String FULL_KEY = "--order-list-from-to";
-    public static final String SHORT_KEY = "-olft";
+    public static final String FULL_KEY = "--order-catalog-from-to";
+    public static final String SHORT_KEY = "-ocft";
 
-    private static final String DESCRIPTION = "Display a list of orders for a certain period of time";
+    private static final String DESCRIPTION = "Display a list of orders (order catalog) for a certain period of time";
 
     private final OrderService orderService;
 

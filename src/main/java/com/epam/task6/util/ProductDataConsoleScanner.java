@@ -3,9 +3,9 @@ package com.epam.task6.util;
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.command.PutProductToCartCmd;
-import com.epam.task4.repository.ProductRepository;
-import com.epam.task6.create_product.EntityContainer;
-import com.epam.task6.create_product.mirror_wrapper_entity.InitCommodity;
+import com.epam.task4.service.ProductService;
+import com.epam.task6.create_product.CreateProduct;
+import com.epam.task6.create_product.ProductCreatingContainer;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
@@ -19,12 +19,12 @@ import java.util.function.Function;
  * @see PutProductToCartCmd
  */
 public class ProductDataConsoleScanner {
-    private final ProductRepository productRepository;
-    private final EntityContainer entityContainer;
+    private final ProductService productService;
+    private final ProductCreatingContainer productCreatingContainer;
 
-    public ProductDataConsoleScanner(ProductRepository productRepository, EntityContainer entityContainer) {
-        this.productRepository = productRepository;
-        this.entityContainer = entityContainer;
+    public ProductDataConsoleScanner(ProductService productService, ProductCreatingContainer productCreatingContainer) {
+        this.productService = productService;
+        this.productCreatingContainer = productCreatingContainer;
     }
 
     public Long inputId() {
@@ -39,7 +39,7 @@ public class ProductDataConsoleScanner {
                 Long id = Long.valueOf(stringId);
                 if (!MyValidator.isNotNegativeOrNotZero(id)) {
                     System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
-                } else if (productRepository.getById(id) != null) {
+                } else if (productService.getProductById(id) != null) {
                     System.out.printf(ShopLiterals.MSG_PRODUCT_ALREADY_EXISTS, id);
                 } else {
                     return id;
@@ -85,19 +85,19 @@ public class ProductDataConsoleScanner {
                 ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_AMOUNT);
     }
 
-    public InitCommodity inputType() {
+    public CreateProduct inputCreateProductType() {
         System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_TYPE);
-        entityContainer.viewExistingEntities();
+        productCreatingContainer.viewExistingEntities();
         while (true) {
             String entityKey = MainApp.getContext().getScanner().nextLine().toLowerCase().trim();
             if (entityKey.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
                     entityKey.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
                 return null;     // abort the entire operation
-            } else if (entityContainer.isContainEntity(entityKey)) {
-                return entityContainer.getEntityByKey(entityKey);
+            } else if (productCreatingContainer.isContainEntity(entityKey)) {
+                return productCreatingContainer.getEntityByKey(entityKey);
             } else {
                 System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_TYPE, entityKey);
-                entityContainer.viewExistingEntities();
+                productCreatingContainer.viewExistingEntities();
             }
         }
     }
