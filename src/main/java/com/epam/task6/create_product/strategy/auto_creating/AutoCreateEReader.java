@@ -1,4 +1,4 @@
-package com.epam.task6.create_product.auto_creating;
+package com.epam.task6.create_product.strategy.auto_creating;
 
 import com.epam.task1.entity.Commodity;
 import com.epam.task1.entity.EReader;

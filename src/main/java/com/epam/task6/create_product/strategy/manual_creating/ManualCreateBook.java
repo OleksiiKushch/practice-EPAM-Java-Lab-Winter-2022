@@ -1,4 +1,4 @@
-package com.epam.task6.create_product.manual_creating;
+package com.epam.task6.create_product.strategy.manual_creating;
 
 import com.epam.task1.entity.Book;
 import com.epam.task1.entity.Commodity;
