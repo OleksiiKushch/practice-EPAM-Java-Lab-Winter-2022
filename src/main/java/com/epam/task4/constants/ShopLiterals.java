@@ -69,7 +69,7 @@ public interface ShopLiterals {
                     SKIP_CMD_FULL_CAST, SKIP_CMD_SHORT_CAST) + ConsoleColor.RESET;
 
     String MSG_WHEN_APP_RUN = ConsoleColor.CYAN + "Application is start! (shop is opening).\n" +
-            "Enter '--help' to see a list of possible commands, or '--stop' to stop the application." + ConsoleColor.RESET;
+            "Enter '--help' to see a list of possible commands, or '--close' to stop the application." + ConsoleColor.RESET;
     String MSG_WHEN_APP_STOP = ConsoleColor.CYAN + "Application is stop! (shop is closing)." + ConsoleColor.RESET;
 
     String MSG_ENTER_AFTER_YEAR = ConsoleColor.CYAN + "Please, enter FROM (after) date (year):" + ConsoleColor.RESET;

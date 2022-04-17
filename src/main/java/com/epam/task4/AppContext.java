@@ -36,13 +36,12 @@ import com.epam.task4.util.ProductDataConsoleScannerForCart;
 import com.epam.task6.create_product.ProductCreatingContainer;
 import com.epam.task6.create_product.auto_creating.AutoCreateAudiobook;
 import com.epam.task6.create_product.auto_creating.AutoCreateBook;
+import com.epam.task6.create_product.auto_creating.AutoCreateCommodity;
 import com.epam.task6.create_product.auto_creating.AutoCreateEReader;
 import com.epam.task6.create_product.manual_creating.ManualCreateAudiobook;
 import com.epam.task6.create_product.manual_creating.ManualCreateBook;
+import com.epam.task6.create_product.manual_creating.ManualCreateCommodity;
 import com.epam.task6.create_product.manual_creating.ManualCreateEReader;
-import com.epam.task6.create_product.strategy.AutoProductCreatingStrategy;
-import com.epam.task6.create_product.strategy.ManualProductCreatingStrategy;
-import com.epam.task6.create_product.strategy.ProductCreatingStrategy;
 import com.epam.task6.util.ProductDataConsoleScanner;
 import com.epam.task6.util.UtilProductCatalog;
 
@@ -63,9 +62,6 @@ public class AppContext {
     private CartRepository cartRepository;
 
     private ProductCreatingContainer productCreatingContainer;
-
-    /** set the default mode as "manual", however it can be changed in the method {@link #initStrategyCreatingProduct()} */
-    private ProductCreatingStrategy productCreatingStrategy;
 
     private ProductService productService;
     private OrderService orderService;
@@ -124,30 +120,27 @@ public class AppContext {
 
     private void initStrategyCreatingProduct() {
         System.out.printf(ShopLiterals.MSG_WHEN_INIT_PRODUCT_CREATING_STRATEGY,
-                ManualProductCreatingStrategy.getFullDescription(), AutoProductCreatingStrategy.getFullDescription());
+                ManualCreateCommodity.getFullDescription(), AutoCreateCommodity.getFullDescription());
         System.out.println(ShopLiterals.MSG_ABILITY_SKIP_OPERATION);
         System.out.println(ShopLiterals.MSG_DEFAULT_PRODUCT_CREATING_STRATEGY);
         while (true) {
             String command = scanner.nextLine().trim();
-            if (command.equals(ManualProductCreatingStrategy.CODE_KEY.toString()) ||
-                    command.equals(ManualProductCreatingStrategy.FULL_KEY) ||
-                    command.equals(ManualProductCreatingStrategy.SHORT_KEY)) {
-                productCreatingStrategy = new ManualProductCreatingStrategy();
+            if (command.equals(ManualCreateCommodity.CODE_KEY.toString()) ||
+                    command.equals(ManualCreateCommodity.FULL_KEY) ||
+                    command.equals(ManualCreateCommodity.SHORT_KEY)) {
                 productCreatingContainer = initManualProductCreatingEntities(new ProductCreatingContainer());
                 System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
                         ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY);
                 return;
-            } else if (command.equals(AutoProductCreatingStrategy.CODE_KEY.toString()) ||
-                    command.equals(AutoProductCreatingStrategy.FULL_KEY) ||
-                    command.equals(AutoProductCreatingStrategy.SHORT_KEY)) {
-                productCreatingStrategy = new AutoProductCreatingStrategy();
+            } else if (command.equals(AutoCreateCommodity.CODE_KEY.toString()) ||
+                    command.equals(AutoCreateCommodity.FULL_KEY) ||
+                    command.equals(AutoCreateCommodity.SHORT_KEY)) {
                 productCreatingContainer = initAutoProductCreatingEntities(new ProductCreatingContainer());
                 System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
                         ShopLiterals.AUTO_PRODUCT_CREATING_STRATEGY);
                 return;
             } else if (command.equals(ShopLiterals.SKIP_CMD_FULL_CAST) ||
                     command.equals(ShopLiterals.SKIP_CMD_SHORT_CAST)) {
-                productCreatingStrategy = new ManualProductCreatingStrategy();
                 productCreatingContainer = initManualProductCreatingEntities(new ProductCreatingContainer());
                 System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
                         ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY);
@@ -155,7 +148,7 @@ public class AppContext {
             } else {
                 System.out.println(ShopLiterals.MSG_UNSUPPORTED_COMMAND);
                 System.out.printf(ShopLiterals.MSG_INVALID_INPUT_PRODUCT_CREATING_STRATEGY, command,
-                        ManualProductCreatingStrategy.getHelpFullDescription(), AutoProductCreatingStrategy.getHelpFullDescription());
+                        ManualCreateCommodity.getHelpFullDescription(), AutoCreateCommodity.getHelpFullDescription());
             }
         }
     }
@@ -169,7 +162,7 @@ public class AppContext {
     }
 
     private void initService() {
-        productService = new ProductServiceImpl(productRepository, productCreatingStrategy);
+        productService = new ProductServiceImpl(productRepository);
         orderService = new OrderServiceImpl(orderRepository);
         cartService = new CartServiceImpl(productRepository, orderRepository, cartRepository);
     }

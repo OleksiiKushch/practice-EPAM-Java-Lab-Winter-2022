@@ -2,7 +2,6 @@ package com.epam.task6.create_product.auto_creating;
 
 import com.epam.task1.entity.Audiobook;
 import com.epam.task1.entity.Commodity;
-import com.epam.task6.create_product.strategy.AutoProductCreatingStrategy;
 
 import java.security.SecureRandom;
 
@@ -18,9 +17,9 @@ public class AutoCreateAudiobook extends AutoCreateBook {
         SecureRandom secureRandom = new SecureRandom();
 
         Audiobook audiobook = (Audiobook) super.create();
-        audiobook.setSizeMB(secureRandom.nextInt(AutoProductCreatingStrategy.MAX_VALUE_RANDOM_GENERATED_NUM));
-        audiobook.setListeningLength(secureRandom.nextInt(AutoProductCreatingStrategy.MAX_VALUE_RANDOM_GENERATED_NUM));
-        audiobook.setNarrator(NARRATOR + secureRandom.nextInt(AutoProductCreatingStrategy.MAX_VALUE_RANDOM_GENERATED_NUM));
+        audiobook.setSizeMB(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+        audiobook.setListeningLength(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+        audiobook.setNarrator(NARRATOR + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
         return audiobook;
     }
 }

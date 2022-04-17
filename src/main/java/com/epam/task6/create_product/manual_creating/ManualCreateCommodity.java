@@ -2,12 +2,19 @@ package com.epam.task6.create_product.manual_creating;
 
 import com.epam.task1.entity.Commodity;
 import com.epam.task4.MainApp;
+import com.epam.task4.constants.ShopLiterals;
 import com.epam.task6.create_product.CreateProduct;
 import com.epam.task6.util.ProductDataConsoleScanner;
 
 import java.math.BigDecimal;
 
 public abstract class ManualCreateCommodity implements CreateProduct {
+    public static final Integer CODE_KEY = 1;
+    public static final String FULL_KEY = "--manual";
+    public static final String SHORT_KEY = "-m";
+
+    public static final String DESCRIPTION = "Manual mode via console";
+
     protected Commodity commodity;
 
     protected ManualCreateCommodity(Commodity commodity) {
@@ -47,5 +54,13 @@ public abstract class ManualCreateCommodity implements CreateProduct {
         commodity.setAmount(amount);
 
         return commodity;
+    }
+
+    public static String getFullDescription() {
+        return String.format(ShopLiterals.BASE_OUTPUT_FORMAT_PRODUCT_CREATING_STRATEGY, CODE_KEY, FULL_KEY, SHORT_KEY, DESCRIPTION);
+    }
+
+    public static String getHelpFullDescription() {
+        return String.format(ShopLiterals.HELP_OUTPUT_FORMAT_PRODUCT_CREATING_STRATEGY, CODE_KEY, FULL_KEY, SHORT_KEY, DESCRIPTION);
     }
 }
