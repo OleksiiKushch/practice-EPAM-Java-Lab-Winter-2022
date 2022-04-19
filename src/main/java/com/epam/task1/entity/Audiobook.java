@@ -27,6 +27,11 @@ public class Audiobook extends Book {
     public Audiobook() {
     }
 
+    public Audiobook(Book book) {
+        super(book.getId(), book.getFrontTitle(), book.getPrice(), book.getAmount(),
+                book.getTitle(), book.getAuthor(), book.getLanguage(), book.getNumberOfPages());
+    }
+
     public Audiobook(Long id, String frontTitle, BigDecimal price,
                      String title, String author, String language, int numberOfPages,
                      int sizeMB, int listeningLength, String narrator) {

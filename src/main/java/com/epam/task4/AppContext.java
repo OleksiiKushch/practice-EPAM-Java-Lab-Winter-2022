@@ -172,17 +172,17 @@ public class AppContext {
     }
 
     private static ProductCreatingContainer initManualProductCreatingEntities(ProductCreatingContainer productCreatingContainer) {
-        productCreatingContainer.getCommands().put(ShopLiterals.BOOK_LITERAL_TYPE, new ManualCreateBook(new Book()));
-        productCreatingContainer.getCommands().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new ManualCreateAudiobook(new Audiobook()));
-        productCreatingContainer.getCommands().put(ShopLiterals.E_READER_LITERAL_TYPE, new ManualCreateEReader(new EReader()));
+        productCreatingContainer.getContainer().put(ShopLiterals.BOOK_LITERAL_TYPE, new ManualCreateBook());
+        productCreatingContainer.getContainer().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new ManualCreateAudiobook());
+        productCreatingContainer.getContainer().put(ShopLiterals.E_READER_LITERAL_TYPE, new ManualCreateEReader());
 
         return productCreatingContainer;
     }
 
     private static ProductCreatingContainer initAutoProductCreatingEntities(ProductCreatingContainer productCreatingContainer) {
-        productCreatingContainer.getCommands().put(ShopLiterals.BOOK_LITERAL_TYPE, new AutoCreateBook(new Book()));
-        productCreatingContainer.getCommands().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new AutoCreateAudiobook(new Audiobook()));
-        productCreatingContainer.getCommands().put(ShopLiterals.E_READER_LITERAL_TYPE, new AutoCreateEReader(new EReader()));
+        productCreatingContainer.getContainer().put(ShopLiterals.BOOK_LITERAL_TYPE, new AutoCreateBook());
+        productCreatingContainer.getContainer().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new AutoCreateAudiobook());
+        productCreatingContainer.getContainer().put(ShopLiterals.E_READER_LITERAL_TYPE, new AutoCreateEReader());
 
         return productCreatingContainer;
     }

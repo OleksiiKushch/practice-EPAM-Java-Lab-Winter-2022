@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class Demo {
     private static final int NUMBER_OF_TEST = 1000;
-    private static final String PATH_TEST_FILE = "src/main/java/com/epam/task6/test_gzip/path_test_file";
+    private static final String PATH_TEST_FILE = "src/main/resources/test_gzip/path_test_file";
 
     public static void main(String[] args) throws IOException {
         ProductCatalog productCatalog = InitMockResources.initProductCatalog(new ProductCatalog());

@@ -10,19 +10,17 @@ public class AutoCreateBook extends AutoCreateCommodity {
     private static final String AUTHOR = "Author";
     private static final String LANGUAGE = "Language";
 
-    public AutoCreateBook(Commodity commodity) {
-        super(commodity);
-    }
-
     @Override
     public Commodity create() {
         SecureRandom secureRandom = new SecureRandom();
 
-        Book book = (Book) super.create();
+        Book book = new Book(super.create());
+
         book.setTitle(TITLE + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
         book.setAuthor(AUTHOR + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
         book.setLanguage(LANGUAGE + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
         book.setNumberOfPages(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+
         return book;
     }
 }

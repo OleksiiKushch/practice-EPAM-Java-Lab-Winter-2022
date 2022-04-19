@@ -12,7 +12,7 @@ public class ProductCreatingContainer {
         container = new LinkedHashMap<>();
     }
 
-    public Map<String, CreateProduct> getCommands() {
+    public Map<String, CreateProduct> getContainer() {
         return container;
     }
 

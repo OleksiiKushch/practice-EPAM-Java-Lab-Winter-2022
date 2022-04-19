@@ -37,7 +37,7 @@ public class ProductDataConsoleScanner {
             }
             try {
                 Long id = Long.valueOf(stringId);
-                if (!MyValidator.isNotNegativeOrNotZero(id)) {
+                if (!NumericValidator.isNotNegativeOrNotZero(id)) {
                     System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
                 } else if (productService.getProductById(id) != null) {
                     System.out.printf(ShopLiterals.MSG_PRODUCT_ALREADY_EXISTS, id);
@@ -79,7 +79,7 @@ public class ProductDataConsoleScanner {
     public Integer inputAmount() {
         System.out.println(ShopLiterals.MSG_ENTER_AMOUNT_PRODUCT_FOR_CATALOG);
         return (Integer) inputNumericParameter(
-                MyValidator::isNotNegative,
+                NumericValidator::isNotNegative,
                 Integer::valueOf,
                 ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT,
                 ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_AMOUNT);
@@ -120,7 +120,7 @@ public class ProductDataConsoleScanner {
     public Integer inputNumberOfPages() {
         System.out.println(ShopLiterals.MSG_ENTER_BOOK_NUMBER_PAGES);
         return (Integer) inputNumericParameter(
-                MyValidator::isNotNegativeOrNotZero,
+                NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
                 ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_NUMBER_PAGES,
                 ShopLiterals.MSG_INVALID_FORMAT_NUMBER_PAGES);
@@ -129,7 +129,7 @@ public class ProductDataConsoleScanner {
     public Integer inputSizeMB() {
         System.out.println(ShopLiterals.MSG_ENTER_AUDIOBOOK_SIZE_MB);
         return (Integer) inputNumericParameter(
-                MyValidator::isNotNegativeOrNotZero,
+                NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
                 ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_SIZE_MB,
                 ShopLiterals.MSG_INVALID_FORMAT_SIZE_MB);
@@ -138,7 +138,7 @@ public class ProductDataConsoleScanner {
     public Integer inputListeningLength() {
         System.out.println(ShopLiterals.MSG_ENTER_AUDIOBOOK_LISTENING_LENGTH);
         return (Integer) inputNumericParameter(
-                MyValidator::isNotNegativeOrNotZero,
+                NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
                 ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_LISTENING_LENGTH,
                 ShopLiterals.MSG_INVALID_FORMAT_LISTENING_LENGTH);
@@ -157,7 +157,7 @@ public class ProductDataConsoleScanner {
     public Float inputDisplaySize() {
         System.out.println(ShopLiterals.MSG_ENTER_E_READER_DISPLAY_SIZE);
         return (Float) inputNumericParameter(
-                MyValidator::isNotNegativeOrNotZero,
+                NumericValidator::isNotNegativeOrNotZero,
                 Float::valueOf,
                 ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_DISPLAY_SIZE,
                 ShopLiterals.MSG_INVALID_FORMAT_DISPLAY_SIZE);
@@ -166,7 +166,7 @@ public class ProductDataConsoleScanner {
     public Integer inputStorageGB() {
         System.out.println(ShopLiterals.MSG_ENTER_E_READER_STORAGE_CAPACITY_GB);
         return (Integer) inputNumericParameter(
-                MyValidator::isNotNegativeOrNotZero,
+                NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
                 ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_STORAGE_CAPACITY_GB,
                 ShopLiterals.MSG_INVALID_FORMAT_STORAGE_CAPACITY_GB);
@@ -175,7 +175,7 @@ public class ProductDataConsoleScanner {
     public Integer inputResolutionPPI() {
         System.out.println(ShopLiterals.MSG_ENTER_E_READER_RESOLUTION_PPI);
         return (Integer) inputNumericParameter(
-                MyValidator::isNotNegativeOrNotZero,
+                NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
                 ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_RESOLUTION_PPI,
                 ShopLiterals.MSG_INVALID_FORMAT_RESOLUTION_PPI);

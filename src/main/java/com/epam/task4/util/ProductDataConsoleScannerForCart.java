@@ -4,7 +4,7 @@ import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.service.CartService;
 import com.epam.task4.service.ProductService;
-import com.epam.task6.util.MyValidator;
+import com.epam.task6.util.NumericValidator;
 
 public class ProductDataConsoleScannerForCart {
     private final ProductService productService;
@@ -32,7 +32,7 @@ public class ProductDataConsoleScannerForCart {
             }
             try {
                 Long id = Long.valueOf(stringId);
-                if (!MyValidator.isNotNegativeOrNotZero(id)) {
+                if (!NumericValidator.isNotNegativeOrNotZero(id)) {
                     System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
                 } else if (productService.getProductById(id) == null) {
                     System.out.printf(ShopLiterals.MSG_PRODUCT_DOES_NOT_EXISTS, id);
@@ -68,7 +68,7 @@ public class ProductDataConsoleScannerForCart {
             }
             try {
                 Integer amount = Integer.valueOf(stringAmount);
-                if (!MyValidator.isNotNegativeOrNotZero(amount)) {
+                if (!NumericValidator.isNotNegativeOrNotZero(amount)) {
                     System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT);
                 } else if (amountOnStock < amount + amountOnCart) {
                     System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT, product_id, amount + amountOnCart);

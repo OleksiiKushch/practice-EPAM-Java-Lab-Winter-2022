@@ -32,6 +32,10 @@ public class Book extends Commodity {
     public Book() {
     }
 
+    public Book(Commodity commodity) {
+        super(commodity.getId(), commodity.getFrontTitle(), commodity.getPrice(), commodity.getAmount());
+    }
+
     public Book(Long id, String frontTitle, BigDecimal price,
                 String title, String author, String language, int numberOfPages) {
         super(id, frontTitle, price);

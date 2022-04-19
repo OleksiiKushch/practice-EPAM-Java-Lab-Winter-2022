@@ -2,7 +2,7 @@ package com.epam.task6.util;
 
 import java.math.BigDecimal;
 
-public class MyValidator {
+public class NumericValidator {
     private static final int ZERO = 0;
 
     public static boolean isNotNegativeOrNotZero(Number number) {

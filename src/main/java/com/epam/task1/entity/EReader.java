@@ -32,6 +32,10 @@ public class EReader extends Commodity {
     public EReader() {
     }
 
+    public EReader(Commodity commodity) {
+        super(commodity.getId(), commodity.getFrontTitle(), commodity.getPrice(), commodity.getAmount());
+    }
+
     public EReader(Long id, String frontTitle, BigDecimal price,
                    String model, float displaySize, int storageGB, int resolutionPPI) {
         super(id, frontTitle, price);

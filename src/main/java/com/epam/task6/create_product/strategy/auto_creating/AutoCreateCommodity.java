@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 
 public abstract class AutoCreateCommodity implements CreateProduct {
     public static final Integer CODE_KEY = 2;
+
     public static final String FULL_KEY = "--automatic";
     public static final String SHORT_KEY = "-a";
 
@@ -20,20 +21,12 @@ public abstract class AutoCreateCommodity implements CreateProduct {
 
     private static final String FRONT_TITLE = "FrontTitle";
 
-    private final Commodity commodity;
-
-    protected AutoCreateCommodity(Commodity commodity) {
-        this.commodity = commodity;
-    }
-
-    public Commodity getCommodity() {
-        return commodity;
-    }
-
     @Override
     public Commodity create() {
         ProductService productService = MainApp.getContext().getProductService();
         SecureRandom secureRandom = new SecureRandom();
+
+        Commodity commodity = new Commodity();
 
         long id = secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM);
         while (productService.getProductById(id) != null) {
