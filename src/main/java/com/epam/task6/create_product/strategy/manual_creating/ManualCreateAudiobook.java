@@ -11,11 +11,21 @@ public class ManualCreateAudiobook extends ManualCreateBook {
     public Commodity create() {
         ProductDataConsoleScanner productDataConsoleScanner = MainApp.getContext().getProductDataConsoleScanner();
 
-        Audiobook audiobook = new Audiobook((Book) super.create());
+        Book book = (Book) super.create();
+        if (book == null) {
+            return null;
+        }
+        Audiobook audiobook = new Audiobook(book);
 
-        if (setField(audiobook::setSizeMB, productDataConsoleScanner::inputSizeMB)) return null;
-        if (setField(audiobook::setListeningLength, productDataConsoleScanner::inputListeningLength)) return null;
-        if (setField(audiobook::setNarrator, productDataConsoleScanner::inputNarrator)) return null;
+        if (!setField(audiobook::setSizeMB, productDataConsoleScanner::inputSizeMB)) {
+            return null;
+        }
+        if (!setField(audiobook::setListeningLength, productDataConsoleScanner::inputListeningLength)) {
+            return null;
+        }
+        if (!setField(audiobook::setNarrator, productDataConsoleScanner::inputNarrator)) {
+            return null;
+        }
 
         return audiobook;
     }

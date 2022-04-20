@@ -23,10 +23,18 @@ public abstract class ManualCreateCommodity implements CreateProduct {
 
         Commodity commodity = new Commodity();
 
-        if (setField(commodity::setId, productDataConsoleScanner::inputId)) return null;
-        if (setField(commodity::setFrontTitle, productDataConsoleScanner::inputFrontTitle)) return null;
-        if (setField(commodity::setPrice, productDataConsoleScanner::inputPrice)) return null;
-        if (setField(commodity::setAmount, productDataConsoleScanner::inputAmount)) return null;
+        if (!setField(commodity::setId, productDataConsoleScanner::inputId)) {
+            return null;
+        }
+        if (!setField(commodity::setFrontTitle, productDataConsoleScanner::inputFrontTitle)) {
+            return null;
+        }
+        if (!setField(commodity::setPrice, productDataConsoleScanner::inputPrice)) {
+            return null;
+        }
+        if (!setField(commodity::setAmount, productDataConsoleScanner::inputAmount)) {
+            return null;
+        }
 
         return commodity;
     }
@@ -34,10 +42,10 @@ public abstract class ManualCreateCommodity implements CreateProduct {
     protected <T> boolean setField(Consumer<T> setter, Supplier<T> data) {
         T fieldValue = data.get();
         if (fieldValue == null) {
-            return true;
+            return false;
         }
         setter.accept(fieldValue);
-        return false;
+        return true;
     }
 
     public static String getFullDescription() {
