@@ -6,9 +6,6 @@ import com.epam.task4.constants.ShopLiterals;
 import com.epam.task6.create_product.CreateProduct;
 import com.epam.task6.util.ProductDataConsoleScanner;
 
-import java.util.function.Consumer;
-import java.util.function.Supplier;
-
 public abstract class ManualCreateCommodity implements CreateProduct {
     public static final Integer CODE_KEY = 1;
 
@@ -23,29 +20,12 @@ public abstract class ManualCreateCommodity implements CreateProduct {
 
         Commodity commodity = new Commodity();
 
-        if (!setField(commodity::setId, productDataConsoleScanner::inputId)) {
-            return null;
-        }
-        if (!setField(commodity::setFrontTitle, productDataConsoleScanner::inputFrontTitle)) {
-            return null;
-        }
-        if (!setField(commodity::setPrice, productDataConsoleScanner::inputPrice)) {
-            return null;
-        }
-        if (!setField(commodity::setAmount, productDataConsoleScanner::inputAmount)) {
-            return null;
-        }
+        commodity.setId(productDataConsoleScanner.inputId());
+        commodity.setFrontTitle(productDataConsoleScanner.inputFrontTitle());
+        commodity.setPrice(productDataConsoleScanner.inputPrice());
+        commodity.setAmount((productDataConsoleScanner.inputAmount()));
 
         return commodity;
-    }
-
-    protected <T> boolean setField(Consumer<T> setter, Supplier<T> data) {
-        T fieldValue = data.get();
-        if (fieldValue == null) {
-            return false;
-        }
-        setter.accept(fieldValue);
-        return true;
     }
 
     public static String getFullDescription() {

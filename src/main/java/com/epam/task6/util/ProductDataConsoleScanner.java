@@ -31,10 +31,6 @@ public class ProductDataConsoleScanner {
         System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_ID_FOR_CATALOG);
         while (true) {
             String stringId = MainApp.getContext().getScanner().nextLine();
-            if (stringId.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
-                    stringId.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
-            }
             try {
                 Long id = Long.valueOf(stringId);
                 if (!NumericValidator.isNotNegativeOrNotZero(id)) {
@@ -59,10 +55,6 @@ public class ProductDataConsoleScanner {
         System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_PRICE);
         while (true) {
             String stringPrice = MainApp.getContext().getScanner().nextLine().trim();
-            if (stringPrice.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
-                    stringPrice.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
-            }
             try {
                 BigDecimal price = new BigDecimal(stringPrice);
                 if (!(price.compareTo(BigDecimal.ZERO) >= 0)) {
@@ -90,10 +82,7 @@ public class ProductDataConsoleScanner {
         productCreatingContainer.viewExistingEntities();
         while (true) {
             String entityKey = MainApp.getContext().getScanner().nextLine().toLowerCase().trim();
-            if (entityKey.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
-                    entityKey.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
-            } else if (productCreatingContainer.isContainEntity(entityKey)) {
+            if (productCreatingContainer.isContainEntity(entityKey)) {
                 return productCreatingContainer.getEntityByKey(entityKey);
             } else {
                 System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_TYPE, entityKey);
@@ -185,10 +174,6 @@ public class ProductDataConsoleScanner {
                                          String msgInvalidNumericFormat, String msgInvalidFormat) {
         while (true) {
             String stringResult = MainApp.getContext().getScanner().nextLine();
-            if (stringResult.equals(ShopLiterals.BACK_CMD_FULL_CAST)
-                    || stringResult.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
-            }
             try {
                 Number result = convertor.apply(stringResult);
                 if (!validator.apply(result)) {
@@ -203,11 +188,6 @@ public class ProductDataConsoleScanner {
     }
 
     private String inputStringParameter() {
-        String result = MainApp.getContext().getScanner().nextLine().trim();
-        if (result.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
-                result.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-            return null;     // abort the entire operation
-        }
-        return result;
+        return MainApp.getContext().getScanner().nextLine().trim();
     }
 }

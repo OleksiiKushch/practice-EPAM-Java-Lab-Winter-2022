@@ -10,24 +10,12 @@ public class ManualCreateBook extends ManualCreateCommodity {
     public Commodity create() {
         ProductDataConsoleScanner productDataConsoleScanner = MainApp.getContext().getProductDataConsoleScanner();
 
-        Commodity commodity = super.create();
-        if (commodity == null) {
-            return null;
-        }
-        Book book = new Book(commodity);
+        Book book = new Book(super.create());
 
-        if (!setField(book::setTitle, productDataConsoleScanner::inputTitle)) {
-            return null;
-        }
-        if (!setField(book::setAuthor, productDataConsoleScanner::inputAuthor)) {
-            return null;
-        }
-        if (!setField(book::setLanguage, productDataConsoleScanner::inputLanguage)) {
-            return null;
-        }
-        if (!setField(book::setNumberOfPages, productDataConsoleScanner::inputNumberOfPages)) {
-            return null;
-        }
+        book.setTitle(productDataConsoleScanner.inputTitle());
+        book.setAuthor(productDataConsoleScanner.inputAuthor());
+        book.setLanguage(productDataConsoleScanner.inputLanguage());
+        book.setNumberOfPages(productDataConsoleScanner.inputNumberOfPages());
 
         return book;
     }

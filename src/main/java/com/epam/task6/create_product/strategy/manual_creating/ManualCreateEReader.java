@@ -10,24 +10,12 @@ public class ManualCreateEReader extends ManualCreateCommodity {
     public Commodity create() {
         ProductDataConsoleScanner productDataConsoleScanner = MainApp.getContext().getProductDataConsoleScanner();
 
-        Commodity commodity = super.create();
-        if (commodity == null) {
-            return null;
-        }
-        EReader eReader = new EReader(commodity);
+        EReader eReader = new EReader(super.create());
 
-        if (!setField(eReader::setModel, productDataConsoleScanner::inputModel)) {
-            return null;
-        }
-        if (!setField(eReader::setDisplaySize, productDataConsoleScanner::inputDisplaySize)) {
-            return null;
-        }
-        if (!setField(eReader::setStorageGB, productDataConsoleScanner::inputStorageGB)) {
-            return null;
-        }
-        if (!setField(eReader::setResolutionPPI, productDataConsoleScanner::inputResolutionPPI)) {
-            return null;
-        }
+        eReader.setModel(productDataConsoleScanner.inputModel());
+        eReader.setDisplaySize(productDataConsoleScanner.inputDisplaySize());
+        eReader.setStorageGB(productDataConsoleScanner.inputStorageGB());
+        eReader.setResolutionPPI(productDataConsoleScanner.inputResolutionPPI());
 
         return eReader;
     }
