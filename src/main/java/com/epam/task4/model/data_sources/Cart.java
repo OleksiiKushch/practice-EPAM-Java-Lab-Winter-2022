@@ -1,5 +1,7 @@
 package com.epam.task4.model.data_sources;
 
+import com.epam.task4.controller.command.ViewCartHistoryCmd;
+
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,7 +12,7 @@ import java.util.Map;
  * <p>
  * Also there is a special container (last products) ({@link #container}),
  * which stores the identifiers of the last products that were in the cart for all shopping sessions.
- * See {@link com.epam.task4.controller.command.ViewLatestProductsFromCartCmd}.
+ * See {@link ViewCartHistoryCmd}.
  *
  * @author Oleksii Kushch
  */

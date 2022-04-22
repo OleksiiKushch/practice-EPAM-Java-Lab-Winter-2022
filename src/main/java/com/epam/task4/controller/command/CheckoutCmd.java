@@ -9,7 +9,7 @@ import com.epam.task4.service.CartService;
 public class CheckoutCmd implements Command {
     public static final String FULL_KEY = "--checkout";
 
-    public static final String DESCRIPTION = "Buy all items from the cart (checkout)";
+    private static final String DESCRIPTION = "Buy all items from the cart (checkout)";
 
     private final CartService cartService;
 

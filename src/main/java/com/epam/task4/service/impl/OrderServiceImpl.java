@@ -4,7 +4,7 @@ import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.model.entity.Order;
 import com.epam.task4.repository.OrderRepository;
 import com.epam.task4.service.OrderService;
-import com.epam.task4.util.DateScanner;
+import com.epam.task4.util.DateConsoleScanner;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -39,8 +39,8 @@ public class OrderServiceImpl implements OrderService {
      *     <li> Entering the day (end-point) from the console
      * </ul>
      * On any of these six parts, it is possible to stop execution of all operation if the corresponding methods
-     * for reading data from the console ({@link DateScanner#inputYear}, {@link DateScanner#inputMonth},
-     * {@link DateScanner#inputDay}) return {@code null}.
+     * for reading data from the console ({@link DateConsoleScanner#inputYear}, {@link DateConsoleScanner#inputMonth},
+     * {@link DateConsoleScanner#inputDay}) return {@code null}.
      */
     @Override
     public List<Order> getOrdersFromToByDate() {
@@ -65,8 +65,8 @@ public class OrderServiceImpl implements OrderService {
      *     <li> Entering the day from the console
      * </ul>
      * On any of these three parts, it is possible to stop execution of all operation (this method execute())
-     * if the corresponding methods for reading data from the console ({@link DateScanner#inputYear}, {@link DateScanner#inputMonth},
-     * {@link DateScanner#inputDay}) return {@code null}.
+     * if the corresponding methods for reading data from the console ({@link DateConsoleScanner#inputYear}, {@link DateConsoleScanner#inputMonth},
+     * {@link DateConsoleScanner#inputDay}) return {@code null}.
      */
     @Override
     public Order getOrderByNearestDate() {
@@ -83,19 +83,19 @@ public class OrderServiceImpl implements OrderService {
     private LocalDateTime interactiveConsoleInputDate(
             String msgAppealForInputYear, String msgAppealForInputMonth, String msgAppealForInputDay) {
         System.out.println(msgAppealForInputYear);
-        Integer year = DateScanner.inputYear();
+        Integer year = DateConsoleScanner.inputYear();
         if (year == null) {
             System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
             return null;
         }
         System.out.println(msgAppealForInputMonth);
-        Integer month = DateScanner.inputMonth();
+        Integer month = DateConsoleScanner.inputMonth();
         if (month == null) {
             System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
             return null;
         }
         System.out.println(msgAppealForInputDay);
-        Integer day = DateScanner.inputDay(year, month);
+        Integer day = DateConsoleScanner.inputDay(year, month);
         if (day == null) {
             System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
             return null;

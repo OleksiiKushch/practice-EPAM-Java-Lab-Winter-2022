@@ -9,7 +9,7 @@ import com.epam.task4.controller.Command;
 public class HelpCmd implements Command {
     public static final String FULL_KEY = "--help";
 
-    public static final String DESCRIPTION = "See a list of possible commands";
+    private static final String DESCRIPTION = "Display a list of possible commands";
 
     @Override
     public void execute() {

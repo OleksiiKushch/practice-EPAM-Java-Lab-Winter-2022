@@ -11,10 +11,10 @@ import java.util.List;
  * @author Oleksii Kushch
  */
 public class ViewProductCatalogCmd implements Command {
-    public static final String FULL_KEY = "--product-list";
-    public static final String SHORT_KEY = "-pl";
+    public static final String FULL_KEY = "--product-catalog";
+    public static final String SHORT_KEY = "-pc";
 
-    public static final String DESCRIPTION = "Display a list of products";
+    private static final String DESCRIPTION = "Display a list of products (product catalog)";
 
     private final ProductService productService;
 

@@ -2,27 +2,28 @@ package com.epam.task4.util;
 
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
-import com.epam.task4.controller.command.PutProductToCartCmd;
-import com.epam.task4.repository.CartRepository;
-import com.epam.task4.repository.ProductRepository;
+import com.epam.task4.service.CartService;
+import com.epam.task4.service.ProductService;
+import com.epam.task6.util.NumericValidator;
 
-/**
- * Class for reading data about product (like id or amount) from the console with built-in validation.
- * <p>
- * Are directly called in the {@code execute()} method in the following classes:
- * @see PutProductToCartCmd
- * @author Oleksii Kushch
- */
-public class ProductDataScanner {
+public class ProductDataConsoleScannerForCart {
+    private final ProductService productService;
+    private final CartService cartService;
+
+    public ProductDataConsoleScannerForCart(ProductService productService, CartService cartService) {
+        this.productService = productService;
+        this.cartService = cartService;
+    }
+
     /**
      * Reading data (product id) from the console with built-in validation.
      * <p>
      * Noted: return {@code null} if needed abort the entire operation
-     * (method {@link PutProductToCartCmd#execute()})
+     * (method {@link com.epam.task4.controller.command.PutProductToCartCmd#execute()})
      * @return product ({@link com.epam.task1.entity.Commodity}) id<br>or {@code null} if abort the entire operation
      */
-    public static Long inputIdForCart(ProductRepository productRepository) {
-        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_ID);
+    public Long inputId() {
+        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_ID_FOR_CART);
         while (true) {
             String stringId = MainApp.getContext().getScanner().nextLine();
             if (stringId.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
@@ -31,9 +32,9 @@ public class ProductDataScanner {
             }
             try {
                 Long id = Long.valueOf(stringId);
-                if (isNegativeOrZero(id)) {
+                if (!NumericValidator.isNotNegativeOrNotZero(id)) {
                     System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
-                } else if (productRepository.getById(id) == null) {
+                } else if (productService.getProductById(id) == null) {
                     System.out.printf(ShopLiterals.MSG_PRODUCT_DOES_NOT_EXISTS, id);
                 } else {
                     return id;
@@ -48,16 +49,16 @@ public class ProductDataScanner {
      * Reading data (amount of products) from the console with built-in validation.
      * <p>
      * Noted: return {@code null} if needed abort the entire operation
-     * (method {@link PutProductToCartCmd#execute()})
+     * (method {@link com.epam.task4.controller.command.PutProductToCartCmd#execute()})
      * @return amount of products ({@link com.epam.task1.entity.Commodity})<br>or {@code null} if abort the entire operation
      */
-    public static Integer inputAmountForCart(Long id, ProductRepository productRepository, CartRepository cartRepository) {
-        Integer amountOnStock = productRepository.getById(id).getAmount();
+    public Integer inputAmount(Long product_id) {
+        Integer amountOnStock = productService.getProductById(product_id).getAmount();
 
-        Integer amountOnCart = cartRepository.getAll().get(id);
+        Integer amountOnCart = cartService.getContent().get(product_id);
         amountOnCart = amountOnCart != null ? amountOnCart : 0;
 
-        System.out.printf(ShopLiterals.MSG_ENTER_AMOUNT_PRODUCT, amountOnStock, amountOnCart);
+        System.out.printf(ShopLiterals.MSG_ENTER_PRODUCT_AMOUNT_FOR_CART, amountOnStock, amountOnCart);
 
         while (true) {
             String stringAmount = MainApp.getContext().getScanner().nextLine();
@@ -67,24 +68,20 @@ public class ProductDataScanner {
             }
             try {
                 Integer amount = Integer.valueOf(stringAmount);
-                if (isNegativeOrZero(amount)) {
-                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT_PRODUCT);
+                if (!NumericValidator.isNotNegativeOrNotZero(amount)) {
+                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT);
                 } else if (amountOnStock < amount + amountOnCart) {
-                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_AMOUNT_PRODUCT, id, amount + amountOnCart);
+                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT, product_id, amount + amountOnCart);
                     if (amountOnCart > 0) {
-                        System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_AMOUNT_IN_CART_PRODUCT, amount, amountOnCart);
+                        System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT_FOR_CART, amount, amountOnCart);
                     }
-                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_AMOUNT_IN_STOCK_PRODUCT, amountOnStock);
+                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT_FOR_CATALOG, amountOnStock);
                 } else {
                     return amount;
                 }
             } catch(NumberFormatException exception) {
-                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_AMOUNT_PRODUCT, stringAmount);
+                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_AMOUNT, stringAmount);
             }
         }
-    }
-
-    private static boolean isNegativeOrZero(Number number) {
-        return number.longValue() <= 0;
     }
 }

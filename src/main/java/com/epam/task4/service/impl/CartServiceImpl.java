@@ -1,6 +1,7 @@
 package com.epam.task4.service.impl;
 
 import com.epam.task1.entity.Commodity;
+import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.model.data_sources.OrderCatalog;
 import com.epam.task4.model.data_sources.ProductCatalog;
@@ -9,7 +10,7 @@ import com.epam.task4.repository.CartRepository;
 import com.epam.task4.repository.OrderRepository;
 import com.epam.task4.repository.ProductRepository;
 import com.epam.task4.service.CartService;
-import com.epam.task4.util.ProductDataScanner;
+import com.epam.task4.util.ProductDataConsoleScannerForCart;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -36,7 +37,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Commodity> getContent() {
+    public Map<Long, Integer> getContent() {
+        return cartRepository.getAll();
+    }
+
+    @Override
+    public List<Commodity> getContentList() {
         return mapListProducts(cartRepository.getAll());
     }
 
@@ -50,12 +56,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public void interactivePut() {
         System.out.println(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
-        Long id = ProductDataScanner.inputIdForCart(productRepository);
+        ProductDataConsoleScannerForCart productDataConsoleScanner = MainApp.getContext().getProductDataConsoleScannerForCart();
+        Long id = productDataConsoleScanner.inputId();
         if (id == null) {
             System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
             return;
         }
-        Integer amount = ProductDataScanner.inputAmountForCart(id, productRepository, cartRepository);
+        Integer amount = productDataConsoleScanner.inputAmount(id);
         if (amount == null) {
             System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
             return;
@@ -124,7 +131,7 @@ public class CartServiceImpl implements CartService {
         cartRepository.insertInHistory(id, LocalDateTime.now());
     }
 
-    private List<Commodity> mapListProducts(Map<Long, Integer> container) {
+    public List<Commodity> mapListProducts(Map<Long, Integer> container) {
         return container.entrySet().stream()
                 .map(entry -> {
                     Commodity productCatalogCommodity = productRepository.getById(entry.getKey());

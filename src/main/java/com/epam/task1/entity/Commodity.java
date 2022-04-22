@@ -10,19 +10,28 @@ import java.util.Objects;
  *
  * @author Oleksii Kushch
  */
-public abstract class Commodity implements Cloneable, Serializable {
+public class Commodity implements Cloneable, Serializable {
     private static final long serialVersionUID = 5773634382252297178L;
 
-    /** the identifier concrete commodity (unique value) */
-    private Long id;
-    /** the front (external) title concrete commodity */
+    /**
+     * the identifier concrete commodity (unique value)
+     */
+    private long id;
+    /**
+     * the front (external) title concrete commodity
+     */
     private String frontTitle;
-    /** the price concrete commodity (used BigDecimal because need the precision for money values) */
+    /**
+     * the price concrete commodity (used BigDecimal because need the precision for money values)
+     */
     private BigDecimal price;
-    /** the amount concrete commodity */
-    private Integer amount;
+    /**
+     * the amount concrete commodity
+     */
+    private int amount;
 
-    public Commodity() {}
+    public Commodity() {
+    }
 
     public Commodity(Long id, String frontTitle, BigDecimal price) {
         this.id = id;
@@ -37,7 +46,7 @@ public abstract class Commodity implements Cloneable, Serializable {
         this.amount = amount;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -61,7 +70,7 @@ public abstract class Commodity implements Cloneable, Serializable {
         this.price = price;
     }
 
-    public Integer getAmount() {
+    public int getAmount() {
         return amount;
     }
 
@@ -74,10 +83,10 @@ public abstract class Commodity implements Cloneable, Serializable {
         if (this == object) return true;
         if (!(object instanceof Commodity)) return false;
         Commodity commodity = (Commodity) object;
-        return Objects.equals(id, commodity.id) &&
+        return id == commodity.id &&
                 Objects.equals(frontTitle, commodity.frontTitle) &&
                 Objects.equals(price, commodity.price) &&
-                Objects.equals(amount, commodity.amount);
+                amount == commodity.amount;
     }
 
     @Override
