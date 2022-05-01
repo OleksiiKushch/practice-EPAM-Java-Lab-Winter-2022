@@ -91,8 +91,6 @@ public class CartServiceImpl implements CartService {
                 commodity.setAmount(commodity.getAmount() - value);
             });
             orderRepository.insert(new Order(LocalDateTime.now(), mapListProducts(cartRepository.getAll())));
-            System.out.println(ShopLiterals.MSG_CHECKOUT_SUCCESS);
-            System.out.println(ShopLiterals.SUM + ShopLiterals.SPACE + getSum());
             cartRepository.getAll().clear();
         }
     }

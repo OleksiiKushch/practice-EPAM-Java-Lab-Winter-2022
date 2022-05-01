@@ -5,8 +5,11 @@ import com.epam.task1.entity.EReader;
 
 import java.security.SecureRandom;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class AutoCreateEReader extends AutoCreateCommodity {
-    private static final String MODEL = "Model";
+    public static final String MODEL = "Model";
 
     @Override
     public Commodity create() {
@@ -15,9 +18,9 @@ public class AutoCreateEReader extends AutoCreateCommodity {
         EReader eReader = new EReader(super.create());
 
         eReader.setModel(MODEL + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
-        eReader.setDisplaySize(secureRandom.nextFloat() * MAX_VALUE_RANDOM_GENERATED_NUM);
-        eReader.setStorageGB(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
-        eReader.setResolutionPPI(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+        eReader.setDisplaySizeInches(secureRandom.nextFloat() * MAX_VALUE_RANDOM_GENERATED_NUM);
+        eReader.setStorageCapacityGB(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+        eReader.setScreenResolutionPPI(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
 
         return eReader;
     }

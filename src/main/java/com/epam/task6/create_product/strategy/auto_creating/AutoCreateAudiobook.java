@@ -6,8 +6,11 @@ import com.epam.task1.entity.Commodity;
 
 import java.security.SecureRandom;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class AutoCreateAudiobook extends AutoCreateBook {
-    private static final String NARRATOR = "Narrator";
+    public static final String NARRATOR = "Narrator";
 
     @Override
     public Commodity create() {
@@ -15,8 +18,8 @@ public class AutoCreateAudiobook extends AutoCreateBook {
 
         Audiobook audiobook = new Audiobook((Book) super.create());
 
-        audiobook.setSizeMB(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
-        audiobook.setListeningLength(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+        audiobook.setFileSizeMB(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+        audiobook.setListeningTimeMinutes(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
         audiobook.setNarrator(NARRATOR + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
 
         return audiobook;

@@ -6,9 +6,14 @@ import com.epam.task4.controller.command.PutProductToCartCmd;
 import com.epam.task4.service.ProductService;
 import com.epam.task6.create_product.CreateProduct;
 import com.epam.task6.create_product.ProductCreatingContainer;
+import com.epam.task7.constants.MessageKey;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Class for reading data about product (like id or amount) from the console with built-in validation.
@@ -21,173 +26,211 @@ import java.util.function.Function;
 public class ProductDataConsoleScanner {
     private final ProductService productService;
     private final ProductCreatingContainer productCreatingContainer;
+    private final ResourceBundle resourceBundle;
 
-    public ProductDataConsoleScanner(ProductService productService, ProductCreatingContainer productCreatingContainer) {
+    private final Map<String, Supplier<Object>> methodContainer;
+
+    public ProductDataConsoleScanner(ProductService productService, ProductCreatingContainer productCreatingContainer,
+                                     ResourceBundle resourceBundle) {
         this.productService = productService;
         this.productCreatingContainer = productCreatingContainer;
-    }
-
-    public Long inputId() {
-        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_ID_FOR_CATALOG);
-        while (true) {
-            String stringId = MainApp.getContext().getScanner().nextLine();
-            try {
-                Long id = Long.valueOf(stringId);
-                if (!NumericValidator.isNotNegativeOrNotZero(id)) {
-                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
-                } else if (productService.getProductById(id) != null) {
-                    System.out.printf(ShopLiterals.MSG_PRODUCT_ALREADY_EXISTS, id);
-                } else {
-                    return id;
-                }
-            } catch (NumberFormatException exception) {
-                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_ID, stringId);
-            }
-        }
-    }
-
-    public String inputFrontTitle() {
-        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_FRONT_TITLE);
-        return inputStringParameter();
-    }
-
-    public BigDecimal inputPrice() {
-        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_PRICE);
-        while (true) {
-            String stringPrice = MainApp.getContext().getScanner().nextLine().trim();
-            try {
-                BigDecimal price = new BigDecimal(stringPrice);
-                if (!(price.compareTo(BigDecimal.ZERO) >= 0)) {
-                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_PRICE);
-                } else {
-                    return price;
-                }
-            } catch (NumberFormatException exception) {
-                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_PRICE, stringPrice);
-            }
-        }
-    }
-
-    public Integer inputAmount() {
-        System.out.println(ShopLiterals.MSG_ENTER_AMOUNT_PRODUCT_FOR_CATALOG);
-        return (Integer) inputNumericParameter(
-                NumericValidator::isNotNegative,
-                Integer::valueOf,
-                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT,
-                ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_AMOUNT);
+        this.resourceBundle = resourceBundle;
+        methodContainer = new HashMap<>();
+        initMethodContainer();
     }
 
     public CreateProduct inputCreateProductType() {
-        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_TYPE);
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER_PRODUCT_TYPE);
         productCreatingContainer.viewExistingEntities();
         while (true) {
-            String entityKey = MainApp.getContext().getScanner().nextLine().toLowerCase().trim();
+            String entityKey = MainApp.getContext().getScanner().nextLine().toLowerCase().strip();
             if (productCreatingContainer.isContainEntity(entityKey)) {
                 return productCreatingContainer.getEntityByKey(entityKey);
             } else {
-                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_TYPE, entityKey);
+                MainApp.printWarning(MessageKey.MSG_KEY_INVALID_FORMAT_PRODUCT_CREATING_TYPE, entityKey);
                 productCreatingContainer.viewExistingEntities();
             }
         }
     }
 
-    public String inputTitle() {
-        System.out.println(ShopLiterals.MSG_ENTER_BOOK_TITlE);
+    public Long inputProductId() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID));
+        while (true) {
+            String stringId = MainApp.getContext().getScanner().nextLine().strip();
+            try {
+                Long id = Long.valueOf(stringId);
+                if (!NumericValidator.isNotNegativeOrNotZero(id)) {
+                    MainApp.printWarning(MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE_OR_EQUALS_ZERO,
+                            resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID));
+                } else if (productService.getProductById(id) != null) {
+                    MainApp.printWarning(MessageKey.MSG_KEY_PRODUCT_WITH_THIS_ID_ALREADY_EXISTS, id);
+                } else {
+                    return id;
+                }
+            } catch (NumberFormatException exception) {
+                MainApp.printWarning(MessageKey.MSG_KEY_INVALID_FORMAT,
+                        resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID), stringId);
+            }
+        }
+    }
+
+    public String inputProductFrontTitle() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_PRODUCT_FRONT_TITLE));
         return inputStringParameter();
     }
 
-    public String inputAuthor() {
-        System.out.println(ShopLiterals.MSG_ENTER_BOOK_AUTHOR);
+    public BigDecimal inputProductPrice() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE));
+        while (true) {
+            String stringPrice = MainApp.getContext().getScanner().nextLine().strip();
+            try {
+                BigDecimal price = new BigDecimal(stringPrice);
+                if (!(price.compareTo(BigDecimal.ZERO) >= 0)) {
+                    MainApp.printWarning(MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE,
+                            resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE));
+                } else {
+                    return price;
+                }
+            } catch (NumberFormatException exception) {
+                MainApp.printWarning(MessageKey.MSG_KEY_INVALID_FORMAT,
+                        resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE), stringPrice);
+            }
+        }
+    }
+
+    public Integer inputProductAmount() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_PRODUCT_AMOUNT));
+        return (Integer) inputNumericParameter(
+                NumericValidator::isNotNegative,
+                Integer::valueOf,
+                MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE,
+                ShopLiterals.KEY_PRODUCT_AMOUNT);
+    }
+
+    public String inputBookTitle() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_BOOK_TITLE));
         return inputStringParameter();
     }
 
-    public String inputLanguage() {
-        System.out.println(ShopLiterals.MSG_ENTER_BOOK_LANGUAGE);
+    public String inputBookAuthor() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_BOOK_AUTHOR));
         return inputStringParameter();
     }
 
-    public Integer inputNumberOfPages() {
-        System.out.println(ShopLiterals.MSG_ENTER_BOOK_NUMBER_PAGES);
+    public String inputBookLanguage() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_BOOK_LANGUAGE));
+        return inputStringParameter();
+    }
+
+    public Integer inputBookNumberOfPages() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_BOOK_NUMBER_OF_PAGES));
         return (Integer) inputNumericParameter(
                 NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
-                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_NUMBER_PAGES,
-                ShopLiterals.MSG_INVALID_FORMAT_NUMBER_PAGES);
+                MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE_OR_EQUALS_ZERO,
+                ShopLiterals.KEY_BOOK_NUMBER_OF_PAGES);
     }
 
-    public Integer inputSizeMB() {
-        System.out.println(ShopLiterals.MSG_ENTER_AUDIOBOOK_SIZE_MB);
+    public Integer inputAudiobookFileSizeMB() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_FILE_SIZE_MB));
         return (Integer) inputNumericParameter(
                 NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
-                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_SIZE_MB,
-                ShopLiterals.MSG_INVALID_FORMAT_SIZE_MB);
+                MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE_OR_EQUALS_ZERO,
+                ShopLiterals.KEY_AUDIOBOOK_FILE_SIZE_MB);
     }
 
-    public Integer inputListeningLength() {
-        System.out.println(ShopLiterals.MSG_ENTER_AUDIOBOOK_LISTENING_LENGTH);
+    public Integer inputAudiobookListeningTimeMinutes() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_LISTENING_TIME_MINUTES));
         return (Integer) inputNumericParameter(
                 NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
-                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_LISTENING_LENGTH,
-                ShopLiterals.MSG_INVALID_FORMAT_LISTENING_LENGTH);
+                MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE_OR_EQUALS_ZERO,
+                ShopLiterals.KEY_AUDIOBOOK_LISTENING_TIME_MINUTES);
     }
 
-    public String inputNarrator() {
-        System.out.println(ShopLiterals.MSG_ENTER_AUDIOBOOK_NARRATOR);
+    public String inputAudiobookNarrator() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_NARRATOR));
         return inputStringParameter();
     }
 
-    public String inputModel() {
-        System.out.println(ShopLiterals.MSG_ENTER_E_READER_MODEL);
+    public String inputEReaderModel() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_E_READER_MODEL));
         return inputStringParameter();
     }
 
-    public Float inputDisplaySize() {
-        System.out.println(ShopLiterals.MSG_ENTER_E_READER_DISPLAY_SIZE);
+    public Float inputEReaderDisplaySizeInches() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_E_READER_DISPLAY_SIZE_INCHES));
         return (Float) inputNumericParameter(
                 NumericValidator::isNotNegativeOrNotZero,
                 Float::valueOf,
-                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_DISPLAY_SIZE,
-                ShopLiterals.MSG_INVALID_FORMAT_DISPLAY_SIZE);
+                MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE_OR_EQUALS_ZERO,
+                ShopLiterals.KEY_E_READER_DISPLAY_SIZE_INCHES);
     }
 
-    public Integer inputStorageGB() {
-        System.out.println(ShopLiterals.MSG_ENTER_E_READER_STORAGE_CAPACITY_GB);
+    public Integer inputEReaderStorageCapacityGB() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_E_READER_STORAGE_CAPACITY_GB));
         return (Integer) inputNumericParameter(
                 NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
-                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_STORAGE_CAPACITY_GB,
-                ShopLiterals.MSG_INVALID_FORMAT_STORAGE_CAPACITY_GB);
+                MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE_OR_EQUALS_ZERO,
+                ShopLiterals.KEY_E_READER_STORAGE_CAPACITY_GB);
     }
 
-    public Integer inputResolutionPPI() {
-        System.out.println(ShopLiterals.MSG_ENTER_E_READER_RESOLUTION_PPI);
+    public Integer inputEReaderScreenResolutionPPI() {
+        MainApp.printMessage(MessageKey.MSG_KEY_ENTER, resourceBundle.getString(ShopLiterals.KEY_E_READER_SCREEN_RESOLUTION_PPI));
         return (Integer) inputNumericParameter(
                 NumericValidator::isNotNegativeOrNotZero,
                 Integer::valueOf,
-                ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_RESOLUTION_PPI,
-                ShopLiterals.MSG_INVALID_FORMAT_RESOLUTION_PPI);
+                MessageKey.MSG_KEY_INVALID_FORMAT_CANNOT_BE_NEGATIVE_OR_EQUALS_ZERO,
+                ShopLiterals.KEY_E_READER_SCREEN_RESOLUTION_PPI);
     }
 
     private Number inputNumericParameter(Function<Number, Boolean> validator, Function<String, Number> convertor,
-                                         String msgInvalidNumericFormat, String msgInvalidFormat) {
+                                         String msgKeyInvalidNumericFormat, String parameterKey) {
         while (true) {
             String stringResult = MainApp.getContext().getScanner().nextLine();
             try {
                 Number result = convertor.apply(stringResult);
                 if (!validator.apply(result)) {
-                    System.out.println(msgInvalidNumericFormat);
+                    MainApp.printWarning(msgKeyInvalidNumericFormat,
+                            resourceBundle.getString(parameterKey));
                 } else {
                     return result;
                 }
             } catch (NumberFormatException exception) {
-                System.out.printf(msgInvalidFormat, stringResult);
+                MainApp.printWarning(MessageKey.MSG_KEY_INVALID_FORMAT,
+                        resourceBundle.getString(parameterKey), stringResult);
             }
         }
     }
 
     private String inputStringParameter() {
-        return MainApp.getContext().getScanner().nextLine().trim();
+        return MainApp.getContext().getScanner().nextLine().strip();
+    }
+
+    private void initMethodContainer() {
+        methodContainer.put(ShopLiterals.KEY_PRODUCT_ID, this::inputProductId);
+        methodContainer.put(ShopLiterals.KEY_PRODUCT_FRONT_TITLE, this::inputProductFrontTitle);
+        methodContainer.put(ShopLiterals.KEY_PRODUCT_PRICE, this::inputProductPrice);
+        methodContainer.put(ShopLiterals.KEY_PRODUCT_AMOUNT, this::inputProductAmount);
+
+        methodContainer.put(ShopLiterals.KEY_BOOK_TITLE, this::inputBookTitle);
+        methodContainer.put(ShopLiterals.KEY_BOOK_AUTHOR, this::inputBookAuthor);
+        methodContainer.put(ShopLiterals.KEY_BOOK_LANGUAGE, this::inputBookLanguage);
+        methodContainer.put(ShopLiterals.KEY_BOOK_NUMBER_OF_PAGES, this::inputBookNumberOfPages);
+
+        methodContainer.put(ShopLiterals.KEY_AUDIOBOOK_FILE_SIZE_MB, this::inputAudiobookFileSizeMB);
+        methodContainer.put(ShopLiterals.KEY_AUDIOBOOK_LISTENING_TIME_MINUTES, this::inputAudiobookListeningTimeMinutes);
+        methodContainer.put(ShopLiterals.KEY_AUDIOBOOK_NARRATOR, this::inputAudiobookNarrator);
+
+        methodContainer.put(ShopLiterals.KEY_E_READER_MODEL, this::inputEReaderModel);
+        methodContainer.put(ShopLiterals.KEY_E_READER_DISPLAY_SIZE_INCHES, this::inputEReaderDisplaySizeInches);
+        methodContainer.put(ShopLiterals.KEY_E_READER_STORAGE_CAPACITY_GB, this::inputEReaderStorageCapacityGB);
+        methodContainer.put(ShopLiterals.KEY_E_READER_SCREEN_RESOLUTION_PPI, this::inputEReaderScreenResolutionPPI);
+    }
+
+    public Map<String, Supplier<Object>> getMethodContainer() {
+        return methodContainer;
     }
 }

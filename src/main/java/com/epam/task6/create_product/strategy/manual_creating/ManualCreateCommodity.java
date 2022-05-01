@@ -6,6 +6,9 @@ import com.epam.task4.constants.ShopLiterals;
 import com.epam.task6.create_product.CreateProduct;
 import com.epam.task6.util.ProductDataConsoleScanner;
 
+/**
+ * @author Oleksii Kushch
+ */
 public abstract class ManualCreateCommodity implements CreateProduct {
     public static final Integer CODE_KEY = 1;
 
@@ -20,10 +23,10 @@ public abstract class ManualCreateCommodity implements CreateProduct {
 
         Commodity commodity = new Commodity();
 
-        commodity.setId(productDataConsoleScanner.inputId());
-        commodity.setFrontTitle(productDataConsoleScanner.inputFrontTitle());
-        commodity.setPrice(productDataConsoleScanner.inputPrice());
-        commodity.setAmount((productDataConsoleScanner.inputAmount()));
+        commodity.setId(productDataConsoleScanner.inputProductId());
+        commodity.setFrontTitle(productDataConsoleScanner.inputProductFrontTitle());
+        commodity.setPrice(productDataConsoleScanner.inputProductPrice());
+        commodity.setAmount((productDataConsoleScanner.inputProductAmount()));
 
         return commodity;
     }

@@ -5,6 +5,9 @@ import com.epam.task1.entity.Commodity;
 import com.epam.task4.MainApp;
 import com.epam.task6.util.ProductDataConsoleScanner;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class ManualCreateBook extends ManualCreateCommodity {
     @Override
     public Commodity create() {
@@ -12,10 +15,10 @@ public class ManualCreateBook extends ManualCreateCommodity {
 
         Book book = new Book(super.create());
 
-        book.setTitle(productDataConsoleScanner.inputTitle());
-        book.setAuthor(productDataConsoleScanner.inputAuthor());
-        book.setLanguage(productDataConsoleScanner.inputLanguage());
-        book.setNumberOfPages(productDataConsoleScanner.inputNumberOfPages());
+        book.setTitle(productDataConsoleScanner.inputBookTitle());
+        book.setAuthor(productDataConsoleScanner.inputBookAuthor());
+        book.setLanguage(productDataConsoleScanner.inputBookLanguage());
+        book.setNumberOfPages(productDataConsoleScanner.inputBookNumberOfPages());
 
         return book;
     }

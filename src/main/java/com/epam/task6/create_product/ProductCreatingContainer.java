@@ -1,10 +1,18 @@
 package com.epam.task6.create_product;
 
-import com.epam.task4.constants.ShopLiterals;
+import com.epam.task4.MainApp;
+import com.epam.task7.constants.MessageKey;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * The class that contain (hold) all product creating strategies which allow an application {@link com.epam.task4.MainApp}.
+ * An associative container ({@link #container}) that contains all product creating strategies, takes a name strategy (mode)
+ * product creating in string format as a key and a class object {@link CreateProduct} as a value.
+ *
+ * @author Oleksii Kushch
+ */
 public class ProductCreatingContainer {
     private final Map<String, CreateProduct> container;
 
@@ -12,8 +20,8 @@ public class ProductCreatingContainer {
         container = new LinkedHashMap<>();
     }
 
-    public Map<String, CreateProduct> getContainer() {
-        return container;
+    public void put(String entityKey, CreateProduct createProduct) {
+        container.put(entityKey, createProduct);
     }
 
     public boolean isContainEntity(String entityKey) {
@@ -24,8 +32,11 @@ public class ProductCreatingContainer {
         return container.get(entityKey);
     }
 
+    /**
+     * print to console existing product types for which there is a strategy for creating
+     */
     public void viewExistingEntities() {
-        System.out.println(ShopLiterals.MSG_EXISTING_PRODUCT_TYPES);
+        MainApp.printMessage(MessageKey.MSG_KEY_EXISTING_PRODUCT_TYPES);
         container.keySet().forEach(System.out::println);
     }
 }

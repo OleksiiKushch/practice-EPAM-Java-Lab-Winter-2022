@@ -6,6 +6,9 @@ import com.epam.task1.entity.Commodity;
 import com.epam.task4.MainApp;
 import com.epam.task6.util.ProductDataConsoleScanner;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class ManualCreateAudiobook extends ManualCreateBook {
     @Override
     public Commodity create() {
@@ -13,9 +16,9 @@ public class ManualCreateAudiobook extends ManualCreateBook {
 
         Audiobook audiobook = new Audiobook((Book) super.create());
 
-        audiobook.setSizeMB(productDataConsoleScanner.inputSizeMB());
-        audiobook.setListeningLength(productDataConsoleScanner.inputListeningLength());
-        audiobook.setNarrator(productDataConsoleScanner.inputNarrator());
+        audiobook.setFileSizeMB(productDataConsoleScanner.inputAudiobookFileSizeMB());
+        audiobook.setListeningTimeMinutes(productDataConsoleScanner.inputAudiobookListeningTimeMinutes());
+        audiobook.setNarrator(productDataConsoleScanner.inputAudiobookNarrator());
 
         return audiobook;
     }

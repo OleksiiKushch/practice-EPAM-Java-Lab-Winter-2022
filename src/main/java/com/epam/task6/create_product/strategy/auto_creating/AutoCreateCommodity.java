@@ -9,6 +9,9 @@ import com.epam.task6.create_product.CreateProduct;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 
+/**
+ * @author Oleksii Kushch
+ */
 public abstract class AutoCreateCommodity implements CreateProduct {
     public static final Integer CODE_KEY = 2;
 
@@ -19,7 +22,7 @@ public abstract class AutoCreateCommodity implements CreateProduct {
 
     public static final int MAX_VALUE_RANDOM_GENERATED_NUM = 100;
 
-    private static final String FRONT_TITLE = "FrontTitle";
+    public static final String FRONT_TITLE = "FrontTitle";
 
     @Override
     public Commodity create() {

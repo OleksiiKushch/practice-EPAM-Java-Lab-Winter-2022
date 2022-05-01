@@ -5,10 +5,13 @@ import com.epam.task1.entity.Commodity;
 
 import java.security.SecureRandom;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class AutoCreateBook extends AutoCreateCommodity {
-    private static final String TITLE = "Title";
-    private static final String AUTHOR = "Author";
-    private static final String LANGUAGE = "Language";
+    public static final String TITLE = "Title";
+    public static final String AUTHOR = "Author";
+    public static final String LANGUAGE = "Language";
 
     @Override
     public Commodity create() {

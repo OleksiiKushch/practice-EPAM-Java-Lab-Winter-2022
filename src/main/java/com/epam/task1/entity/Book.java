@@ -1,5 +1,8 @@
 package com.epam.task1.entity;
 
+import com.epam.task4.constants.ShopLiterals;
+import com.epam.task7.create_product.ProductField;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -15,19 +18,23 @@ public class Book extends Commodity {
     /**
      * the title concrete book (name)
      */
+    @ProductField(KEY = ShopLiterals.KEY_BOOK_TITLE)
     private String title;
     /**
      * the author concrete book (main or first author to the list of book authors)
      */
+    @ProductField(KEY = ShopLiterals.KEY_BOOK_AUTHOR)
     private String author;
     /**
      * the language concrete book
      */
+    @ProductField(KEY = ShopLiterals.KEY_BOOK_LANGUAGE)
     private String language;
     /**
      * the number of pages concrete book
      */
-    private int numberOfPages;
+    @ProductField(KEY = ShopLiterals.KEY_BOOK_NUMBER_OF_PAGES)
+    private Integer numberOfPages;
 
     public Book() {
     }
@@ -37,7 +44,7 @@ public class Book extends Commodity {
     }
 
     public Book(Long id, String frontTitle, BigDecimal price,
-                String title, String author, String language, int numberOfPages) {
+                String title, String author, String language, Integer numberOfPages) {
         super(id, frontTitle, price);
         this.title = title;
         this.author = author;
@@ -46,7 +53,7 @@ public class Book extends Commodity {
     }
 
     public Book(Long id, String frontTitle, BigDecimal price, Integer amount,
-                String title, String author, String language, int numberOfPages) {
+                String title, String author, String language, Integer numberOfPages) {
         super(id, frontTitle, price, amount);
         this.title = title;
         this.author = author;
@@ -78,11 +85,11 @@ public class Book extends Commodity {
         this.language = language;
     }
 
-    public int getNumberOfPages() {
+    public Integer getNumberOfPages() {
         return numberOfPages;
     }
 
-    public void setNumberOfPages(int numberOfPages) {
+    public void setNumberOfPages(Integer numberOfPages) {
         this.numberOfPages = numberOfPages;
     }
 
@@ -92,7 +99,7 @@ public class Book extends Commodity {
         if (!(o instanceof Book)) return false;
         if (!super.equals(o)) return false;
         Book book = (Book) o;
-        return numberOfPages == book.numberOfPages &&
+        return numberOfPages.equals(book.numberOfPages) &&
                 Objects.equals(title, book.title) &&
                 Objects.equals(author, book.author) &&
                 Objects.equals(language, book.language);
