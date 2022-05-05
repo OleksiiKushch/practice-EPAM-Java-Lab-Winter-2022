@@ -12,9 +12,10 @@ import java.util.Map;
  */
 public interface CartService {
     Map<Long, Integer> getContent();
+    boolean isEmpty();
     List<Commodity> getContentList();
     List<Map.Entry<Commodity, LocalDateTime>> getHistory();
-    void interactivePut();
+    void put(Long id, Integer amount);
     void checkout();
     BigDecimal getSum();
 }

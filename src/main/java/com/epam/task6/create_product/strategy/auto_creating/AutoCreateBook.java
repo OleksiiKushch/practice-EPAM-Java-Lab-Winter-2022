@@ -2,27 +2,24 @@ package com.epam.task6.create_product.strategy.auto_creating;
 
 import com.epam.task1.entity.Book;
 import com.epam.task1.entity.Commodity;
-
-import java.security.SecureRandom;
+import com.epam.task6.util.ProductDataRandomGenerator;
 
 /**
  * @author Oleksii Kushch
  */
 public class AutoCreateBook extends AutoCreateCommodity {
-    public static final String TITLE = "Title";
-    public static final String AUTHOR = "Author";
-    public static final String LANGUAGE = "Language";
+    public AutoCreateBook(ProductDataRandomGenerator productDataRandomGenerator) {
+        super(productDataRandomGenerator);
+    }
 
     @Override
     public Commodity create() {
-        SecureRandom secureRandom = new SecureRandom();
-
         Book book = new Book(super.create());
 
-        book.setTitle(TITLE + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
-        book.setAuthor(AUTHOR + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
-        book.setLanguage(LANGUAGE + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
-        book.setNumberOfPages(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+        book.setTitle(productDataRandomGenerator.getRandomBookTitle());
+        book.setAuthor(productDataRandomGenerator.getRandomBookAuthor());
+        book.setLanguage(productDataRandomGenerator.getRandomBookLanguage());
+        book.setNumberOfPages(productDataRandomGenerator.getRandomBookNumberOfPages());
 
         return book;
     }

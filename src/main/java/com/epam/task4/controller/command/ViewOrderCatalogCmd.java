@@ -1,5 +1,6 @@
 package com.epam.task4.controller.command;
 
+import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
 import com.epam.task4.model.entity.Order;
@@ -26,7 +27,7 @@ public class ViewOrderCatalogCmd implements Command {
     public void execute() {
         List<Order> orders = orderService.getAllOrders();
         if (orders.isEmpty()) {
-            System.out.println(ShopLiterals.MSG_ORDER_CATALOG_IS_EMPTY);
+            MainApp.printAlert(ShopLiterals.MSG_ORDER_CATALOG_IS_EMPTY);
         } else {
             orders.forEach(order -> System.out.println(order.toStringWithoutId()));
         }

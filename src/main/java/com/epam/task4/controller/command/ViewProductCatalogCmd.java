@@ -1,6 +1,7 @@
 package com.epam.task4.controller.command;
 
 import com.epam.task1.entity.Commodity;
+import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
 import com.epam.task4.service.ProductService;
@@ -26,7 +27,7 @@ public class ViewProductCatalogCmd implements Command {
     public void execute() {
         List<Commodity> products = productService.getAllProducts();
         if (products.isEmpty()) {
-            System.out.println(ShopLiterals.MSG_PRODUCT_CATALOG_IS_EMPTY);
+            MainApp.printAlert(ShopLiterals.MSG_PRODUCT_CATALOG_IS_EMPTY);
         } else {
             products.forEach(product -> System.out.println(product.toStringOptional()));
         }

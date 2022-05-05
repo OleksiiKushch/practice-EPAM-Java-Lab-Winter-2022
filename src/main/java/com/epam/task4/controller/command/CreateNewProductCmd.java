@@ -2,12 +2,12 @@ package com.epam.task4.controller.command;
 
 import com.epam.task1.entity.Commodity;
 import com.epam.task4.MainApp;
-import com.epam.task4.constants.ConsoleColor;
+import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
 import com.epam.task4.service.ProductService;
+import com.epam.task6.util.ProductDataConsoleScanner;
 import com.epam.task7.constants.MessageKey;
-
-import java.util.ResourceBundle;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author Oleksii Kushch
@@ -19,18 +19,20 @@ public class CreateNewProductCmd implements Command {
     private static final String DESCRIPTION = "Create new product and add it's to catalog";
 
     private final ProductService productService;
-    private final ResourceBundle resourceBundle;
 
-    public CreateNewProductCmd(ProductService productService, ResourceBundle resourceBundle) {
+    private final ProductDataConsoleScanner productDataConsoleScanner;
+
+    public CreateNewProductCmd(ProductService productService, ProductDataConsoleScanner productDataConsoleScanner) {
         this.productService = productService;
-        this.resourceBundle = resourceBundle;
+        this.productDataConsoleScanner = productDataConsoleScanner;
     }
 
     @Override
     public void execute() {
-        Commodity newProduct = productService.addProductToCatalog();
+        Commodity newProduct = productDataConsoleScanner.inputCreateProductType().create();
+        productService.addProductToCatalog(newProduct);
         MainApp.printSuccessMessage(MessageKey.MSG_KEY_NEW_PRODUCT_SUCCESSFULLY_CREATED);
-        System.out.println(ConsoleColor.GREEN + newProduct + ConsoleColor.RESET);
+        MainApp.printSuccessMessage(StringUtils.join(newProduct.toString(), ShopLiterals.NEWLINE));
     }
 
     @Override

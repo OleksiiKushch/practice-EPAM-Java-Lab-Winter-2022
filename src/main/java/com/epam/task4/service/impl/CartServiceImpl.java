@@ -1,8 +1,6 @@
 package com.epam.task4.service.impl;
 
 import com.epam.task1.entity.Commodity;
-import com.epam.task4.MainApp;
-import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.model.data_sources.OrderCatalog;
 import com.epam.task4.model.data_sources.ProductCatalog;
 import com.epam.task4.model.entity.Order;
@@ -10,7 +8,6 @@ import com.epam.task4.repository.CartRepository;
 import com.epam.task4.repository.OrderRepository;
 import com.epam.task4.repository.ProductRepository;
 import com.epam.task4.service.CartService;
-import com.epam.task4.util.ProductDataConsoleScannerForCart;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -42,6 +39,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public boolean isEmpty() {
+        return cartRepository.getAll().isEmpty();
+    }
+
+    @Override
     public List<Commodity> getContentList() {
         return mapListProducts(cartRepository.getAll());
     }
@@ -53,22 +55,23 @@ public class CartServiceImpl implements CartService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Add (put) products id to container and groups its summing their (products) amount
+     * accordingly. Also add (put) product id to special container, building a kind
+     * of stack-like structure, where the products (their id) are lined up in the order of the "last added".
+     *
+     * @param id the product id ({@link com.epam.task1.entity.Commodity})
+     * @param amount amount (number of products)
+     */
     @Override
-    public void interactivePut() {
-        System.out.println(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
-        ProductDataConsoleScannerForCart productDataConsoleScanner = MainApp.getContext().getProductDataConsoleScannerForCart();
-        Long id = productDataConsoleScanner.inputId();
-        if (id == null) {
-            System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
-            return;
+    public void put(Long id, Integer amount) {
+        Map<Long, Integer> cartContainer = cartRepository.getAll();
+        if (cartContainer.containsKey(id)) {
+            cartRepository.insert(id, cartContainer.get(id) + amount);
+        } else {
+            cartRepository.insert(id, amount);
         }
-        Integer amount = productDataConsoleScanner.inputAmount(id);
-        if (amount == null) {
-            System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
-            return;
-        }
-        put(id, amount);
-        System.out.printf(ShopLiterals.MSG_PUT_PRODUCT_TO_CART_SUCCESS, id, amount);
+        cartRepository.insertInHistory(id, LocalDateTime.now());
     }
 
     /**
@@ -83,16 +86,12 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void checkout() {
-        if (cartRepository.getAll().isEmpty()) {
-            System.out.println(ShopLiterals.MSG_ALERT_CART_IS_EMPTY);
-        } else {
-            cartRepository.getAll().forEach((key, value) -> { // process amount on stock (mock product catalog)
-                Commodity commodity = productRepository.getById(key);
-                commodity.setAmount(commodity.getAmount() - value);
-            });
-            orderRepository.insert(new Order(LocalDateTime.now(), mapListProducts(cartRepository.getAll())));
-            cartRepository.getAll().clear();
-        }
+        cartRepository.getAll().forEach((key, value) -> { // process amount on stock (mock product catalog)
+            Commodity commodity = productRepository.getById(key);
+            commodity.setAmount(commodity.getAmount() - value);
+        });
+        orderRepository.insert(new Order(LocalDateTime.now(), mapListProducts(cartRepository.getAll())));
+        cartRepository.getAll().clear();
     }
 
     /**
@@ -109,24 +108,6 @@ public class CartServiceImpl implements CartService {
                 .map(entry -> productRepository.getById(entry.getKey()).getPrice()
                         .multiply(new BigDecimal(entry.getValue())))
                 .reduce(new BigDecimal(DEFAULT_SUM_IF_CART_IS_EMPTY), BigDecimal::add);
-    }
-
-    /**
-     * Add (put) products id to container and groups its summing their (products) amount
-     * accordingly. Also add (put) product id to special container, building a kind
-     * of stack-like structure, where the products (their id) are lined up in the order of the "last added".
-     *
-     * @param id the product id ({@link com.epam.task1.entity.Commodity})
-     * @param amount amount (number of products)
-     */
-    private void put(Long id, Integer amount) {
-        Map<Long, Integer> cartContainer = cartRepository.getAll();
-        if (cartContainer.containsKey(id)) {
-            cartRepository.insert(id, cartContainer.get(id) + amount);
-        } else {
-            cartRepository.insert(id, amount);
-        }
-        cartRepository.insertInHistory(id, LocalDateTime.now());
     }
 
     public List<Commodity> mapListProducts(Map<Long, Integer> container) {

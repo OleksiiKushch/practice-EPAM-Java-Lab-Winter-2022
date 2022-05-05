@@ -1,8 +1,5 @@
 package com.epam.task6.create_product;
 
-import com.epam.task4.MainApp;
-import com.epam.task7.constants.MessageKey;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -13,10 +10,12 @@ import java.util.Map;
  *
  * @author Oleksii Kushch
  */
-public class ProductCreatingContainer {
+public class ProductCreatingEntityContainer {
     private final Map<String, CreateProduct> container;
+    private final ProductCreatingStrategy productCreatingStrategy;
 
-    public ProductCreatingContainer() {
+    public ProductCreatingEntityContainer(ProductCreatingStrategy productCreatingStrategy) {
+        this.productCreatingStrategy = productCreatingStrategy;
         container = new LinkedHashMap<>();
     }
 
@@ -32,11 +31,14 @@ public class ProductCreatingContainer {
         return container.get(entityKey);
     }
 
+    public ProductCreatingStrategy getProductCreatingStrategy() {
+        return productCreatingStrategy;
+    }
+
     /**
      * print to console existing product types for which there is a strategy for creating
      */
     public void viewExistingEntities() {
-        MainApp.printMessage(MessageKey.MSG_KEY_EXISTING_PRODUCT_TYPES);
         container.keySet().forEach(System.out::println);
     }
 }

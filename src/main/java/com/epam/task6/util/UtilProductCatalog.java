@@ -1,5 +1,6 @@
 package com.epam.task6.util;
 
+import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.model.data_sources.ProductCatalog;
 
@@ -39,7 +40,7 @@ public class UtilProductCatalog {
         File file = new File(path);
         try {
             if (file.createNewFile()) {
-                System.out.println(ShopLiterals.MSG_ALERT_PRODUCT_CATALOG_FILE_NOT_FOUND);
+                MainApp.printAlert(ShopLiterals.MSG_ALERT_PRODUCT_CATALOG_FILE_NOT_FOUND);
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

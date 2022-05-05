@@ -1,10 +1,9 @@
 package com.epam.task7.create_product.strategy;
 
 import com.epam.task1.entity.Commodity;
-import com.epam.task4.MainApp;
-import com.epam.task6.create_product.CreateProduct;
 import com.epam.task6.util.ProductDataConsoleScanner;
 import com.epam.task7.create_product.ProductField;
+import com.epam.task7.create_product.ReflectCreateProduct;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -14,19 +13,20 @@ import java.util.List;
  * Class creating and initialization new product via console with using reflection tech
  * @author Oleksii Kushch
  */
-public class ReflectManualCreateProduct implements CreateProduct {
+public class ReflectManualCreateProduct implements ReflectCreateProduct {
     private final Commodity commodity;
+    private final ProductDataConsoleScanner productDataConsoleScanner;
 
-    public ReflectManualCreateProduct(Commodity commodity) {
+    public ReflectManualCreateProduct(Commodity commodity, ProductDataConsoleScanner productDataConsoleScanner) {
+        this.productDataConsoleScanner = productDataConsoleScanner;
         this.commodity = commodity;
     }
 
     @Override
     public Commodity create() {
         List<Field> fieldList = new ArrayList<>();
-        CreateProduct.getProductFields(fieldList, commodity.getClass());
+        getProductFields(fieldList, commodity.getClass());
 
-        ProductDataConsoleScanner productDataConsoleScanner = MainApp.getContext().getProductDataConsoleScanner();
         for (Field field : fieldList) {
             try {
                 field.setAccessible(true);

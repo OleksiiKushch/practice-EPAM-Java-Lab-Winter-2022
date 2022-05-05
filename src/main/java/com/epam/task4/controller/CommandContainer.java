@@ -1,6 +1,7 @@
 package com.epam.task4.controller;
 
 import com.epam.task4.constants.ShopLiterals;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -82,7 +83,7 @@ public class CommandContainer {
                             .collect(Collectors.joining(ShopLiterals.SPACE));
                     cmdCasts = separateCmdCasts(cmdCasts);
                     int indent = indentLength - cmdCasts.length();
-                    System.out.printf("%s%-" + indent + "s%s%n", cmdCasts, " ", description);
+                    System.out.printf(StringUtils.join("%s%-", indent, "s%s%n"), cmdCasts, " ", description);
                 });
     }
 

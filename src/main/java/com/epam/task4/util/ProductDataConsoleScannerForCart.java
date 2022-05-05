@@ -6,13 +6,18 @@ import com.epam.task4.service.CartService;
 import com.epam.task4.service.ProductService;
 import com.epam.task6.util.NumericValidator;
 
+import java.util.Objects;
+import java.util.Scanner;
+
 public class ProductDataConsoleScannerForCart {
     private final ProductService productService;
     private final CartService cartService;
+    private final Scanner scanner;
 
-    public ProductDataConsoleScannerForCart(ProductService productService, CartService cartService) {
+    public ProductDataConsoleScannerForCart(ProductService productService, CartService cartService, Scanner scanner) {
         this.productService = productService;
         this.cartService = cartService;
+        this.scanner = scanner;
     }
 
     /**
@@ -23,9 +28,9 @@ public class ProductDataConsoleScannerForCart {
      * @return product ({@link com.epam.task1.entity.Commodity}) id<br>or {@code null} if abort the entire operation
      */
     public Long inputId() {
-        System.out.println(ShopLiterals.MSG_ENTER_PRODUCT_ID_FOR_CART);
+        MainApp.printMessage(ShopLiterals.MSG_ENTER_PRODUCT_ID_FOR_CART);
         while (true) {
-            String stringId = MainApp.getContext().getScanner().nextLine();
+            String stringId = scanner.nextLine();
             if (stringId.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
                     stringId.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
                 return null;     // abort the entire operation
@@ -33,14 +38,14 @@ public class ProductDataConsoleScannerForCart {
             try {
                 Long id = Long.valueOf(stringId);
                 if (!NumericValidator.isNotNegativeOrNotZero(id)) {
-                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
-                } else if (productService.getProductById(id) == null) {
-                    System.out.printf(ShopLiterals.MSG_PRODUCT_DOES_NOT_EXISTS, id);
+                    MainApp.printWarning(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_ID);
+                } else if (Objects.isNull(productService.getProductById(id))) {
+                    MainApp.printWarning(ShopLiterals.MSG_PRODUCT_DOES_NOT_EXISTS, id);
                 } else {
                     return id;
                 }
             } catch(NumberFormatException exception) {
-                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_ID, stringId);
+                MainApp.printWarning(ShopLiterals.MSG_INVALID_FORMAT_ID, stringId);
             }
         }
     }
@@ -58,10 +63,10 @@ public class ProductDataConsoleScannerForCart {
         Integer amountOnCart = cartService.getContent().get(product_id);
         amountOnCart = amountOnCart != null ? amountOnCart : 0;
 
-        System.out.printf(ShopLiterals.MSG_ENTER_PRODUCT_AMOUNT_FOR_CART, amountOnStock, amountOnCart);
+        MainApp.printMessage(ShopLiterals.MSG_ENTER_PRODUCT_AMOUNT_FOR_CART, amountOnStock, amountOnCart);
 
         while (true) {
-            String stringAmount = MainApp.getContext().getScanner().nextLine();
+            String stringAmount = scanner.nextLine();
             if (stringAmount.equals(ShopLiterals.BACK_CMD_FULL_CAST)
                     || stringAmount.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
                 return null;     // abort the entire operation
@@ -69,18 +74,18 @@ public class ProductDataConsoleScannerForCart {
             try {
                 Integer amount = Integer.valueOf(stringAmount);
                 if (!NumericValidator.isNotNegativeOrNotZero(amount)) {
-                    System.out.println(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT);
+                    MainApp.printWarning(ShopLiterals.MSG_INVALID_NUMERIC_FORMAT_AMOUNT);
                 } else if (amountOnStock < amount + amountOnCart) {
-                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT, product_id, amount + amountOnCart);
+                    MainApp.printWarning(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT, product_id, amount + amountOnCart);
                     if (amountOnCart > 0) {
-                        System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT_FOR_CART, amount, amountOnCart);
+                        MainApp.printWarning(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT_FOR_CART, amount, amountOnCart);
                     }
-                    System.out.printf(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT_FOR_CATALOG, amountOnStock);
+                    MainApp.printWarning(ShopLiterals.MSG_TOO_MUCH_VALUE_PRODUCT_AMOUNT_FOR_CATALOG, amountOnStock);
                 } else {
                     return amount;
                 }
             } catch(NumberFormatException exception) {
-                System.out.printf(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_AMOUNT, stringAmount);
+                MainApp.printWarning(ShopLiterals.MSG_INVALID_FORMAT_PRODUCT_AMOUNT, stringAmount);
             }
         }
     }

@@ -1,9 +1,11 @@
 package com.epam.task4.controller.command;
 
 import com.epam.task1.entity.Commodity;
+import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
 import com.epam.task4.service.CartService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
@@ -25,11 +27,11 @@ public class ViewCartCmd implements Command {
     public void execute() {
         List<Commodity> cartContainer = cartService.getContentList();
         if (cartContainer.isEmpty()) {
-            System.out.println(ShopLiterals.MSG_CART_IS_EMPTY);
+            MainApp.printAlert(ShopLiterals.MSG_CART_IS_EMPTY);
         } else {
             cartContainer.forEach(product -> System.out.println(product.toStringWithAmount()));
         }
-        System.out.println(ShopLiterals.SUM + ShopLiterals.SPACE + cartService.getSum());
+        MainApp.print(StringUtils.join(ShopLiterals.SUM + ShopLiterals.SPACE + cartService.getSum()));
     }
 
     @Override

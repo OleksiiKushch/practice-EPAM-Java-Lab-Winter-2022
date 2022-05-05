@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface ProductService {
     List<Commodity> getAllProducts();
-    Commodity addProductToCatalog();
+    void addProductToCatalog(Commodity product);
     Commodity getProductById(Long id);
 }

@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -45,7 +46,7 @@ public class LocaleContainer {
 
     public Locale getLocaleByKey(String localeKey) {
         Locale result = container.get(localeKey);
-        if (result == null) {
+        if (Objects.isNull(result)) {
             // because native locale key capitalized
             result = container.get(localeKey.substring(0, 1).toUpperCase().concat(localeKey.substring(1)));
         }
@@ -57,7 +58,6 @@ public class LocaleContainer {
      * example: "russian (ru) [Русский]"
      */
     public void viewExistingLocales() {
-        System.out.println(ShopLiterals.MSG_EXISTING_LOCALES);
         container.entrySet().stream().collect(Collectors.groupingBy(entry -> entry.getValue().getLanguage()))
                 .values().stream().sorted(Comparator.comparing(locale -> locale.get(0).getKey()))
                 .map(list -> list.stream().map(Map.Entry::getKey).collect(Collectors.toList()))

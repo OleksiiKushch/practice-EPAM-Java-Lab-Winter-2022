@@ -1,10 +1,8 @@
 package com.epam.task4.service.impl;
 
 import com.epam.task1.entity.Commodity;
-import com.epam.task4.MainApp;
 import com.epam.task4.repository.ProductRepository;
 import com.epam.task4.service.ProductService;
-import com.epam.task6.util.ProductDataConsoleScanner;
 
 import java.util.List;
 
@@ -24,11 +22,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Commodity addProductToCatalog() {
-        ProductDataConsoleScanner productDataConsoleScanner = MainApp.getContext().getProductDataConsoleScanner();
-        Commodity newProduct = productDataConsoleScanner.inputCreateProductType().create();
-        productRepository.insert(newProduct);
-        return newProduct;
+    public void addProductToCatalog(Commodity product) {
+        productRepository.insert(product);
     }
 
     @Override

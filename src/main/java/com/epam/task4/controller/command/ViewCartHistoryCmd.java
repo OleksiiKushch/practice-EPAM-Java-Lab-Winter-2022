@@ -1,6 +1,7 @@
 package com.epam.task4.controller.command;
 
 import com.epam.task1.entity.Commodity;
+import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
 import com.epam.task4.service.CartService;
@@ -32,7 +33,7 @@ public class ViewCartHistoryCmd implements Command {
     public void execute() {
         List<Map.Entry<Commodity, LocalDateTime>> cartHistory = cartService.getHistory();
         if (cartHistory.isEmpty()) {
-            System.out.println(ShopLiterals.MSG_CART_HISTORY_IS_EMPTY);
+            MainApp.printAlert(ShopLiterals.MSG_CART_HISTORY_IS_EMPTY);
         } else {
             long skip = cartHistory.size() - QUANTITY_LAST_PRODUCTS;
             skip = skip > 0 ? skip : 0;

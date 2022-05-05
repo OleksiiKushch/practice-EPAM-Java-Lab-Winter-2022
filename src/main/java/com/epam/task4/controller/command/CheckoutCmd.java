@@ -1,5 +1,6 @@
 package com.epam.task4.controller.command;
 
+import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
 import com.epam.task4.service.CartService;
@@ -23,9 +24,13 @@ public class CheckoutCmd implements Command {
     @Override
     public void execute() {
         BigDecimal sum = cartService.getSum();
-        cartService.checkout();
-        System.out.println(ShopLiterals.MSG_CHECKOUT_SUCCESS);
-        System.out.println(ShopLiterals.SUM + ShopLiterals.SPACE + sum);
+        if (cartService.isEmpty()) {
+            MainApp.printAlert(ShopLiterals.MSG_ALERT_CART_IS_EMPTY);
+        } else {
+            cartService.checkout();
+            MainApp.printSuccessMessage(ShopLiterals.MSG_CHECKOUT_SUCCESS);
+            MainApp.print(ShopLiterals.SUM + ShopLiterals.SPACE + sum);
+        }
     }
 
     @Override
