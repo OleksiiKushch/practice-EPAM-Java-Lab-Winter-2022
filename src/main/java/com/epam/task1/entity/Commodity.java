@@ -111,9 +111,9 @@ public class Commodity implements Cloneable, Serializable, BaseItem {
     public String toString() {
         return "Commodity{" +
                 "id=" + id +
-                ", frontTitle='" + frontTitle + '\'' +
-                ", price=" + price +
-                ", amount=" + amount +
+                "; frontTitle='" + frontTitle + '\'' +
+                "; price=" + price +
+                "; amount=" + amount +
                 '}';
     }
 

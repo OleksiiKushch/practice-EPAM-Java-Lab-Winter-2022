@@ -1,5 +1,6 @@
 package com.epam.task4.constants;
 
+import com.epam.task4.controller.command.PutProductToCartCmd;
 import com.epam.task6.create_product.strategy.manual_creating.ManualProductCreatingStrategy;
 
 /**
@@ -18,6 +19,17 @@ public interface ShopLiterals {
     String BOOK_LITERAL_TYPE = "book";
     String AUDIOBOOK_LITERAL_TYPE = "audiobook";
     String E_READER_LITERAL_TYPE = "e-reader";
+
+    // PRODUCT STRING_FIELDS NAME
+    String COMMODITY_FRONT_TITLE = "FrontTitle";
+
+    String BOOK_TITLE = "Title";
+    String BOOK_AUTHOR = "Author";
+    String BOOK_LANGUAGE = "Language";
+
+    String AUDIOBOOK_NARRATOR = "Narrator";
+
+    String E_READER_MODEL = "Model";
 
     // ENTITIES
     String KEY_PRODUCT_ID = "PRODUCT_ID";
@@ -81,7 +93,8 @@ public interface ShopLiterals {
 
     String MSG_NOTHING_FOUND = "Nothing found!%n";
 
-    String MSG_ALERT_CART_IS_EMPTY = "Cart is empty, please select and add (put) the product you want to cart.%n";
+    String MSG_ALERT_CART_IS_EMPTY = String.format("Cart is empty, please select and add (put) the product you want to cart [Use command: %s or just %s].%n",
+            PutProductToCartCmd.FULL_KEY, PutProductToCartCmd.SHORT_KEY);
 
     String MSG_CART_IS_EMPTY = "Cart is empty!%n";
     String MSG_CART_HISTORY_IS_EMPTY = "Cart history is empty! No product has been added to the cart yet.%n";

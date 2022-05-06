@@ -31,7 +31,7 @@ public class ViewCartCmd implements Command {
         } else {
             cartContainer.forEach(product -> System.out.println(product.toStringWithAmount()));
         }
-        MainApp.print(StringUtils.join(ShopLiterals.SUM + ShopLiterals.SPACE + cartService.getSum()));
+        MainApp.print(StringUtils.join(ShopLiterals.SUM, ShopLiterals.SPACE, cartService.getSum(), ShopLiterals.NEWLINE));
     }
 
     @Override

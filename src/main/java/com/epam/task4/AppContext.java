@@ -119,11 +119,6 @@ public class AppContext {
         resourceBundle = ResourceBundle.getBundle(AppContext.NAME_RESOURCE_BUNDLE, Locale.ENGLISH);
     }
 
-    private void initProductCreatingStrategy() {
-        productCreatingEntityContainer = initReflectManualProductCreatingEntities(new ProductCreatingEntityContainer(new ManualProductCreatingStrategy()));
-        productCreatingStrategyContainer = initProductCreatingStrategiesContainer(new ProductCreatingStrategyContainer());
-    }
-
     private void initDataSource() {
         productCatalog = UtilProductCatalog.loadProductCatalog(PATH_PRODUCT_CATALOG);
         orderCatalog = InitMockResources.initOrderCatalog(new OrderCatalog());
@@ -153,7 +148,7 @@ public class AppContext {
     }
 
     private void initProductDataConsoleScanner() {
-        productDataConsoleScanner = new ProductDataConsoleScanner(productService, scanner);
+        productDataConsoleScanner = new ProductDataConsoleScanner(productService, scanner, null);
     }
 
     private void initProductDataConsoleScannerForCart() {
@@ -177,6 +172,13 @@ public class AppContext {
         localeContainer.put(ShopLiterals.NATIVE_LOCALE_RU, ruLocale);
 
         return localeContainer;
+    }
+
+    private void initProductCreatingStrategy() {
+        productCreatingEntityContainer = initReflectManualProductCreatingEntities(new ProductCreatingEntityContainer(new ManualProductCreatingStrategy()));
+        // pulling dependencies between classes ProductCreatingEntityContainer and ProductCreatingEntityContainer
+        productDataConsoleScanner.setProductCreatingEntityContainer(productCreatingEntityContainer);
+        productCreatingStrategyContainer = initProductCreatingStrategiesContainer(new ProductCreatingStrategyContainer());
     }
 
     private ProductCreatingStrategyContainer initProductCreatingStrategiesContainer(ProductCreatingStrategyContainer productCreatingStrategyContainer) {
@@ -303,6 +305,7 @@ public class AppContext {
             String command = scanner.nextLine().strip();
             if (productCreatingStrategyContainer.isContainStrategy(command)) {
                 productCreatingEntityContainer = productCreatingStrategyContainer.getEntityContainerByKey(command);
+                productDataConsoleScanner.setProductCreatingEntityContainer(productCreatingEntityContainer);
                 MainApp.printSuccessMessage(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
                         productCreatingEntityContainer.getProductCreatingStrategy().getName());
                 return;
@@ -326,10 +329,6 @@ public class AppContext {
 
     public CommandContainer getCommandContainer() {
         return commandContainer;
-    }
-
-    public ProductCreatingEntityContainer getProductCreatingEntityContainer() {
-        return productCreatingEntityContainer;
     }
 
     public ResourceBundle getResourceBundle() {

@@ -4,6 +4,7 @@ import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
 import com.epam.task4.service.CartService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 
@@ -29,7 +30,7 @@ public class CheckoutCmd implements Command {
         } else {
             cartService.checkout();
             MainApp.printSuccessMessage(ShopLiterals.MSG_CHECKOUT_SUCCESS);
-            MainApp.print(ShopLiterals.SUM + ShopLiterals.SPACE + sum);
+            MainApp.print(StringUtils.join(ShopLiterals.SUM, ShopLiterals.SPACE, sum, ShopLiterals.NEWLINE));
         }
     }
 

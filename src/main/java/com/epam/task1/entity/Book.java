@@ -114,13 +114,13 @@ public class Book extends Commodity {
     public String toString() {
         return "Book{" +
                 "id=" + getId() +
-                ", frontTitle='" + getFrontTitle() + '\'' +
-                ", price=" + getPrice() +
-                ", amount=" + getAmount() +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", language='" + language + '\'' +
-                ", numberOfPages=" + numberOfPages +
+                "; frontTitle='" + getFrontTitle() + '\'' +
+                "; price=" + getPrice() +
+                "; amount=" + getAmount() +
+                "; title='" + title + '\'' +
+                "; author='" + author + '\'' +
+                "; language='" + language + '\'' +
+                "; numberOfPages=" + numberOfPages +
                 '}';
     }
 }

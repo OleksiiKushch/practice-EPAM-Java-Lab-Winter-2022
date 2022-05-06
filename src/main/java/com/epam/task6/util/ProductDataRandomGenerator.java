@@ -2,6 +2,7 @@ package com.epam.task6.util;
 
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.service.ProductService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.security.SecureRandom;
@@ -11,16 +12,6 @@ import java.util.function.Supplier;
 
 public class ProductDataRandomGenerator {
     public static final int MAX_VALUE_RANDOM_GENERATED_NUM = 100;
-
-    public static final String FRONT_TITLE = "FrontTitle";
-
-    public static final String TITLE = "Title";
-    public static final String AUTHOR = "Author";
-    public static final String LANGUAGE = "Language";
-
-    public static final String NARRATOR = "Narrator";
-
-    public static final String MODEL = "Model";
 
     private final ProductService productService;
 
@@ -45,7 +36,7 @@ public class ProductDataRandomGenerator {
     }
 
     public String getRandomProductFrontTitle() {
-        return FRONT_TITLE + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM);
+        return StringUtils.join(ShopLiterals.COMMODITY_FRONT_TITLE, secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
     }
 
     public BigDecimal getRandomProductPrice() {
@@ -57,15 +48,15 @@ public class ProductDataRandomGenerator {
     }
 
     public String getRandomBookTitle() {
-        return TITLE + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM);
+        return StringUtils.join(ShopLiterals.BOOK_TITLE, secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
     }
 
     public String getRandomBookAuthor() {
-        return AUTHOR + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM);
+        return StringUtils.join(ShopLiterals.BOOK_AUTHOR, secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
     }
 
     public String getRandomBookLanguage() {
-        return LANGUAGE + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM);
+        return StringUtils.join(ShopLiterals.BOOK_LANGUAGE, secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
     }
 
     public Integer getRandomBookNumberOfPages() {
@@ -81,11 +72,11 @@ public class ProductDataRandomGenerator {
     }
 
     public String getRandomAudiobookNarrator() {
-        return NARRATOR + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM);
+        return StringUtils.join(ShopLiterals.AUDIOBOOK_NARRATOR, secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
     }
 
     public String getRandomEReaderModel() {
-        return MODEL + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM);
+        return StringUtils.join(ShopLiterals.E_READER_MODEL, secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
     }
 
     public Float getRandomEReaderDisplaySizeInches() {

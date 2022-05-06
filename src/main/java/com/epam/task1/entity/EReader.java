@@ -4,6 +4,7 @@ import com.epam.task4.constants.ShopLiterals;
 import com.epam.task7.create_product.ProductField;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Objects;
 
 /**
@@ -114,13 +115,13 @@ public class EReader extends Commodity {
     public String toString() {
         return "EReader{" +
                 "id=" + getId() +
-                ", frontTitle='" + getFrontTitle() + '\'' +
-                ", price=" + getPrice() +
-                ", amount=" + getAmount() +
-                ", model='" + model + '\'' +
-                ", displaySizeInches=" + displaySizeInches +
-                ", storageCapacityGB=" + storageCapacityGB +
-                ", screenResolutionPPI=" + screenResolutionPPI +
+                "; frontTitle='" + getFrontTitle() + '\'' +
+                "; price=" + getPrice() +
+                "; amount=" + getAmount() +
+                "; model='" + model + '\'' +
+                "; displaySizeInches=" + new DecimalFormat("#.#").format(displaySizeInches) +
+                "; storageCapacityGB=" + storageCapacityGB +
+                "; screenResolutionPPI=" + screenResolutionPPI +
                 '}';
     }
 }

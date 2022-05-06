@@ -106,7 +106,7 @@ public class CommandContainer {
      * @return all cast options except for the main surrounds with parentheses, example: '--product-list (-pl)'
      */
     private String separateCmdCasts(String cmdCasts) {
-        cmdCasts = cmdCasts.replaceFirst(ShopLiterals.SPACE, ShopLiterals.SPACE + ShopLiterals.LEFT_PARENTHESIS);
+        cmdCasts = cmdCasts.replaceFirst(ShopLiterals.SPACE, StringUtils.join(ShopLiterals.SPACE, ShopLiterals.LEFT_PARENTHESIS));
         if (cmdCasts.contains(ShopLiterals.LEFT_PARENTHESIS)) {
             cmdCasts = cmdCasts.concat(ShopLiterals.RIGHT_PARENTHESIS);
         }

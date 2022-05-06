@@ -5,6 +5,7 @@ import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.command.PutProductToCartCmd;
 import com.epam.task4.service.ProductService;
 import com.epam.task6.create_product.CreateProduct;
+import com.epam.task6.create_product.ProductCreatingEntityContainer;
 import com.epam.task7.constants.MessageKey;
 
 import java.math.BigDecimal;
@@ -25,28 +26,35 @@ import java.util.function.Supplier;
 public class ProductDataConsoleScanner {
     private final ProductService productService;
     private final Scanner scanner;
+    private ProductCreatingEntityContainer productCreatingEntityContainer;
 
     private final Map<String, Supplier<Object>> methodContainer;
 
-    public ProductDataConsoleScanner(ProductService productService, Scanner scanner) {
+    public ProductDataConsoleScanner(ProductService productService, Scanner scanner,
+                                     ProductCreatingEntityContainer productCreatingEntityContainer) {
         this.productService = productService;
         this.scanner = scanner;
+        this.productCreatingEntityContainer = productCreatingEntityContainer;
         methodContainer = new HashMap<>();
         initMethodContainer();
+    }
+
+    public void setProductCreatingEntityContainer(ProductCreatingEntityContainer productCreatingEntityContainer) {
+        this.productCreatingEntityContainer = productCreatingEntityContainer;
     }
 
     public CreateProduct inputCreateProductType() {
         MainApp.printMessage(MessageKey.MSG_KEY_ENTER_PRODUCT_TYPE);
         MainApp.printMessage(MessageKey.MSG_KEY_EXISTING_PRODUCT_TYPES);
-        MainApp.getContext().getProductCreatingEntityContainer().viewExistingEntities();
+        productCreatingEntityContainer.viewExistingEntities();
         while (true) {
             String entityKey = scanner.nextLine().toLowerCase().strip();
-            if (MainApp.getContext().getProductCreatingEntityContainer().isContainEntity(entityKey)) {
-                return MainApp.getContext().getProductCreatingEntityContainer().getEntityByKey(entityKey);
+            if (productCreatingEntityContainer.isContainEntity(entityKey)) {
+                return productCreatingEntityContainer.getEntityByKey(entityKey);
             } else {
                 MainApp.printWarning(MessageKey.MSG_KEY_INVALID_FORMAT_PRODUCT_CREATING_TYPE, entityKey);
                 MainApp.printWarning(MessageKey.MSG_KEY_EXISTING_PRODUCT_TYPES);
-                MainApp.getContext().getProductCreatingEntityContainer().viewExistingEntities();
+                productCreatingEntityContainer.viewExistingEntities();
             }
         }
     }

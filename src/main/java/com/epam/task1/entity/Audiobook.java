@@ -100,16 +100,16 @@ public class Audiobook extends Book {
     public String toString() {
         return "AudioBook{" +
                 "id=" + getId() +
-                ", frontTitle='" + getFrontTitle() + '\'' +
-                ", price=" + getPrice() +
-                ", amount=" + getAmount() +
-                ", title='" + getTitle() + '\'' +
-                ", author='" + getAuthor() + '\'' +
-                ", language='" + getLanguage() + '\'' +
-                ", numberOfPages=" + getNumberOfPages() +
-                ", fileSizeMB=" + fileSizeMB +
-                ", listeningTimeMinutes=" + listeningTimeMinutes +
-                ", narrator='" + narrator + '\'' +
+                "; frontTitle='" + getFrontTitle() + '\'' +
+                "; price=" + getPrice() +
+                "; amount=" + getAmount() +
+                "; title='" + getTitle() + '\'' +
+                "; author='" + getAuthor() + '\'' +
+                "; language='" + getLanguage() + '\'' +
+                "; numberOfPages=" + getNumberOfPages() +
+                "; fileSizeMB=" + fileSizeMB +
+                "; listeningTimeMinutes=" + listeningTimeMinutes +
+                "; narrator='" + narrator + '\'' +
                 '}';
     }
 }
