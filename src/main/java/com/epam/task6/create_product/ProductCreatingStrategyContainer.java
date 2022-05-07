@@ -4,6 +4,11 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Contains a set of entities for creating goods according to its creation strategy
+ *
+ * @author OleksiiKushch
+ */
 public class ProductCreatingStrategyContainer {
     private final Map<String, ProductCreatingEntityContainer> container;
 

@@ -6,6 +6,7 @@ import com.epam.task7.create_product.ProductField;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * Bean class representation of the e-reader (e-book reader or e-book device)
@@ -115,13 +116,34 @@ public class EReader extends Commodity {
     public String toString() {
         return "EReader{" +
                 "id=" + getId() +
-                "; frontTitle='" + getFrontTitle() + '\'' +
-                "; price=" + getPrice() +
-                "; amount=" + getAmount() +
-                "; model='" + model + '\'' +
-                "; displaySizeInches=" + new DecimalFormat("#.#").format(displaySizeInches) +
-                "; storageCapacityGB=" + storageCapacityGB +
-                "; screenResolutionPPI=" + screenResolutionPPI +
+                ", frontTitle='" + getFrontTitle() + '\'' +
+                ", price=" + getPrice() +
+                ", amount=" + getAmount() +
+                ", model='" + model + '\'' +
+                ", displaySizeInches=" + displaySizeInches +
+                ", storageCapacityGB=" + storageCapacityGB +
+                ", screenResolutionPPI=" + screenResolutionPPI +
                 '}';
+    }
+
+    @Override
+    public String userFriendlyToString(ResourceBundle resourceBundle) {
+        return String.format("%s: " + getFrontTitle() +
+                        "%n%s: " + getId() +
+                        "%n%s: " + getPrice() +
+                        "%n%s: " + getAmount() +
+                        "%n%s: " + model +
+                        "%n%s: " + new DecimalFormat("#.#").format(displaySizeInches) +
+                        "%n%s: " + storageCapacityGB +
+                        "%n%s: " + screenResolutionPPI +
+                        "%n",
+                resourceBundle.getString(ShopLiterals.KEY_E_READER),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_AMOUNT),
+                resourceBundle.getString(ShopLiterals.KEY_E_READER_MODEL),
+                resourceBundle.getString(ShopLiterals.KEY_E_READER_DISPLAY_SIZE_INCHES),
+                resourceBundle.getString(ShopLiterals.KEY_E_READER_STORAGE_CAPACITY_GB),
+                resourceBundle.getString(ShopLiterals.KEY_E_READER_SCREEN_RESOLUTION_PPI));
     }
 }

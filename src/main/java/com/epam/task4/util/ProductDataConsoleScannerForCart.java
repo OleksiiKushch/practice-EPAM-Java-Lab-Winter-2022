@@ -2,6 +2,7 @@ package com.epam.task4.util;
 
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
+import com.epam.task4.exception.AbortOperationException;
 import com.epam.task4.service.CartService;
 import com.epam.task4.service.ProductService;
 import com.epam.task6.util.NumericValidator;
@@ -23,17 +24,18 @@ public class ProductDataConsoleScannerForCart {
     /**
      * Reading data (product id) from the console with built-in validation.
      * <p>
-     * Noted: return {@code null} if needed abort the entire operation
+     * Noted: throw {@link com.epam.task4.exception.AbortOperationException} if needed abort the entire operation
      * (method {@link com.epam.task4.controller.command.PutProductToCartCmd#execute()})
-     * @return product ({@link com.epam.task1.entity.Commodity}) id<br>or {@code null} if abort the entire operation
+     * @return product ({@link com.epam.task1.entity.Commodity}) id<br>or
+     * throw {@link com.epam.task4.exception.AbortOperationException} if abort the entire operation
      */
     public Long inputId() {
         MainApp.printMessage(ShopLiterals.MSG_ENTER_PRODUCT_ID_FOR_CART);
         while (true) {
             String stringId = scanner.nextLine();
-            if (stringId.equals(ShopLiterals.BACK_CMD_FULL_CAST) ||
-                    stringId.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(stringId) ||
+                    ShopLiterals.BACK_CMD_SHORT_CAST.equals(stringId)) {
+                throw new AbortOperationException();
             }
             try {
                 Long id = Long.valueOf(stringId);
@@ -53,9 +55,10 @@ public class ProductDataConsoleScannerForCart {
     /**
      * Reading data (amount of products) from the console with built-in validation.
      * <p>
-     * Noted: return {@code null} if needed abort the entire operation
+     * Noted: throw {@link com.epam.task4.exception.AbortOperationException} if needed abort the entire operation
      * (method {@link com.epam.task4.controller.command.PutProductToCartCmd#execute()})
-     * @return amount of products ({@link com.epam.task1.entity.Commodity})<br>or {@code null} if abort the entire operation
+     * @return amount of products ({@link com.epam.task1.entity.Commodity})<br>or
+     * throw {@link com.epam.task4.exception.AbortOperationException} if abort the entire operation
      */
     public Integer inputAmount(Long product_id) {
         Integer amountOnStock = productService.getProductById(product_id).getAmount();
@@ -67,9 +70,9 @@ public class ProductDataConsoleScannerForCart {
 
         while (true) {
             String stringAmount = scanner.nextLine();
-            if (stringAmount.equals(ShopLiterals.BACK_CMD_FULL_CAST)
-                    || stringAmount.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(stringAmount)
+                    || ShopLiterals.BACK_CMD_SHORT_CAST.equals(stringAmount)) {
+                throw new AbortOperationException();
             }
             try {
                 Integer amount = Integer.valueOf(stringAmount);

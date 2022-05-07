@@ -3,10 +3,10 @@ package com.epam.task4.controller.command;
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
+import com.epam.task4.exception.AbortOperationException;
 import com.epam.task4.service.CartService;
 import com.epam.task4.util.ProductDataConsoleScannerForCart;
-
-import java.util.Objects;
+import com.epam.task7.constants.MessageKey;
 
 /**
  * @author Oleksii Kushch
@@ -28,17 +28,15 @@ public class PutProductToCartCmd implements Command {
 
     @Override
     public void execute() {
-        MainApp.printMessage(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
+        MainApp.printMessage(MessageKey.MSG_KEY_ABILITY_CANCEL_OPERATION, ShopLiterals.BACK_CMD_FULL_CAST, ShopLiterals.BACK_CMD_SHORT_CAST);
 
-        Long id = productDataConsoleScannerForCart.inputId();
-        if (Objects.isNull(id)) {
-            MainApp.printAlert(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
-            return;
-        }
-
-        Integer amount = productDataConsoleScannerForCart.inputAmount(id);
-        if (Objects.isNull(amount)) {
-            MainApp.printAlert(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
+        Long id;
+        Integer amount;
+        try {
+            id = productDataConsoleScannerForCart.inputId();
+            amount = productDataConsoleScannerForCart.inputAmount(id);
+        } catch (AbortOperationException exception) {
+            MainApp.printAlert(MessageKey.MSG_KEY_WHEN_OPERATION_ABORT);
             return;
         }
 

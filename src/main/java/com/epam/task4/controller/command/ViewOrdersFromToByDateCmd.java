@@ -3,13 +3,14 @@ package com.epam.task4.controller.command;
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
+import com.epam.task4.exception.AbortOperationException;
 import com.epam.task4.model.entity.Order;
 import com.epam.task4.service.OrderService;
 import com.epam.task4.util.DateConsoleScanner;
+import com.epam.task7.constants.MessageKey;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Oleksii Kushch
@@ -31,19 +32,17 @@ public class ViewOrdersFromToByDateCmd implements Command {
 
     @Override
     public void execute() {
-        MainApp.printMessage(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
+        MainApp.printMessage(MessageKey.MSG_KEY_ABILITY_CANCEL_OPERATION, ShopLiterals.BACK_CMD_FULL_CAST, ShopLiterals.BACK_CMD_SHORT_CAST);
 
-        LocalDateTime fromDate = dateConsoleScanner.interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_AFTER_YEAR,
-                ShopLiterals.MSG_ENTER_AFTER_MONTH, ShopLiterals.MSG_ENTER_AFTER_DAY);
-        if (Objects.isNull(fromDate)) {
-            MainApp.printAlert(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
-            return;
-        }
-
-        LocalDateTime toDate = dateConsoleScanner.interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_BEFORE_YEAR,
-                ShopLiterals.MSG_ENTER_BEFORE_MONTH, ShopLiterals.MSG_ENTER_BEFORE_DAY);
-        if (Objects.isNull(toDate)) {
-            MainApp.printAlert(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
+        LocalDateTime fromDate;
+        LocalDateTime toDate;
+        try {
+            fromDate = dateConsoleScanner.interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_AFTER_YEAR,
+                    ShopLiterals.MSG_ENTER_AFTER_MONTH, ShopLiterals.MSG_ENTER_AFTER_DAY);
+            toDate = dateConsoleScanner.interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_BEFORE_YEAR,
+                    ShopLiterals.MSG_ENTER_BEFORE_MONTH, ShopLiterals.MSG_ENTER_BEFORE_DAY);
+        } catch (AbortOperationException exception) {
+            MainApp.printAlert(MessageKey.MSG_KEY_WHEN_OPERATION_ABORT);
             return;
         }
 

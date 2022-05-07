@@ -5,6 +5,7 @@ import com.epam.task7.create_product.ProductField;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * Bean class representation of the book.
@@ -114,13 +115,34 @@ public class Book extends Commodity {
     public String toString() {
         return "Book{" +
                 "id=" + getId() +
-                "; frontTitle='" + getFrontTitle() + '\'' +
-                "; price=" + getPrice() +
-                "; amount=" + getAmount() +
-                "; title='" + title + '\'' +
-                "; author='" + author + '\'' +
-                "; language='" + language + '\'' +
-                "; numberOfPages=" + numberOfPages +
+                ", frontTitle='" + getFrontTitle() + '\'' +
+                ", price=" + getPrice() +
+                ", amount=" + getAmount() +
+                ", title='" + title + '\'' +
+                ", author='" + author + '\'' +
+                ", language='" + language + '\'' +
+                ", numberOfPages=" + numberOfPages +
                 '}';
+    }
+
+    @Override
+    public String userFriendlyToString(ResourceBundle resourceBundle) {
+        return String.format("%s: " + getFrontTitle() +
+                        "%n%s: " + getId() +
+                        "%n%s: " + getPrice() +
+                        "%n%s: " + getAmount() +
+                        "%n%s: " + title +
+                        "%n%s: " + author +
+                        "%n%s: " + language +
+                        "%n%s: " + numberOfPages +
+                        "%n",
+                resourceBundle.getString(ShopLiterals.KEY_BOOK),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_AMOUNT),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_TITLE),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_AUTHOR),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_LANGUAGE),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_NUMBER_OF_PAGES));
     }
 }

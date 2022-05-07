@@ -4,6 +4,8 @@ import com.epam.task4.constants.ConsoleColor;
 import com.epam.task4.constants.ShopLiterals;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ResourceBundle;
+
 /**
  * Class implementation the console user-interface for business logic "Online store".
  *
@@ -18,6 +20,7 @@ public class MainApp {
         isRunning = true;
         initContext(new AppContext());
         setShopSettings();
+
         printMessage(ShopLiterals.MSG_WHEN_APP_RUN);
         while (isRunning) {
             String command = context.getScanner().nextLine().strip();
@@ -67,12 +70,8 @@ public class MainApp {
     }
 
     private static void printMsg(String messageKey, String ansiCodeColor, Object... args) {
-        String message;
-        if (context.getResourceBundle().containsKey(messageKey)) {
-            message = context.getResourceBundle().getString(messageKey);
-        } else {
-            message = messageKey;
-        }
+        ResourceBundle resourceBundle = context.getResourceBundle();
+        String message = resourceBundle.containsKey(messageKey) ? resourceBundle.getString(messageKey) : messageKey;
         System.out.printf(StringUtils.join(ansiCodeColor, message, ConsoleColor.RESET), args);
     }
 

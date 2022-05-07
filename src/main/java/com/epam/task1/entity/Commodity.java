@@ -7,6 +7,7 @@ import com.epam.task7.modified_product.BaseItem;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * An abstract representation of the commodity.
@@ -111,10 +112,22 @@ public class Commodity implements Cloneable, Serializable, BaseItem {
     public String toString() {
         return "Commodity{" +
                 "id=" + id +
-                "; frontTitle='" + frontTitle + '\'' +
-                "; price=" + price +
-                "; amount=" + amount +
+                ", frontTitle='" + frontTitle + '\'' +
+                ", price=" + price +
+                ", amount=" + amount +
                 '}';
+    }
+
+    public String userFriendlyToString(ResourceBundle resourceBundle) {
+        return String.format("%s: " + frontTitle +
+                "%n%s: " + id +
+                "%n%s: " + price +
+                "%n%s: " + amount +
+                "%n",
+                resourceBundle.getString(ShopLiterals.KEY_COMMODITY),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_AMOUNT));
     }
 
     public String toStringOptional() {

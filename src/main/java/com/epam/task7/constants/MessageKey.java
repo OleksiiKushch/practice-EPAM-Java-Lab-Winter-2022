@@ -1,6 +1,9 @@
 package com.epam.task7.constants;
 
 public interface MessageKey {
+    String MSG_KEY_ABILITY_CANCEL_OPERATION = "ability.cancel.operation";
+    String MSG_KEY_WHEN_OPERATION_ABORT = "when.operation.abort";
+
     // create new product (add it's to catalog)
     String MSG_KEY_ENTER_PRODUCT_TYPE = "enter.product.type";
     String MSG_KEY_EXISTING_PRODUCT_TYPES = "existing.product.types";

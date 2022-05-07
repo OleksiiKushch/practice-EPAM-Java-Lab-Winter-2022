@@ -4,11 +4,11 @@ import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.command.ViewOrderByNearestDateCmd;
 import com.epam.task4.controller.command.ViewOrdersFromToByDateCmd;
+import com.epam.task4.exception.AbortOperationException;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Scanner;
 
 /**
@@ -31,38 +31,31 @@ public class DateConsoleScanner {
 
     public LocalDateTime interactiveConsoleInputDate(
             String msgAppealForInputYear, String msgAppealForInputMonth, String msgAppealForInputDay) {
+
         MainApp.printMessage(msgAppealForInputYear);
         Integer year = inputYear();
-        if (Objects.isNull(year)) {
-            return null; // abort the entire operation
-        }
         MainApp.printMessage(msgAppealForInputMonth);
         Integer month = inputMonth();
-        if (Objects.isNull(month)) {
-            return null; // abort the entire operation
-        }
         MainApp.printMessage(msgAppealForInputDay);
         Integer day = inputDay(year, month);
-        if (Objects.isNull(day)) {
-            return null; // abort the entire operation
-        }
+
         return LocalDateTime.of(year, month, day, MOCK_VALUE_FOR_HOUR_MINUTE_SECOND, MOCK_VALUE_FOR_HOUR_MINUTE_SECOND, MOCK_VALUE_FOR_HOUR_MINUTE_SECOND);
     }
 
     /**
      * Reading data (year) from the console with built-in validation.
      * <p>
-     * Noted: return {@code null} if needed abort the entire operation
+     * Noted: throw {@link AbortOperationException} if needed abort the entire operation
      * (method execute in the corresponding command classes, see the detailed description of this class)
-     * @return year or {@code null} if abort the entire operation
+     * @return year or throw {@link AbortOperationException} if abort the entire operation
      */
     public Integer inputYear() {
         int year = 1;
         boolean isYearSet = false;
         while (!isYearSet) {
             String stringYear = scanner.nextLine();
-            if (stringYear.equals(ShopLiterals.BACK_CMD_FULL_CAST) || stringYear.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(stringYear) || ShopLiterals.BACK_CMD_SHORT_CAST.equals(stringYear)) {
+                throw new AbortOperationException();
             }
             try {
                 year = Integer.parseInt(stringYear);
@@ -77,17 +70,17 @@ public class DateConsoleScanner {
     /**
      * Reading data (month (month number)) from the console with built-in validation.
      * <p>
-     * Noted: return {@code null} if needed abort the entire operation
+     * Noted: throw {@link AbortOperationException} if needed abort the entire operation
      * (method execute in the corresponding command classes, see the detailed description of this class)
-     * @return month (month number) or {@code null} if abort the entire operation
+     * @return month (month number) or throw {@link AbortOperationException} if abort the entire operation
      */
     public Integer inputMonth() {
         int month = 1;
         boolean isMonthSet = false;
         while (!isMonthSet) {
             String stringMonth = scanner.nextLine();
-            if (stringMonth.equals(ShopLiterals.BACK_CMD_FULL_CAST) || stringMonth.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(stringMonth) || ShopLiterals.BACK_CMD_SHORT_CAST.equals(stringMonth)) {
+                throw new AbortOperationException();
             }
             try {
                 month = Integer.parseInt(stringMonth);
@@ -104,17 +97,17 @@ public class DateConsoleScanner {
     /**
      * Reading data (day) from the console with built-in validation.
      * <p>
-     * Noted: return {@code null} if needed abort the entire operation
+     * Noted: throw {@link AbortOperationException} if needed abort the entire operation
      * (method execute in the corresponding command classes, see the detailed description of this class)
-     * @return day or {@code null} if abort the entire operation
+     * @return day or throw {@link AbortOperationException} if abort the entire operation
      */
     public Integer inputDay(int year, int month) {
         int day = 1;
         boolean isDaySet = false;
         while (!isDaySet) {
             String stringDay = scanner.nextLine();
-            if (stringDay.equals(ShopLiterals.BACK_CMD_FULL_CAST) || stringDay.equals(ShopLiterals.BACK_CMD_SHORT_CAST)) {
-                return null;     // abort the entire operation
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(stringDay) || ShopLiterals.BACK_CMD_SHORT_CAST.equals(stringDay)) {
+                throw new AbortOperationException();
             }
             try {
                 day = Integer.parseInt(stringDay);

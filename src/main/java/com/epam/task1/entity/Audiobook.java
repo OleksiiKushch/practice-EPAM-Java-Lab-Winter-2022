@@ -5,6 +5,7 @@ import com.epam.task7.create_product.ProductField;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * Bean class representation of the digital e-book with audio voice acting.
@@ -100,16 +101,43 @@ public class Audiobook extends Book {
     public String toString() {
         return "AudioBook{" +
                 "id=" + getId() +
-                "; frontTitle='" + getFrontTitle() + '\'' +
-                "; price=" + getPrice() +
-                "; amount=" + getAmount() +
-                "; title='" + getTitle() + '\'' +
-                "; author='" + getAuthor() + '\'' +
-                "; language='" + getLanguage() + '\'' +
-                "; numberOfPages=" + getNumberOfPages() +
-                "; fileSizeMB=" + fileSizeMB +
-                "; listeningTimeMinutes=" + listeningTimeMinutes +
-                "; narrator='" + narrator + '\'' +
+                ", frontTitle='" + getFrontTitle() + '\'' +
+                ", price=" + getPrice() +
+                ", amount=" + getAmount() +
+                ", title='" + getTitle() + '\'' +
+                ", author='" + getAuthor() + '\'' +
+                ", language='" + getLanguage() + '\'' +
+                ", numberOfPages=" + getNumberOfPages() +
+                ", fileSizeMB=" + fileSizeMB +
+                ", listeningTimeMinutes=" + listeningTimeMinutes +
+                ", narrator='" + narrator + '\'' +
                 '}';
+    }
+
+    @Override
+    public String userFriendlyToString(ResourceBundle resourceBundle) {
+        return String.format("%s: " + getFrontTitle() +
+                        "%n%s: " + getId() +
+                        "%n%s: " + getPrice() +
+                        "%n%s: " + getAmount() +
+                        "%n%s: " + getTitle() +
+                        "%n%s: " + getAuthor() +
+                        "%n%s: " + getLanguage() +
+                        "%n%s: " + getNumberOfPages() +
+                        "%n%s: " + fileSizeMB +
+                        "%n%s: " + listeningTimeMinutes +
+                        "%n%s: " + narrator +
+                        "%n",
+                resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_AMOUNT),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_TITLE),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_AUTHOR),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_LANGUAGE),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_NUMBER_OF_PAGES),
+                resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_FILE_SIZE_MB),
+                resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_LISTENING_TIME_MINUTES),
+                resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_NARRATOR));
     }
 }

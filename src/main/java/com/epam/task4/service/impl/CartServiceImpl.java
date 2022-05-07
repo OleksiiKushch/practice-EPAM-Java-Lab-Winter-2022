@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -66,11 +65,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public void put(Long id, Integer amount) {
         Map<Long, Integer> cartContainer = cartRepository.getAll();
-        if (cartContainer.containsKey(id)) {
-            cartRepository.insert(id, cartContainer.get(id) + amount);
-        } else {
-            cartRepository.insert(id, amount);
-        }
+        cartRepository.insert(id, cartContainer.containsKey(id) ? cartContainer.get(id) + amount : amount);
         cartRepository.insertInHistory(id, LocalDateTime.now());
     }
 
@@ -114,13 +109,12 @@ public class CartServiceImpl implements CartService {
         return container.entrySet().stream()
                 .map(entry -> {
                     Commodity productCatalogCommodity = productRepository.getById(entry.getKey());
-                    Commodity cartCommodity = null;
+                    Commodity cartCommodity = new Commodity();
                     try {
                         cartCommodity = (Commodity) productCatalogCommodity.clone();
                     } catch (CloneNotSupportedException e) {
                         e.printStackTrace();
                     }
-                    Objects.requireNonNull(cartCommodity);
                     cartCommodity.setAmount(entry.getValue());
                     return cartCommodity;
                 })

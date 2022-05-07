@@ -32,6 +32,11 @@ public interface ShopLiterals {
     String E_READER_MODEL = "Model";
 
     // ENTITIES
+    String KEY_COMMODITY = "COMMODITY";
+    String KEY_BOOK = "BOOK";
+    String KEY_AUDIOBOOK = "AUDIOBOOK";
+    String KEY_E_READER = "E_READER";
+
     String KEY_PRODUCT_ID = "PRODUCT_ID";
     String KEY_PRODUCT_FRONT_TITLE = "PRODUCT_FRONT_TITLE";
     String KEY_PRODUCT_PRICE = "PRODUCT_PRICE";
@@ -89,8 +94,6 @@ public interface ShopLiterals {
     // ALERT MESSAGES
     String MSG_ALERT_PRODUCT_CATALOG_FILE_NOT_FOUND = "Product catalog file not found! A new empty product catalog file has been created.%n"; // maybe warning message
 
-    String MSG_WHEN_OPERATION_ABORT = "Abort operation successful!%n";
-
     String MSG_NOTHING_FOUND = "Nothing found!%n";
 
     String MSG_ALERT_CART_IS_EMPTY = String.format("Cart is empty, please select and add (put) the product you want to cart [Use command: %s or just %s].%n",
@@ -142,9 +145,7 @@ public interface ShopLiterals {
             "Enter '--help' to see a list of possible commands, or '--close' to stop the application.%n";
     String MSG_WHEN_APP_STOP = "Application is stop! (shop is closing).%n";
 
-    String MSG_ABILITY_CANCEL_OPERATION = String.format("If you want to stop (abort) the operation type '%s' or '%s'%n",
-                    BACK_CMD_FULL_CAST, BACK_CMD_SHORT_CAST);
-    String MSG_ABILITY_SKIP_OPERATION = String.format("If you want to skip (default value will be automatically set) the operation type '%s' or '%s'%n",
+    String MSG_ABILITY_SKIP_OPERATION = String.format("If you want to skip (default value will be automatically set) the operation type '%s' or just '%s'%n",
             SKIP_CMD_FULL_CAST, SKIP_CMD_SHORT_CAST);
 
     String MSG_ENTER_AFTER_YEAR = "Please, enter FROM (after) date (year):%n";

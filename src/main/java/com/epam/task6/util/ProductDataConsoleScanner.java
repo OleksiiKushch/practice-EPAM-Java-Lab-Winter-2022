@@ -2,7 +2,7 @@ package com.epam.task6.util;
 
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
-import com.epam.task4.controller.command.PutProductToCartCmd;
+import com.epam.task4.exception.AbortOperationException;
 import com.epam.task4.service.ProductService;
 import com.epam.task6.create_product.CreateProduct;
 import com.epam.task6.create_product.ProductCreatingEntityContainer;
@@ -20,8 +20,10 @@ import java.util.function.Supplier;
  * <p>
  * Are directly called in the {@code execute()} method in the following classes:
  *
+ * Noted: All methods throws {@link AbortOperationException} if you need to interrupt an external operation
+ *
  * @author Oleksii Kushch
- * @see PutProductToCartCmd
+ * @see com.epam.task4.controller.command.CreateNewProductCmd
  */
 public class ProductDataConsoleScanner {
     private final ProductService productService;
@@ -49,7 +51,10 @@ public class ProductDataConsoleScanner {
         productCreatingEntityContainer.viewExistingEntities();
         while (true) {
             String entityKey = scanner.nextLine().toLowerCase().strip();
-            if (productCreatingEntityContainer.isContainEntity(entityKey)) {
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(entityKey) ||
+                    ShopLiterals.BACK_CMD_SHORT_CAST.equals(entityKey)) {
+                throw new AbortOperationException();
+            } else if (productCreatingEntityContainer.isContainEntity(entityKey)) {
                 return productCreatingEntityContainer.getEntityByKey(entityKey);
             } else {
                 MainApp.printWarning(MessageKey.MSG_KEY_INVALID_FORMAT_PRODUCT_CREATING_TYPE, entityKey);
@@ -63,6 +68,10 @@ public class ProductDataConsoleScanner {
         MainApp.printMessage(MessageKey.MSG_KEY_ENTER, MainApp.getContext().getResourceBundle().getString(ShopLiterals.KEY_PRODUCT_ID));
         while (true) {
             String stringId = scanner.nextLine().strip();
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(stringId) ||
+                    ShopLiterals.BACK_CMD_SHORT_CAST.equals(stringId)) {
+                throw new AbortOperationException();
+            }
             try {
                 Long id = Long.valueOf(stringId);
                 if (!NumericValidator.isNotNegativeOrNotZero(id)) {
@@ -89,6 +98,10 @@ public class ProductDataConsoleScanner {
         MainApp.printMessage(MessageKey.MSG_KEY_ENTER, MainApp.getContext().getResourceBundle().getString(ShopLiterals.KEY_PRODUCT_PRICE));
         while (true) {
             String stringPrice = scanner.nextLine().strip();
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(stringPrice) ||
+                    ShopLiterals.BACK_CMD_SHORT_CAST.equals(stringPrice)) {
+                throw new AbortOperationException();
+            }
             try {
                 BigDecimal price = new BigDecimal(stringPrice);
                 if (!(price.compareTo(BigDecimal.ZERO) >= 0)) {
@@ -196,6 +209,10 @@ public class ProductDataConsoleScanner {
                                          String msgKeyInvalidNumericFormat, String parameterKey) {
         while (true) {
             String stringResult = scanner.nextLine();
+            if (ShopLiterals.BACK_CMD_FULL_CAST.equals(stringResult) ||
+                    ShopLiterals.BACK_CMD_SHORT_CAST.equals(stringResult)) {
+                throw new AbortOperationException();
+            }
             try {
                 Number result = convertor.apply(stringResult);
                 if (!validator.apply(result)) {
@@ -212,7 +229,12 @@ public class ProductDataConsoleScanner {
     }
 
     private String inputStringParameter() {
-        return scanner.nextLine().strip();
+        String result = scanner.nextLine().strip();
+        if (ShopLiterals.BACK_CMD_FULL_CAST.equals(result) ||
+                ShopLiterals.BACK_CMD_SHORT_CAST.equals(result)) {
+            throw new AbortOperationException();
+        }
+        return result;
     }
 
     private void initMethodContainer() {

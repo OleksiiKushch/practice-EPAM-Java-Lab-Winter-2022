@@ -3,9 +3,11 @@ package com.epam.task4.controller.command;
 import com.epam.task4.MainApp;
 import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.controller.Command;
+import com.epam.task4.exception.AbortOperationException;
 import com.epam.task4.model.entity.Order;
 import com.epam.task4.service.OrderService;
 import com.epam.task4.util.DateConsoleScanner;
+import com.epam.task7.constants.MessageKey;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDateTime;
@@ -31,12 +33,14 @@ public class ViewOrderByNearestDateCmd implements Command {
 
     @Override
     public void execute() {
-        MainApp.printMessage(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
+        MainApp.printMessage(MessageKey.MSG_KEY_ABILITY_CANCEL_OPERATION, ShopLiterals.BACK_CMD_FULL_CAST, ShopLiterals.BACK_CMD_SHORT_CAST);
 
-        LocalDateTime nearestDate = dateConsoleScanner.interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_NEAREST_YEAR,
-                ShopLiterals.MSG_ENTER_NEAREST_MONTH, ShopLiterals.MSG_ENTER_NEAREST_DAY);
-        if (Objects.isNull(nearestDate)) {
-            MainApp.printAlert(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
+        LocalDateTime nearestDate;
+        try {
+            nearestDate = dateConsoleScanner.interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_NEAREST_YEAR,
+                    ShopLiterals.MSG_ENTER_NEAREST_MONTH, ShopLiterals.MSG_ENTER_NEAREST_DAY);
+        } catch (AbortOperationException exception) {
+            MainApp.printAlert(MessageKey.MSG_KEY_WHEN_OPERATION_ABORT);
             return;
         }
 
