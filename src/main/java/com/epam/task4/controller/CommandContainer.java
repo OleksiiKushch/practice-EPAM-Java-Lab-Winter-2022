@@ -1,6 +1,7 @@
 package com.epam.task4.controller;
 
 import com.epam.task4.constants.ShopLiterals;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -8,8 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * CommandHolder is the class that initialize and contain (hold) all commands which allow
- * an application {@link com.epam.task4.MainApp}.
+ * CommandHolder is the class that contain (hold) all commands which allow an application {@link com.epam.task4.MainApp}.
  * <p>
  * An associative container ({@link #commands}) that contains all commands takes a main (full) or short command cast in
  * string format as a key and an interface implementation class object Command as a value.
@@ -40,8 +40,8 @@ public class CommandContainer {
         commands = new LinkedHashMap<>();
     }
 
-    public Map<String, Command> getCommands() {
-        return commands;
+    public void put(String strCommand, Command command) {
+        commands.put(strCommand, command);
     }
 
     /**
@@ -83,7 +83,7 @@ public class CommandContainer {
                             .collect(Collectors.joining(ShopLiterals.SPACE));
                     cmdCasts = separateCmdCasts(cmdCasts);
                     int indent = indentLength - cmdCasts.length();
-                    System.out.printf("%s%-" + indent + "s%s%n", cmdCasts, " ", description);
+                    System.out.printf(StringUtils.join("%s%-", indent, "s%s%n"), cmdCasts, " ", description);
                 });
     }
 
@@ -106,7 +106,7 @@ public class CommandContainer {
      * @return all cast options except for the main surrounds with parentheses, example: '--product-list (-pl)'
      */
     private String separateCmdCasts(String cmdCasts) {
-        cmdCasts = cmdCasts.replaceFirst(ShopLiterals.SPACE, ShopLiterals.SPACE + ShopLiterals.LEFT_PARENTHESIS);
+        cmdCasts = cmdCasts.replaceFirst(ShopLiterals.SPACE, StringUtils.join(ShopLiterals.SPACE, ShopLiterals.LEFT_PARENTHESIS));
         if (cmdCasts.contains(ShopLiterals.LEFT_PARENTHESIS)) {
             cmdCasts = cmdCasts.concat(ShopLiterals.RIGHT_PARENTHESIS);
         }

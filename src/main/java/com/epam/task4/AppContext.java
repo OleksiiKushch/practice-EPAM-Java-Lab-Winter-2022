@@ -32,19 +32,27 @@ import com.epam.task4.service.ProductService;
 import com.epam.task4.service.impl.CartServiceImpl;
 import com.epam.task4.service.impl.OrderServiceImpl;
 import com.epam.task4.service.impl.ProductServiceImpl;
+import com.epam.task4.util.DateConsoleScanner;
 import com.epam.task4.util.ProductDataConsoleScannerForCart;
-import com.epam.task6.create_product.ProductCreatingContainer;
+import com.epam.task6.create_product.ProductCreatingEntityContainer;
+import com.epam.task6.create_product.ProductCreatingStrategyContainer;
 import com.epam.task6.create_product.strategy.auto_creating.AutoCreateAudiobook;
 import com.epam.task6.create_product.strategy.auto_creating.AutoCreateBook;
-import com.epam.task6.create_product.strategy.auto_creating.AutoCreateCommodity;
 import com.epam.task6.create_product.strategy.auto_creating.AutoCreateEReader;
+import com.epam.task6.create_product.strategy.auto_creating.AutoProductCreatingStrategy;
 import com.epam.task6.create_product.strategy.manual_creating.ManualCreateAudiobook;
 import com.epam.task6.create_product.strategy.manual_creating.ManualCreateBook;
-import com.epam.task6.create_product.strategy.manual_creating.ManualCreateCommodity;
 import com.epam.task6.create_product.strategy.manual_creating.ManualCreateEReader;
+import com.epam.task6.create_product.strategy.manual_creating.ManualProductCreatingStrategy;
 import com.epam.task6.util.ProductDataConsoleScanner;
+import com.epam.task6.util.ProductDataRandomGenerator;
 import com.epam.task6.util.UtilProductCatalog;
+import com.epam.task7.LocaleContainer;
+import com.epam.task7.create_product.strategy.ReflectAutoCreateProduct;
+import com.epam.task7.create_product.strategy.ReflectManualCreateProduct;
 
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 /**
@@ -52,58 +60,62 @@ import java.util.Scanner;
  */
 public class AppContext {
     public static final String PATH_PRODUCT_CATALOG = "src/main/resources/product_catalog";
+    public static final String NAME_RESOURCE_BUNDLE = "i18n/messages";
 
+    private final Scanner scanner;
+
+    // localization
+    private ResourceBundle resourceBundle;
+    private LocaleContainer localeContainer;
+
+    // product creating strategy
+    private ProductCreatingEntityContainer productCreatingEntityContainer;
+    private ProductCreatingStrategyContainer productCreatingStrategyContainer;
+
+    // data sources
     private ProductCatalog productCatalog;
     private OrderCatalog orderCatalog;
     private Cart cart;
 
+    // repositories
     private ProductRepository productRepository;
     private OrderRepository orderRepository;
     private CartRepository cartRepository;
 
-    private ProductCreatingContainer productCreatingContainer;
-
+    // services
     private ProductService productService;
     private OrderService orderService;
     private CartService cartService;
 
-    private CommandContainer commandContainer;
-
-    private final Scanner scanner;
-
+    // console data scanners
+    private DateConsoleScanner dateConsoleScanner;
     private ProductDataConsoleScanner productDataConsoleScanner;
-
     private ProductDataConsoleScannerForCart productDataConsoleScannerForCart;
+
+    // random data generator
+    private ProductDataRandomGenerator productDataRandomGenerator;
+
+    // controller
+    private CommandContainer commandContainer;
 
     public AppContext() {
         scanner = new Scanner(System.in);
+        init();
+    }
+
+    public void init() {
+        initLocale();
         initDataSource();
         initRepository();
-        initStrategyCreatingProduct();
         initService();
-        initProductDataConsoleScanner();
-        initProductDataConsoleScannerForCart();
+        initConsoleScanner();
+        initDataGenerator();
         initController();
     }
 
-    public Scanner getScanner() {
-        return scanner;
-    }
-
-    public ProductDataConsoleScanner getProductDataConsoleScanner() {
-        return productDataConsoleScanner;
-    }
-
-    public ProductDataConsoleScannerForCart getProductDataConsoleScannerForCart() {
-        return productDataConsoleScannerForCart;
-    }
-
-    public CommandContainer getCommandContainer() {
-        return commandContainer;
-    }
-
-    public ProductService getProductService() {
-        return productService;
+    private void initLocale() {
+        localeContainer = initLocaleContainer(new LocaleContainer());
+        resourceBundle = ResourceBundle.getBundle(AppContext.NAME_RESOURCE_BUNDLE, Locale.ENGLISH);
     }
 
     private void initDataSource() {
@@ -118,104 +130,211 @@ public class AppContext {
         cartRepository = new CartRepositoryImpl(cart);
     }
 
-    private void initStrategyCreatingProduct() {
-        System.out.printf(ShopLiterals.MSG_WHEN_INIT_PRODUCT_CREATING_STRATEGY,
-                ManualCreateCommodity.getFullDescription(), AutoCreateCommodity.getFullDescription());
-        System.out.println(ShopLiterals.MSG_ABILITY_SKIP_OPERATION);
-        System.out.println(ShopLiterals.MSG_DEFAULT_PRODUCT_CREATING_STRATEGY);
-        while (true) {
-            String command = scanner.nextLine().trim();
-            if (command.equals(ManualCreateCommodity.CODE_KEY.toString()) ||
-                    command.equals(ManualCreateCommodity.FULL_KEY) ||
-                    command.equals(ManualCreateCommodity.SHORT_KEY)) {
-                productCreatingContainer = initManualProductCreatingEntities(new ProductCreatingContainer());
-                System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
-                        ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY);
-                return;
-            } else if (command.equals(AutoCreateCommodity.CODE_KEY.toString()) ||
-                    command.equals(AutoCreateCommodity.FULL_KEY) ||
-                    command.equals(AutoCreateCommodity.SHORT_KEY)) {
-                productCreatingContainer = initAutoProductCreatingEntities(new ProductCreatingContainer());
-                System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
-                        ShopLiterals.AUTO_PRODUCT_CREATING_STRATEGY);
-                return;
-            } else if (command.equals(ShopLiterals.SKIP_CMD_FULL_CAST) ||
-                    command.equals(ShopLiterals.SKIP_CMD_SHORT_CAST)) {
-                productCreatingContainer = initManualProductCreatingEntities(new ProductCreatingContainer());
-                System.out.printf(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
-                        ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY);
-                return;
-            } else {
-                System.out.println(ShopLiterals.MSG_UNSUPPORTED_COMMAND);
-                System.out.printf(ShopLiterals.MSG_INVALID_INPUT_PRODUCT_CREATING_STRATEGY, command,
-                        ManualCreateCommodity.getHelpFullDescription(), AutoCreateCommodity.getHelpFullDescription());
-            }
-        }
-    }
-
-    private void initProductDataConsoleScanner() {
-        productDataConsoleScanner = new ProductDataConsoleScanner(productService, productCreatingContainer);
-    }
-
-    private void initProductDataConsoleScannerForCart() {
-        productDataConsoleScannerForCart = new ProductDataConsoleScannerForCart(productService, cartService);
-    }
-
     private void initService() {
         productService = new ProductServiceImpl(productRepository);
         orderService = new OrderServiceImpl(orderRepository);
         cartService = new CartServiceImpl(productRepository, orderRepository, cartRepository);
     }
 
+    private void initConsoleScanner() {
+        initDateConsoleScanner();
+        initProductDataConsoleScanner();
+        initProductDataConsoleScannerForCart();
+    }
+
+    private void initDateConsoleScanner() {
+        dateConsoleScanner = new DateConsoleScanner(scanner);
+    }
+
+    private void initProductDataConsoleScanner() {
+        productDataConsoleScanner = new ProductDataConsoleScanner(productService, scanner, null);
+    }
+
+    private void initProductDataConsoleScannerForCart() {
+        productDataConsoleScannerForCart = new ProductDataConsoleScannerForCart(productService, cartService, scanner);
+    }
+
+    private void initDataGenerator() {
+        productDataRandomGenerator = new ProductDataRandomGenerator(productService);
+    }
+
+    private LocaleContainer initLocaleContainer(LocaleContainer localeContainer) {
+        Locale enLocale = new Locale(ShopLiterals.SHORT_LOCALE_EN);
+        Locale ruLocale = new Locale(ShopLiterals.SHORT_LOCALE_RU);
+
+        localeContainer.put(ShopLiterals.FULL_LOCALE_EN, enLocale);
+        localeContainer.put(ShopLiterals.SHORT_LOCALE_EN, enLocale);
+        localeContainer.put(ShopLiterals.NATIVE_LOCALE_EN, enLocale);
+
+        localeContainer.put(ShopLiterals.FULL_LOCALE_RU, ruLocale);
+        localeContainer.put(ShopLiterals.SHORT_LOCALE_RU, ruLocale);
+        localeContainer.put(ShopLiterals.NATIVE_LOCALE_RU, ruLocale);
+
+        return localeContainer;
+    }
+
     private void initController() {
         commandContainer = initCommands(new CommandContainer(), productService, orderService, cartService);
     }
 
-    private static ProductCreatingContainer initManualProductCreatingEntities(ProductCreatingContainer productCreatingContainer) {
-        productCreatingContainer.getContainer().put(ShopLiterals.BOOK_LITERAL_TYPE, new ManualCreateBook());
-        productCreatingContainer.getContainer().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new ManualCreateAudiobook());
-        productCreatingContainer.getContainer().put(ShopLiterals.E_READER_LITERAL_TYPE, new ManualCreateEReader());
-
-        return productCreatingContainer;
-    }
-
-    private static ProductCreatingContainer initAutoProductCreatingEntities(ProductCreatingContainer productCreatingContainer) {
-        productCreatingContainer.getContainer().put(ShopLiterals.BOOK_LITERAL_TYPE, new AutoCreateBook());
-        productCreatingContainer.getContainer().put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new AutoCreateAudiobook());
-        productCreatingContainer.getContainer().put(ShopLiterals.E_READER_LITERAL_TYPE, new AutoCreateEReader());
-
-        return productCreatingContainer;
-    }
-
-    private static CommandContainer initCommands(CommandContainer commandContainer,
-                                                 ProductService productService, OrderService orderService, CartService cartService) {
+    private CommandContainer initCommands(CommandContainer commandContainer,
+                                          ProductService productService, OrderService orderService, CartService cartService) {
         // full cast
-        commandContainer.getCommands().put(ViewProductCatalogCmd.FULL_KEY, new ViewProductCatalogCmd(productService));
-        commandContainer.getCommands().put(PutProductToCartCmd.FULL_KEY, new PutProductToCartCmd(cartService));
-        commandContainer.getCommands().put(ViewCartCmd.FULL_KEY, new ViewCartCmd(cartService));
-        commandContainer.getCommands().put(CheckoutCmd.FULL_KEY, new CheckoutCmd(cartService));
-        commandContainer.getCommands().put(ViewCartHistoryCmd.FULL_KEY, new ViewCartHistoryCmd(cartService));
+        commandContainer.put(ViewProductCatalogCmd.FULL_KEY, new ViewProductCatalogCmd(productService));
+        commandContainer.put(PutProductToCartCmd.FULL_KEY, new PutProductToCartCmd(cartService, productDataConsoleScannerForCart));
+        commandContainer.put(ViewCartCmd.FULL_KEY, new ViewCartCmd(cartService));
+        commandContainer.put(CheckoutCmd.FULL_KEY, new CheckoutCmd(cartService));
+        commandContainer.put(ViewCartHistoryCmd.FULL_KEY, new ViewCartHistoryCmd(cartService));
 
-        commandContainer.getCommands().put(ViewOrdersFromToByDateCmd.FULL_KEY, new ViewOrdersFromToByDateCmd(orderService));
-        commandContainer.getCommands().put(ViewOrderCatalogCmd.FULL_KEY, new ViewOrderCatalogCmd(orderService));
-        commandContainer.getCommands().put(ViewOrderByNearestDateCmd.FULL_KEY, new ViewOrderByNearestDateCmd(orderService));
+        commandContainer.put(ViewOrdersFromToByDateCmd.FULL_KEY, new ViewOrdersFromToByDateCmd(orderService, dateConsoleScanner));
+        commandContainer.put(ViewOrderCatalogCmd.FULL_KEY, new ViewOrderCatalogCmd(orderService));
+        commandContainer.put(ViewOrderByNearestDateCmd.FULL_KEY, new ViewOrderByNearestDateCmd(orderService, dateConsoleScanner));
 
-        commandContainer.getCommands().put(CreateNewProductCmd.FULL_KEY, new CreateNewProductCmd(productService));
+        commandContainer.put(CreateNewProductCmd.FULL_KEY, new CreateNewProductCmd(productService, productDataConsoleScanner));
 
-        commandContainer.getCommands().put(HelpCmd.FULL_KEY, new HelpCmd());
-        commandContainer.getCommands().put(CloseShopCmd.FULL_KEY, new CloseShopCmd(productService));
+        commandContainer.put(HelpCmd.FULL_KEY, new HelpCmd());
+        commandContainer.put(CloseShopCmd.FULL_KEY, new CloseShopCmd(productService));
 
         // short cast
-        commandContainer.getCommands().put(ViewProductCatalogCmd.SHORT_KEY, new ViewProductCatalogCmd(productService));
-        commandContainer.getCommands().put(PutProductToCartCmd.SHORT_KEY, new PutProductToCartCmd(cartService));
-        commandContainer.getCommands().put(ViewCartHistoryCmd.SHORT_KEY, new ViewCartHistoryCmd(cartService));
+        commandContainer.put(ViewProductCatalogCmd.SHORT_KEY, new ViewProductCatalogCmd(productService));
+        commandContainer.put(PutProductToCartCmd.SHORT_KEY, new PutProductToCartCmd(cartService, productDataConsoleScannerForCart));
+        commandContainer.put(ViewCartHistoryCmd.SHORT_KEY, new ViewCartHistoryCmd(cartService));
 
-        commandContainer.getCommands().put(ViewOrdersFromToByDateCmd.SHORT_KEY, new ViewOrdersFromToByDateCmd(orderService));
-        commandContainer.getCommands().put(ViewOrderCatalogCmd.SHORT_KEY, new ViewOrderCatalogCmd(orderService));
-        commandContainer.getCommands().put(ViewOrderByNearestDateCmd.SHORT_KEY, new ViewOrderByNearestDateCmd(orderService));
+        commandContainer.put(ViewOrdersFromToByDateCmd.SHORT_KEY, new ViewOrdersFromToByDateCmd(orderService, dateConsoleScanner));
+        commandContainer.put(ViewOrderCatalogCmd.SHORT_KEY, new ViewOrderCatalogCmd(orderService));
+        commandContainer.put(ViewOrderByNearestDateCmd.SHORT_KEY, new ViewOrderByNearestDateCmd(orderService, dateConsoleScanner));
 
-        commandContainer.getCommands().put(CreateNewProductCmd.SHORT_KEY, new CreateNewProductCmd(productService));
+        commandContainer.put(CreateNewProductCmd.SHORT_KEY, new CreateNewProductCmd(productService, productDataConsoleScanner));
 
         return commandContainer;
+    }
+
+    public void setShopSettings() {
+        setLocale();
+        setProductCreatingStrategy();
+    }
+
+    private void setLocale() {
+        MainApp.printMessage(ShopLiterals.MSG_WHEN_INIT_LOCALE);
+        MainApp.printMessage(ShopLiterals.MSG_EXISTING_LOCALES);
+        localeContainer.viewExistingLocales();
+        MainApp.printMessage(ShopLiterals.MSG_ABILITY_SKIP_OPERATION);
+        MainApp.printMessage(ShopLiterals.MSG_DEFAULT_LOCALE);
+        while (true) {
+            String strLocale = scanner.nextLine().strip().toLowerCase();
+            if (localeContainer.isContainLocale(strLocale)) {
+                resourceBundle = ResourceBundle.getBundle(AppContext.NAME_RESOURCE_BUNDLE, localeContainer.getLocaleByKey(strLocale));
+                MainApp.printSuccessMessage(ShopLiterals.MSG_SUCCESS_SET_LOCALE, resourceBundle.getLocale().getLanguage());
+                return;
+            } else if (ShopLiterals.SKIP_CMD_FULL_CAST.equals(strLocale) ||
+                    ShopLiterals.SKIP_CMD_SHORT_CAST.equals(strLocale)) {
+                MainApp.printSuccessMessage(ShopLiterals.MSG_SUCCESS_SET_LOCALE, resourceBundle.getLocale().getLanguage()); // ShopLiterals.NATIVE_LOCALE_EN
+                return;
+            } else {
+                MainApp.printWarning(ShopLiterals.MSG_INVALID_INPUT_LOCALE, strLocale);
+                MainApp.printWarning(ShopLiterals.MSG_EXISTING_LOCALES);
+                localeContainer.viewExistingLocales();
+                MainApp.printWarning(ShopLiterals.PLEASE_TRY_AGAIN);
+            }
+        }
+    }
+
+    private void setProductCreatingStrategy() {
+        productCreatingEntityContainer = initReflectManualProductCreatingEntities(new ProductCreatingEntityContainer(new ManualProductCreatingStrategy()));
+        // pulling dependencies between classes ProductCreatingEntityContainer and ProductCreatingEntityContainer
+        productDataConsoleScanner.setProductCreatingEntityContainer(productCreatingEntityContainer);
+        productCreatingStrategyContainer = initProductCreatingStrategiesContainer(new ProductCreatingStrategyContainer());
+
+        MainApp.printMessage(ShopLiterals.MSG_WHEN_INIT_PRODUCT_CREATING_STRATEGY);
+        MainApp.printMessage(ShopLiterals.MSG_EXISTING_PRODUCT_CREATING_STRATEGIES);
+        productCreatingStrategyContainer.viewExistingProductCreatingStrategies();
+        MainApp.printMessage(ShopLiterals.MSG_ABILITY_SKIP_OPERATION);
+        MainApp.printMessage(ShopLiterals.MSG_DEFAULT_PRODUCT_CREATING_STRATEGY);
+        while (true) {
+            String command = scanner.nextLine().strip();
+            if (productCreatingStrategyContainer.isContainStrategy(command)) {
+                productCreatingEntityContainer = productCreatingStrategyContainer.getEntityContainerByKey(command);
+                productDataConsoleScanner.setProductCreatingEntityContainer(productCreatingEntityContainer);
+                MainApp.printSuccessMessage(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
+                        productCreatingEntityContainer.getProductCreatingStrategy().getName());
+                return;
+            } else if (ShopLiterals.SKIP_CMD_FULL_CAST.equals(command) ||
+                    ShopLiterals.SKIP_CMD_SHORT_CAST.equals(command)) {
+                MainApp.printSuccessMessage(ShopLiterals.MSG_SUCCESS_SET_PRODUCT_CREATING_STRATEGY,
+                        productCreatingEntityContainer.getProductCreatingStrategy().getName()); // ShopLiterals.MANUAL_PRODUCT_CREATING_STRATEGY
+                return;
+            } else {
+                MainApp.printWarning(ShopLiterals.MSG_UNSUPPORTED_COMMAND);
+                MainApp.printWarning(ShopLiterals.MSG_INVALID_INPUT_PRODUCT_CREATING_STRATEGY, command);
+                productCreatingStrategyContainer.viewExistingProductCreatingStrategies();
+                MainApp.printWarning(ShopLiterals.PLEASE_TRY_AGAIN);
+            }
+        }
+    }
+
+    private ProductCreatingStrategyContainer initProductCreatingStrategiesContainer(ProductCreatingStrategyContainer productCreatingStrategyContainer) {
+        ProductCreatingEntityContainer manualProductCreatingEntityContainer = productCreatingEntityContainer; // default product creating strategy
+        ProductCreatingEntityContainer autoProductCreatingEntityContainer = initReflectAutoProductCreatingEntities(
+                new ProductCreatingEntityContainer(new AutoProductCreatingStrategy()));
+
+        productCreatingStrategyContainer.put(ManualProductCreatingStrategy.CODE_KEY.toString(), manualProductCreatingEntityContainer);
+        productCreatingStrategyContainer.put(ManualProductCreatingStrategy.FULL_KEY, manualProductCreatingEntityContainer);
+        productCreatingStrategyContainer.put(ManualProductCreatingStrategy.SHORT_KEY, manualProductCreatingEntityContainer);
+
+        productCreatingStrategyContainer.put(AutoProductCreatingStrategy.CODE_KEY.toString(), autoProductCreatingEntityContainer);
+        productCreatingStrategyContainer.put(AutoProductCreatingStrategy.FULL_KEY, autoProductCreatingEntityContainer);
+        productCreatingStrategyContainer.put(AutoProductCreatingStrategy.SHORT_KEY, autoProductCreatingEntityContainer);
+
+        return productCreatingStrategyContainer;
+    }
+
+    private ProductCreatingEntityContainer initManualProductCreatingEntities(ProductCreatingEntityContainer productCreatingEntityContainer) {
+        productCreatingEntityContainer.put(ShopLiterals.BOOK_LITERAL_TYPE, new ManualCreateBook(productDataConsoleScanner));
+        productCreatingEntityContainer.put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new ManualCreateAudiobook(productDataConsoleScanner));
+        productCreatingEntityContainer.put(ShopLiterals.E_READER_LITERAL_TYPE, new ManualCreateEReader(productDataConsoleScanner));
+
+        return productCreatingEntityContainer;
+    }
+
+    private ProductCreatingEntityContainer initAutoProductCreatingEntities(ProductCreatingEntityContainer productCreatingEntityContainer) {
+        productCreatingEntityContainer.put(ShopLiterals.BOOK_LITERAL_TYPE, new AutoCreateBook(productDataRandomGenerator));
+        productCreatingEntityContainer.put(ShopLiterals.AUDIOBOOK_LITERAL_TYPE, new AutoCreateAudiobook(productDataRandomGenerator));
+        productCreatingEntityContainer.put(ShopLiterals.E_READER_LITERAL_TYPE, new AutoCreateEReader(productDataRandomGenerator));
+
+        return productCreatingEntityContainer;
+    }
+
+    private ProductCreatingEntityContainer initReflectManualProductCreatingEntities(ProductCreatingEntityContainer productCreatingEntityContainer) {
+        productCreatingEntityContainer.put(resourceBundle.getString(ShopLiterals.KEY_BOOK).toLowerCase(resourceBundle.getLocale()),
+                new ReflectManualCreateProduct(new Book(), productDataConsoleScanner));
+        productCreatingEntityContainer.put(resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK).toLowerCase(resourceBundle.getLocale()),
+                new ReflectManualCreateProduct(new Audiobook(), productDataConsoleScanner));
+        productCreatingEntityContainer.put(resourceBundle.getString(ShopLiterals.KEY_E_READER).toLowerCase(resourceBundle.getLocale()),
+                new ReflectManualCreateProduct(new EReader(), productDataConsoleScanner));
+
+        return productCreatingEntityContainer;
+    }
+
+    private ProductCreatingEntityContainer initReflectAutoProductCreatingEntities(ProductCreatingEntityContainer productCreatingEntityContainer) {
+        productCreatingEntityContainer.put(resourceBundle.getString(ShopLiterals.KEY_BOOK).toLowerCase(resourceBundle.getLocale()),
+                new ReflectAutoCreateProduct(new Book(), productDataRandomGenerator));
+        productCreatingEntityContainer.put(resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK).toLowerCase(resourceBundle.getLocale()),
+                new ReflectAutoCreateProduct(new Audiobook(), productDataRandomGenerator));
+        productCreatingEntityContainer.put(resourceBundle.getString(ShopLiterals.KEY_E_READER).toLowerCase(resourceBundle.getLocale()),
+                new ReflectAutoCreateProduct(new EReader(), productDataRandomGenerator));
+
+        return productCreatingEntityContainer;
+    }
+
+    public Scanner getScanner() {
+        return scanner;
+    }
+
+    public CommandContainer getCommandContainer() {
+        return commandContainer;
+    }
+
+    public ResourceBundle getResourceBundle() {
+        return resourceBundle;
     }
 }

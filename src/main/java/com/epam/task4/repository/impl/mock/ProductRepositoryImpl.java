@@ -19,7 +19,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public Commodity getById(Long id) {
         return productCatalog.getProductCatalog().stream()
-                .filter(commodity -> commodity.getId() == id)
+                .filter(commodity -> commodity.getId().equals(id))
                 .findFirst().orElse(null);
     }
 

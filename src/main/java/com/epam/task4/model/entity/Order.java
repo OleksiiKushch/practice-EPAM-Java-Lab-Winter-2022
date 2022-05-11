@@ -15,6 +15,9 @@ public class Order {
     private LocalDateTime dateTime;
     private List<Commodity> container;
 
+    public Order() {
+    }
+
     public Order(LocalDateTime dateTime, List<Commodity> container) {
         this.dateTime = dateTime;
         this.container = container;

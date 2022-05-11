@@ -1,7 +1,11 @@
 package com.epam.task1.entity;
 
+import com.epam.task4.constants.ShopLiterals;
+import com.epam.task7.create_product.ProductField;
+
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * Bean class representation of the digital e-book with audio voice acting.
@@ -14,14 +18,17 @@ public class Audiobook extends Book {
     /**
      * the total size of the digital e-book (all its components (files))
      */
-    private int sizeMB;
+    @ProductField(KEY = ShopLiterals.KEY_AUDIOBOOK_FILE_SIZE_MB)
+    private Integer fileSizeMB;
     /**
      * the total time (duration or length) of listening concrete audiobook (measured in minutes)
      */
-    private int listeningLength;
+    @ProductField(KEY = ShopLiterals.KEY_AUDIOBOOK_LISTENING_TIME_MINUTES)
+    private Integer listeningTimeMinutes;
     /**
      * the narrator concrete digital audiobook (main or first narrator to the list of audiobook narrators)
      */
+    @ProductField(KEY = ShopLiterals.KEY_AUDIOBOOK_NARRATOR)
     private String narrator;
 
     public Audiobook() {
@@ -33,37 +40,37 @@ public class Audiobook extends Book {
     }
 
     public Audiobook(Long id, String frontTitle, BigDecimal price,
-                     String title, String author, String language, int numberOfPages,
-                     int sizeMB, int listeningLength, String narrator) {
+                     String title, String author, String language, Integer numberOfPages,
+                     Integer sizeMB, Integer listeningLength, String narrator) {
         super(id, frontTitle, price, title, author, language, numberOfPages);
-        this.sizeMB = sizeMB;
-        this.listeningLength = listeningLength;
+        this.fileSizeMB = sizeMB;
+        this.listeningTimeMinutes = listeningLength;
         this.narrator = narrator;
     }
 
     public Audiobook(Long id, String frontTitle, BigDecimal price, Integer amount,
-                     String title, String author, String language, int numberOfPages,
-                     int sizeMB, int listeningLength, String narrator) {
+                     String title, String author, String language, Integer numberOfPages,
+                     Integer sizeMB, Integer listeningLength, String narrator) {
         super(id, frontTitle, price, amount, title, author, language, numberOfPages);
-        this.sizeMB = sizeMB;
-        this.listeningLength = listeningLength;
+        this.fileSizeMB = sizeMB;
+        this.listeningTimeMinutes = listeningLength;
         this.narrator = narrator;
     }
 
-    public int getSizeMB() {
-        return sizeMB;
+    public Integer getFileSizeMB() {
+        return fileSizeMB;
     }
 
-    public void setSizeMB(int sizeMB) {
-        this.sizeMB = sizeMB;
+    public void setFileSizeMB(Integer fileSizeMB) {
+        this.fileSizeMB = fileSizeMB;
     }
 
-    public int getListeningLength() {
-        return listeningLength;
+    public Integer getListeningTimeMinutes() {
+        return listeningTimeMinutes;
     }
 
-    public void setListeningLength(int listeningLength) {
-        this.listeningLength = listeningLength;
+    public void setListeningTimeMinutes(Integer listeningTimeMinutes) {
+        this.listeningTimeMinutes = listeningTimeMinutes;
     }
 
     public String getNarrator() {
@@ -80,14 +87,14 @@ public class Audiobook extends Book {
         if (!(o instanceof Audiobook)) return false;
         if (!super.equals(o)) return false;
         Audiobook audioBook = (Audiobook) o;
-        return sizeMB == audioBook.sizeMB &&
-                listeningLength == audioBook.listeningLength &&
+        return fileSizeMB.equals(audioBook.fileSizeMB) &&
+                listeningTimeMinutes.equals(audioBook.listeningTimeMinutes) &&
                 Objects.equals(narrator, audioBook.narrator);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), sizeMB, listeningLength, narrator);
+        return Objects.hash(super.hashCode(), fileSizeMB, listeningTimeMinutes, narrator);
     }
 
     @Override
@@ -101,9 +108,36 @@ public class Audiobook extends Book {
                 ", author='" + getAuthor() + '\'' +
                 ", language='" + getLanguage() + '\'' +
                 ", numberOfPages=" + getNumberOfPages() +
-                ", sizeMB=" + sizeMB +
-                ", listeningLength=" + listeningLength +
+                ", fileSizeMB=" + fileSizeMB +
+                ", listeningTimeMinutes=" + listeningTimeMinutes +
                 ", narrator='" + narrator + '\'' +
                 '}';
+    }
+
+    @Override
+    public String userFriendlyToString(ResourceBundle resourceBundle) {
+        return String.format("%s: " + getFrontTitle() +
+                        "%n%s: " + getId() +
+                        "%n%s: " + getPrice() +
+                        "%n%s: " + getAmount() +
+                        "%n%s: " + getTitle() +
+                        "%n%s: " + getAuthor() +
+                        "%n%s: " + getLanguage() +
+                        "%n%s: " + getNumberOfPages() +
+                        "%n%s: " + fileSizeMB +
+                        "%n%s: " + listeningTimeMinutes +
+                        "%n%s: " + narrator +
+                        "%n",
+                resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_AMOUNT),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_TITLE),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_AUTHOR),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_LANGUAGE),
+                resourceBundle.getString(ShopLiterals.KEY_BOOK_NUMBER_OF_PAGES),
+                resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_FILE_SIZE_MB),
+                resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_LISTENING_TIME_MINUTES),
+                resourceBundle.getString(ShopLiterals.KEY_AUDIOBOOK_NARRATOR));
     }
 }

@@ -1,8 +1,13 @@
 package com.epam.task1.entity;
 
+import com.epam.task4.constants.ShopLiterals;
+import com.epam.task7.create_product.ProductField;
+import com.epam.task7.modified_product.BaseItem;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
+import java.util.ResourceBundle;
 
 /**
  * An abstract representation of the commodity.
@@ -10,25 +15,29 @@ import java.util.Objects;
  *
  * @author Oleksii Kushch
  */
-public class Commodity implements Cloneable, Serializable {
+public class Commodity implements Cloneable, Serializable, BaseItem {
     private static final long serialVersionUID = 5773634382252297178L;
 
     /**
      * the identifier concrete commodity (unique value)
      */
-    private long id;
+    @ProductField(KEY = ShopLiterals.KEY_PRODUCT_ID)
+    private Long id;
     /**
      * the front (external) title concrete commodity
      */
+    @ProductField(KEY = ShopLiterals.KEY_PRODUCT_FRONT_TITLE)
     private String frontTitle;
     /**
      * the price concrete commodity (used BigDecimal because need the precision for money values)
      */
+    @ProductField(KEY = ShopLiterals.KEY_PRODUCT_PRICE)
     private BigDecimal price;
     /**
      * the amount concrete commodity
      */
-    private int amount;
+    @ProductField(KEY = ShopLiterals.KEY_PRODUCT_AMOUNT)
+    private Integer amount;
 
     public Commodity() {
     }
@@ -46,7 +55,7 @@ public class Commodity implements Cloneable, Serializable {
         this.amount = amount;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -70,7 +79,7 @@ public class Commodity implements Cloneable, Serializable {
         this.price = price;
     }
 
-    public int getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
@@ -83,10 +92,10 @@ public class Commodity implements Cloneable, Serializable {
         if (this == object) return true;
         if (!(object instanceof Commodity)) return false;
         Commodity commodity = (Commodity) object;
-        return id == commodity.id &&
+        return id.equals(commodity.id) &&
                 Objects.equals(frontTitle, commodity.frontTitle) &&
                 Objects.equals(price, commodity.price) &&
-                amount == commodity.amount;
+                amount.equals(commodity.amount);
     }
 
     @Override
@@ -107,6 +116,18 @@ public class Commodity implements Cloneable, Serializable {
                 ", price=" + price +
                 ", amount=" + amount +
                 '}';
+    }
+
+    public String userFriendlyToString(ResourceBundle resourceBundle) {
+        return String.format("%s: " + frontTitle +
+                "%n%s: " + id +
+                "%n%s: " + price +
+                "%n%s: " + amount +
+                "%n",
+                resourceBundle.getString(ShopLiterals.KEY_COMMODITY),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_ID),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_PRICE),
+                resourceBundle.getString(ShopLiterals.KEY_PRODUCT_AMOUNT));
     }
 
     public String toStringOptional() {

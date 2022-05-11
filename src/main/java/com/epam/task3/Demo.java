@@ -6,6 +6,7 @@ import com.epam.task1.entity.Commodity;
 import com.epam.task3.util.StrKey;
 import com.epam.task3.util.StrKeyByLength;
 import com.epam.task3.util.StrKeyBySumChar;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
@@ -36,11 +37,11 @@ public class Demo {
 
     public static void test(Map<StrKey, Commodity> map, Class<? extends StrKey> typeStrKey, List<Commodity> data)
             throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        System.out.println("For " + map.getClass().getSimpleName() + ":");
-        System.out.println("\tFor " + typeStrKey.getSimpleName() + ":");
+        System.out.println(StringUtils.join("For ", map.getClass().getSimpleName(), ":"));
+        System.out.println(StringUtils.join("\tFor ", typeStrKey.getSimpleName(), ":"));
         for (Commodity commodity : data) {
             map.put(typeStrKey.getConstructor(String.class).newInstance(commodity.getFrontTitle()), commodity);
         }
-        map.values().forEach(b -> System.out.println("\t\t" + b.getId() + " : " + b.getFrontTitle()));
+        map.values().forEach(b -> System.out.println(StringUtils.join("\t\t", b.getId(), " : ", b.getFrontTitle())));
     }
 }

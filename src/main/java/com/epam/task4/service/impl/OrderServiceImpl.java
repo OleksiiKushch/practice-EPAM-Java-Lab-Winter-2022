@@ -1,6 +1,5 @@
 package com.epam.task4.service.impl;
 
-import com.epam.task4.constants.ShopLiterals;
 import com.epam.task4.model.entity.Order;
 import com.epam.task4.repository.OrderRepository;
 import com.epam.task4.service.OrderService;
@@ -10,7 +9,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -43,15 +41,7 @@ public class OrderServiceImpl implements OrderService {
      * {@link DateConsoleScanner#inputDay}) return {@code null}.
      */
     @Override
-    public List<Order> getOrdersFromToByDate() {
-        System.out.println(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
-
-        LocalDateTime fromDate = Objects.requireNonNull(interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_AFTER_YEAR,
-                ShopLiterals.MSG_ENTER_AFTER_MONTH, ShopLiterals.MSG_ENTER_AFTER_DAY));
-
-        LocalDateTime toDate = Objects.requireNonNull(interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_BEFORE_YEAR,
-                ShopLiterals.MSG_ENTER_BEFORE_MONTH, ShopLiterals.MSG_ENTER_BEFORE_DAY));
-
+    public List<Order> getOrdersFromToByDate(LocalDateTime fromDate, LocalDateTime toDate) {
         return orderRepository.getAll().stream()
                 .filter(order -> order.getDateTime().isAfter(fromDate) && order.getDateTime().isBefore(toDate))
                 .collect(Collectors.toList());
@@ -69,37 +59,9 @@ public class OrderServiceImpl implements OrderService {
      * {@link DateConsoleScanner#inputDay}) return {@code null}.
      */
     @Override
-    public Order getOrderByNearestDate() {
-        System.out.println(ShopLiterals.MSG_ABILITY_CANCEL_OPERATION);
-
-        LocalDateTime nearestDate = interactiveConsoleInputDate(ShopLiterals.MSG_ENTER_NEAREST_YEAR,
-                ShopLiterals.MSG_ENTER_NEAREST_MONTH, ShopLiterals.MSG_ENTER_NEAREST_DAY);
-
+    public Order getOrderByNearestDate(LocalDateTime nearestDate) {
         return orderRepository.getAll().stream()
                 .min(Comparator.comparing(order ->
                         Math.abs(Duration.between(order.getDateTime(), nearestDate).toDays()))).orElse(null);
-    }
-
-    private LocalDateTime interactiveConsoleInputDate(
-            String msgAppealForInputYear, String msgAppealForInputMonth, String msgAppealForInputDay) {
-        System.out.println(msgAppealForInputYear);
-        Integer year = DateConsoleScanner.inputYear();
-        if (year == null) {
-            System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        System.out.println(msgAppealForInputMonth);
-        Integer month = DateConsoleScanner.inputMonth();
-        if (month == null) {
-            System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        System.out.println(msgAppealForInputDay);
-        Integer day = DateConsoleScanner.inputDay(year, month);
-        if (day == null) {
-            System.out.println(ShopLiterals.MSG_WHEN_OPERATION_ABORT);
-            return null;
-        }
-        return LocalDateTime.of(year, month, day, 0, 0, 0);
     }
 }

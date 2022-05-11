@@ -2,22 +2,24 @@ package com.epam.task6.create_product.strategy.auto_creating;
 
 import com.epam.task1.entity.Commodity;
 import com.epam.task1.entity.EReader;
+import com.epam.task6.util.ProductDataRandomGenerator;
 
-import java.security.SecureRandom;
-
+/**
+ * @author Oleksii Kushch
+ */
 public class AutoCreateEReader extends AutoCreateCommodity {
-    private static final String MODEL = "Model";
+    public AutoCreateEReader(ProductDataRandomGenerator productDataRandomGenerator) {
+        super(productDataRandomGenerator);
+    }
 
     @Override
     public Commodity create() {
-        SecureRandom secureRandom = new SecureRandom();
-
         EReader eReader = new EReader(super.create());
 
-        eReader.setModel(MODEL + secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
-        eReader.setDisplaySize(secureRandom.nextFloat() * MAX_VALUE_RANDOM_GENERATED_NUM);
-        eReader.setStorageGB(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
-        eReader.setResolutionPPI(secureRandom.nextInt(MAX_VALUE_RANDOM_GENERATED_NUM));
+        eReader.setModel(productDataRandomGenerator.getRandomEReaderModel());
+        eReader.setDisplaySizeInches(productDataRandomGenerator.getRandomEReaderDisplaySizeInches());
+        eReader.setStorageCapacityGB(productDataRandomGenerator.getRandomEReaderStorageCapacityGB());
+        eReader.setScreenResolutionPPI(productDataRandomGenerator.getRandomEReaderScreenResolutionPPI());
 
         return eReader;
     }

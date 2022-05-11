@@ -26,7 +26,7 @@ public class CloseShopCmd implements Command {
     public void execute() {
         UtilProductCatalog.safeProductCatalog(AppContext.PATH_PRODUCT_CATALOG, new ProductCatalog(productService.getAllProducts()));
         MainApp.stop();
-        System.out.println(ShopLiterals.MSG_WHEN_APP_STOP);
+        MainApp.printMessage(ShopLiterals.MSG_WHEN_APP_STOP);
     }
 
     @Override
