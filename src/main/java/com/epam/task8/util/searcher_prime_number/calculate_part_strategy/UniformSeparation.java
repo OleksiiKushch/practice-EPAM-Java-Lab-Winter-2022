@@ -4,6 +4,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 /**
  * Strategies for separation into equal parts (intervals)
@@ -45,20 +47,11 @@ public class UniformSeparation implements CalculatePartStrategy {
         List<List<Long>> result = new ArrayList<>();
         long cursor = to;
         for (long stepSize : stepsSize) {
-            List<Long> part = new ArrayList<>();
-            fillPart(part, cursor - stepSize + 1, cursor);
+            List<Long> part = LongStream.range(cursor - stepSize + 1, cursor + 1) // ' + 1' because inclusive
+                    .boxed().collect(Collectors.toList());
             result.add(part);
             cursor -= stepSize;
         }
         return result;
-    }
-
-    /**
-     * Fill part (interval from to some number) according to arithmetic sequence where coefficient 'd' = 1, e.g. 1, 2, 3, 4, ... and so on.
-     */
-    private void fillPart(List<Long> part, long from, long to) {
-        for (long i = from; i <= to; i++) {
-            part.add(i);
-        }
     }
 }

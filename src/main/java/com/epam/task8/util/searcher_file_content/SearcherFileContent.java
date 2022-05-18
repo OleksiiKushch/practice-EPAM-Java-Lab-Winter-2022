@@ -79,9 +79,6 @@ public class SearcherFileContent {
         private byte[] bytes;
         private boolean isRunning;
 
-        public RunnableSearcherLongestSequence() {
-        }
-
         public void setBytes(byte[] bytes) {
             this.bytes = bytes;
         }
