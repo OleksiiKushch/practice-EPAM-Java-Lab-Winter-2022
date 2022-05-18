@@ -35,10 +35,8 @@ public class ParallelSearcherPNBaseImpl implements ParallelSearcherPrimeNumbers 
     public List<Long> findAllInRange() {
         List<List<Long>> parts = calculatePartStrategy.calculateParts(from, to, numberOfThreads);
 
-        log.debug("Parts size: " + parts.stream().map(List::size).collect(Collectors.toList()));
-        for (List<Long> part : parts) {
-            log.debug(part);
-        }
+        log.debug("\nParts size: " + parts.stream().map(List::size).collect(Collectors.toList()));
+        log.debug(parts.stream().map(part -> part.toString() + "\n").collect(Collectors.joining()));
 
         List<Thread> threads = initThreads(parts);
         threads.forEach(Thread::start);
@@ -55,8 +53,7 @@ public class ParallelSearcherPNBaseImpl implements ParallelSearcherPrimeNumbers 
 
         @Override
         public void run() {
-            log.debug(String.format("Thread (%d) START; Part: [%d; %d]; Size: %d", this.getId(),
-                    part.size() == 0 ? 0 : part.get(0), part.size() == 0 ? 0 : part.get(part.size() - 1), part.size()));
+            log.debug(String.format("Thread (%d) START; Part: [%d; %d]; Size: %d", this.getId(), part.get(0), part.get(part.size() - 1), part.size()));
             long beforeTime = System.currentTimeMillis();
 
             for (long number : part) {

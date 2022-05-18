@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class AbsoluteUniformSeparation implements CalculatePartStrategy {
     public static long STEP = 2;
-    public static long MOD = 1;
+    public static long EXPECT_AFTER_MOD = 1;
 
     @Override
     public List<List<Long>> calculateParts(long from, long to, int numberOfThreads) {
@@ -29,7 +29,7 @@ public class AbsoluteUniformSeparation implements CalculatePartStrategy {
                     break;
                 }
                 part.add(cursor);
-                if (j % STEP == MOD) {
+                if (j % STEP == EXPECT_AFTER_MOD) {
                     cursor += STEP * numberOfThreads - 1;
                 } else {
                     cursor++;

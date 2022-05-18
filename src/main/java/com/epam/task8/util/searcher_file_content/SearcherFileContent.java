@@ -107,7 +107,6 @@ public class SearcherFileContent {
                     }
                 }
             }
-
         }
     }
 
@@ -136,16 +135,16 @@ public class SearcherFileContent {
             currentByte = bytes[i];
             if (i != bytes.length - 1 && currentByte == bytes[i + 1]) {
                 currentCount++;
-                continue;
+            } else {
+                if (currentCount >= resultCount) {
+                    resultCount = currentCount;
+                    resultByte = bytes[i];
+                    resultFrom = currentFrom;
+                    resultTo = i;
+                }
+                currentCount = 1;
+                currentFrom = i + 1;
             }
-            if (currentCount >= resultCount) {
-                resultCount = currentCount;
-                resultByte = bytes[i];
-                resultFrom = currentFrom;
-                resultTo = i;
-            }
-            currentCount = 1;
-            currentFrom = i + 1;
         }
 
         System.out.printf("Byte: %d, count: %d [%d; %d]\r%n", resultByte, resultCount, resultFrom, resultTo);
