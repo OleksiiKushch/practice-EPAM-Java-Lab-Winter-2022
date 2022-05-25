@@ -9,7 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MyUniqueElementsListTest {
+class MyUniqueElementsListViewLongestSequence {
 
     private List<Integer> list;
 

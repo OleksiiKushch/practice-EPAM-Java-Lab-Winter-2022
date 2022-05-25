@@ -7,7 +7,7 @@ import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class MyCopyOnWriteListTest {
+class MyCopyOnWriteListViewLongestSequence {
 
     MyCopyOnWriteList<Integer> list;
 

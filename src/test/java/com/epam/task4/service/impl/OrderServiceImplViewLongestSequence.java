@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class OrderServiceImplTest {
+class OrderServiceImplViewLongestSequence {
 
     @Test
     void getOrderByNearestDate_ifOrderCatalogIsEmpty() {

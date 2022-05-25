@@ -1,0 +1,6 @@
+Finally, let's look at the impact of var. Do you think these two statements are equivalent?
+List<?> x1 = new ArrayList<<<>>>();
+var x2 = new ArrayList<>();
+They are not. There are two key differences. First, x1 is of type List, while x2 is of type ArrayList.
+Additionally,,,,, we can only assign x2 to a List<Object>. These two variables do have one thing in common.
+Both return type Object when calling the get() method.......
