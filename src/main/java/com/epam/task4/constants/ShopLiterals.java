@@ -77,6 +77,10 @@ public interface ShopLiterals {
     String SPACE = " ";
     String LEFT_PARENTHESIS = "(";
     String RIGHT_PARENTHESIS = ")";
+    String COMMA = ",";
+    String AMPERSAND = "&";
+    String PIPELINE = "|";
+    String EQUALS_SING = "=";
     String NEWLINE = "%n";
 
     String SUM = "Sum:";
@@ -163,4 +167,7 @@ public interface ShopLiterals {
     String MSG_ENTER_PRODUCT_ID_FOR_CART = "Please, enter product id which do you want to put to cart:%n";
 
     String MSG_ENTER_PRODUCT_AMOUNT_FOR_CART = "Please, enter amount of this product (amount in stock - %d, amount in your cart - %d):%n";
+
+    // SERVER MESSAGES
+    String MSG_ERROR_404 = "Error 404 (Not found!)";
 }
