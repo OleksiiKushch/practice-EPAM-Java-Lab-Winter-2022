@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookShop</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- custom styles -->
+    <link rel="stylesheet" href="styles/my.tooltip.css">
+    <!-- custom scripts -->
+    <script src="scripts/load.page.components.js"></script>
+    <script src="scripts/render.mock.catalog.js"></script>
+</head>
+<body>
+    <div id="my_header"></div>
+
+    <div class="album py-2 bg-light">
+        <div class="container">
+            <h1 class="my-3">Product catalog:</h1>
+            <div class="row my-3" id="container">
+                <!-- here content -->
+            </div>
+        </div>
+    </div>
+
+    <div id="my_footer"></div>
+
+    <!-- local template -->
+    <template id="template-product-catalog">
+        <div class="col-md-3">
+            <div class="card mb-3 box-shadow">
+                <img class="card-img-top" src="img/where_the_crawdads_sing.jpg">
+                <div class="card-body">
+                    <h6 class="card-title">Where the Crawdads Sing</h6>
+                    <p>by <a href="#">Delia Owens</a></p>
+                    <p class="card-text">Price: 12.99</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-success">Buy</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary">See details</button>
+                        </div>
+                        <button type="button" class="btn btn-link my-tooltip">
+                            <small class="text-muted">Available
+                                <span class="my-tooltip-text">Available immediately</span></small></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+</body>
+<script>
+    loadProductCatalogPageComponents();
+    renderProductCatalog();
+</script>
+</html>
