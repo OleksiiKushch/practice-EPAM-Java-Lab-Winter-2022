@@ -65,11 +65,19 @@ public abstract class Server extends Thread {
             }
             log.debug("Response: " + result);
             sendResponse(socket, result);
-
-            log.debug("Close connection on port: " + socket.getLocalPort());
-            socket.close();
         } catch (IOException exception) {
             exception.printStackTrace();
+        } finally {
+            closeManagerSocket(socket);
+            log.debug("Close connection on port: " + socket.getLocalPort());
+        }
+    }
+
+    private void closeManagerSocket(Socket socket) {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            log.error(e.getMessage());
         }
     }
 
