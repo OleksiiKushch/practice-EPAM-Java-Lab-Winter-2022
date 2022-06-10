@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookShop</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- custom scripts -->
+    <script src="scripts/load.page.components.js"></script>
+    <script src="scripts/show.hide.password.js"></script>
+    <script src="scripts/validator.general.form.jquery.js"></script>
+</head>
+<body>
+    <div id="my_header"></div>
+
+    <div class="container">
+        <h1 class="my-3">Log in page:</h1>
+        <div class="card bg-light">
+            <div class="card-body">
+                <form name="loginForm" class="was-validated" action="" method="post" onsubmit="return validationLoginForm()">
+                    <div class="mb-3">
+                        <label for="inputEmail" class="form-label">Email address:</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="email address"
+                               name="email" value="" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPassword" class="form-label">Password:</label>
+                        <div class="input-group" id="showHidePassword">
+                            <input type="password" class="form-control" id="inputPassword" placeholder="password"
+                                   name="password" minlength="6" maxlength="18" required>
+                            <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary">
+                                <i class="fa fa-eye-slash" aria-hidden="true"></i>
+                            </button>
+                        </span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mb-3 ">Sing in</button>
+
+                    <div class="mb-1">
+                        <label for="forgotPassword" class="form-label">Forgot your password? Reset it:</label>
+                        <a href="#" class="fw-bold text-body" id="forgotPassword"><u>here</u></a>
+                    </div>
+                    <div class="mb-1">
+                        <label for="noAccount" class="form-label">No account? Registration:</label>
+                        <a href="registration.html" class="fw-bold text-body" id="noAccount"><u>here</u></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="my_footer"></div>
+</body>
+<script>
+    loadGeneralPageComponents();
+</script>
+</html>

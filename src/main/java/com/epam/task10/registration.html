@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookShop</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- custom scripts -->
+    <script src="scripts/load.page.components.js"></script>
+    <script src="scripts/validator.general.form.jquery.js"></script>
+</head>
+<body>
+    <div id="my_header"></div>
+
+    <div class="container">
+        <h1 class="my-3">Registration page:</h1>
+        <div class="card bg-light">
+            <div class="card-body">
+                <form name="registrationForm" class="was-validated" action="" method="post" onsubmit="return validationRegistrationForm()">
+                    <div class="mb-3">
+                        <label for="inputEmail" class="form-label">Email address:</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="email address"
+                               name="email" value="" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputPassword" class="form-label">Password:</label>
+                        <input type="password" class="form-control" id="inputPassword" placeholder="password"
+                               name="password" minlength="6" maxlength="18" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="inputConfirmationPassword" class="form-label">Confirmation password:</label>
+                        <input type="password" class="form-control" id="inputConfirmationPassword" placeholder="confirmation password"
+                               name="confirmation_password" minlength="6" maxlength="18" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-3 ">Registration</button>
+
+                    <div class="mb-1">
+                        <label for="noAccount" class="form-label">Have account? Log in:</label>
+                        <a href="login.html" class="fw-bold text-body" id="noAccount"><u>here</u></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="my_footer"></div>
+</body>
+<script>
+    loadGeneralPageComponents();
+</script>
+</html>
