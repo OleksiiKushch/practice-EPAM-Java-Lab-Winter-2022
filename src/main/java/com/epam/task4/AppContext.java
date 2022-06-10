@@ -50,6 +50,14 @@ import com.epam.task6.util.UtilProductCatalog;
 import com.epam.task7.LocaleContainer;
 import com.epam.task7.create_product.strategy.ReflectAutoCreateProduct;
 import com.epam.task7.create_product.strategy.ReflectManualCreateProduct;
+import com.epam.task9.server.Server;
+import com.epam.task9.server.controller.ServerCommandContainer;
+import com.epam.task9.server.controller.server_cmd.custom_tcp_server_impl.GetCountCustomTcpServerCmd;
+import com.epam.task9.server.controller.server_cmd.custom_tcp_server_impl.GetItemByIdCustomTcpServerCmd;
+import com.epam.task9.server.controller.server_cmd.http_server_impl.GetCountHttpServerCmd;
+import com.epam.task9.server.controller.server_cmd.http_server_impl.GetItemByIdHttpServerCmd;
+import com.epam.task9.server.impl.CustomTcpServer;
+import com.epam.task9.server.impl.HttpServer;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -87,6 +95,14 @@ public class AppContext {
     private OrderService orderService;
     private CartService cartService;
 
+    // server command container
+    private ServerCommandContainer httpServerCommandContainer;
+    private ServerCommandContainer customTcpServerCommandContainer;
+
+    // servers
+    private Server httpServer;
+    private Server customTcpServer;
+
     // console data scanners
     private DateConsoleScanner dateConsoleScanner;
     private ProductDataConsoleScanner productDataConsoleScanner;
@@ -108,9 +124,10 @@ public class AppContext {
         initDataSource();
         initRepository();
         initService();
+        initServer();
         initConsoleScanner();
         initDataGenerator();
-        initController();
+        initShopController();
     }
 
     private void initLocale() {
@@ -134,6 +151,17 @@ public class AppContext {
         productService = new ProductServiceImpl(productRepository);
         orderService = new OrderServiceImpl(orderRepository);
         cartService = new CartServiceImpl(productRepository, orderRepository, cartRepository);
+    }
+
+    private void initServer() {
+        initServerCommandContainer();
+        httpServer = new HttpServer(httpServerCommandContainer);
+        customTcpServer = new CustomTcpServer(customTcpServerCommandContainer);
+    }
+
+    private void initServerCommandContainer() {
+        httpServerCommandContainer = initHttpServerCommands(new ServerCommandContainer());
+        customTcpServerCommandContainer = initCustomTcpServerCommands(new ServerCommandContainer());
     }
 
     private void initConsoleScanner() {
@@ -173,12 +201,29 @@ public class AppContext {
         return localeContainer;
     }
 
-    private void initController() {
-        commandContainer = initCommands(new CommandContainer(), productService, orderService, cartService);
+    private ServerCommandContainer initCustomTcpServerCommands(ServerCommandContainer serverCommandContainer) {
+        serverCommandContainer.put(GetCountCustomTcpServerCmd.CMD_NAME, new GetCountCustomTcpServerCmd(productService));
+        serverCommandContainer.put(GetItemByIdCustomTcpServerCmd.CMD_NAME, new GetItemByIdCustomTcpServerCmd(productService));
+
+        return serverCommandContainer;
+    }
+
+    private ServerCommandContainer initHttpServerCommands(ServerCommandContainer serverCommandContainer) {
+        serverCommandContainer.put(GetCountHttpServerCmd.CMD_NAME, new GetCountHttpServerCmd(productService));
+        serverCommandContainer.put(GetItemByIdHttpServerCmd.CMD_NAME, new GetItemByIdHttpServerCmd(productService));
+
+        return serverCommandContainer;
+    }
+
+    private void initShopController() {
+        commandContainer = initCommands(new CommandContainer(), productService, orderService, cartService,
+                dateConsoleScanner, productDataConsoleScanner, productDataConsoleScannerForCart);
     }
 
     private CommandContainer initCommands(CommandContainer commandContainer,
-                                          ProductService productService, OrderService orderService, CartService cartService) {
+                                          ProductService productService, OrderService orderService, CartService cartService,
+                                          DateConsoleScanner dateConsoleScanner, ProductDataConsoleScanner productDataConsoleScanner,
+                                          ProductDataConsoleScannerForCart productDataConsoleScannerForCart) {
         // full cast
         commandContainer.put(ViewProductCatalogCmd.FULL_KEY, new ViewProductCatalogCmd(productService));
         commandContainer.put(PutProductToCartCmd.FULL_KEY, new PutProductToCartCmd(cartService, productDataConsoleScannerForCart));
@@ -324,6 +369,16 @@ public class AppContext {
                 new ReflectAutoCreateProduct(new EReader(), productDataRandomGenerator));
 
         return productCreatingEntityContainer;
+    }
+
+    public void startServers() {
+        httpServer.start();
+        customTcpServer.start();
+    }
+
+    public void stopServers() {
+        httpServer.stopServer();
+        customTcpServer.stopServer();
     }
 
     public Scanner getScanner() {

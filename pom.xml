@@ -5,24 +5,43 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
-    <artifactId>practice EPAM Java Lab Winter 2022</artifactId>
+    <artifactId>practice-EPAM-Java-Lab-Winter-2022</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>14</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <commons-lang.version>3.12.0</commons-lang.version>
-        <commons-collections.version>4.4</commons-collections.version>
+        <junit-platform.version>5.8.2</junit-platform.version>
+        <junit-params>5.9.0-M1</junit-params>
         <mockito-all.version>1.10.19</mockito-all.version>
         <log4j.version>1.2.17</log4j.version>
+        <commons-lang.version>3.12.0</commons-lang.version>
+
+        <json-simple.version>1.1.1</json-simple.version>
+
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>RELEASE</version>
+            <version>${junit-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit-platform.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit-params}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -41,6 +60,14 @@
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>${json-simple.version}</version>
+        </dependency>
+
     </dependencies>
+
 
 </project>

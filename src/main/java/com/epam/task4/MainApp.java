@@ -20,6 +20,7 @@ public class MainApp {
         isRunning = true;
         initContext(new AppContext());
         setShopSettings();
+        startServers();
 
         printMessage(ShopLiterals.MSG_WHEN_APP_RUN);
         while (isRunning) {
@@ -30,6 +31,8 @@ public class MainApp {
                 printWarning(ShopLiterals.MSG_UNSUPPORTED_COMMAND);
             }
         }
+
+        stopServers();
         context.getScanner().close();
     }
 
@@ -43,6 +46,14 @@ public class MainApp {
 
     public static void setShopSettings() {
         context.setShopSettings();
+    }
+
+    public static void startServers() {
+        context.startServers();
+    }
+
+    public static void stopServers() {
+        context.stopServers();
     }
 
     public static AppContext getContext() {
