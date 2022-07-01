@@ -1,6 +1,7 @@
 package com.epam.task11.controller.servlet;
 
 import com.epam.task11.constant.ShopLiterals;
+import com.epam.task11.controller.servlet.captcha.CaptchaCodeStorageStrategy;
 import com.epam.task11.entity.User;
 import com.epam.task11.service.MyServiceException;
 import com.epam.task11.service.impl.UserServiceImpl;
@@ -46,9 +47,14 @@ public class RegistrationServlet extends HttpServlet {
         log.info("User try registration");
         RegistrationData registrationData = getDataFromRequest(request);
         log.debug("Registration data: " + registrationData);
-        String captchaCode = (String) request.getSession().getAttribute(ShopLiterals.CAPTCHA_CODE);
-        log.debug("Captcha code: " + captchaCode);
-        List<String> errors = new RegistrationDataValidator(captchaCode).isValid(registrationData);
+
+        CaptchaCodeStorageStrategy captchaCodeStorageStrategy = (CaptchaCodeStorageStrategy) request.getServletContext()
+                .getAttribute(ShopLiterals.CAPTCHA_CODE_STORAGE_STRATEGY);
+
+        String storedCaptchaCode = captchaCodeStorageStrategy.getStoredCode(request);
+        log.debug("Stored captcha code: " + storedCaptchaCode);
+
+        List<String> errors = new RegistrationDataValidator(storedCaptchaCode).isValid(registrationData);
         if (errors.isEmpty()) {
             User user = registrationData.mapUser();
             log.debug("New user data: " + user);

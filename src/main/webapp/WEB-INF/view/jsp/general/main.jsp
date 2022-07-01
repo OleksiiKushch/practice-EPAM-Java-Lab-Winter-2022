@@ -13,7 +13,7 @@
 
 </head>
 <body>
-    <%@ include file="/WEB-INF/view/jsp/component/header.jsp" %>
+    <jsp:include page="/WEB-INF/view/jsp/component/header.jsp" />
 
     <div class="card text-center bg-light w-75 my-5 mx-auto">
        <div class="card-body">
@@ -25,6 +25,6 @@
        </div>
     </div>
 
-    <%@ include file="/WEB-INF/view/jsp/component/footer.jsp" %>
+    <jsp:include page="/WEB-INF/view/jsp/component/footer.jsp" />
 </body>
 </html>

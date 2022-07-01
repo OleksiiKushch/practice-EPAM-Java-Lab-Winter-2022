@@ -5,6 +5,8 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+<%@ taglib prefix="captchaProvider" uri="http://com.epam/task11/tag/CaptchaProvider" %>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -25,7 +27,7 @@
 <c:set var="error_messages" value="${requestScope[ShopLiterals.ERRORS]}"/>
 
 <body>
-    <%@ include file="/WEB-INF/view/jsp/component/header.jsp" %>
+    <jsp:include page="/WEB-INF/view/jsp/component/header.jsp" />
 
     <div class="container">
         <h1 class="my-3">Registration page:</h1>
@@ -62,7 +64,7 @@
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-sm-4">
-                                <img src="captcha" />
+                                <captchaProvider:get />
                                 <br>
                                 <button type="button" class="btn btn-link">reload</button>
                             </div>
@@ -94,6 +96,6 @@
         </div>
     </div>
 
-    <%@ include file="/WEB-INF/view/jsp/component/footer.jsp" %>
+    <jsp:include page="/WEB-INF/view/jsp/component/footer.jsp" />
 </body>
 </html>

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class ContainerCaptchaDrawer {
+public class CaptchaDrawerContainer {
     private final List<Supplier<CaptchaDrawer>> container;
 
-    public ContainerCaptchaDrawer() {
+    public CaptchaDrawerContainer() {
         container = new ArrayList<>();
         initContainer();
     }

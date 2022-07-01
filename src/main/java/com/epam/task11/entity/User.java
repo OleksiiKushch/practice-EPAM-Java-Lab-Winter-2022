@@ -51,8 +51,8 @@ public class User extends Entity {
     @Override
     public String toString() {
         return "User{" +
-                ", id=" + id +
-                "email='" + email + '\'' +
+                "id=" + id +
+                ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
