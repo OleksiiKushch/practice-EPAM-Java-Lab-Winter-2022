@@ -2,19 +2,25 @@ package com.epam.task11.validation.impl;
 
 import com.epam.task11.util.RegistrationData;
 import com.epam.task11.validation.RegexPattern;
+import com.epam.task11.validation.ValidationMessages;
 import com.epam.task11.validation.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class RegistrationDataValidator implements Validator<RegistrationData> {
     private String captchaCode;
+    private int captchaTimeout;
 
     public RegistrationDataValidator() {
     }
 
-    public RegistrationDataValidator(String captchaCode) {
+    public RegistrationDataValidator(String captchaCode, int captchaTimeout) {
         this.captchaCode = captchaCode;
+        this.captchaTimeout = captchaTimeout;
     }
 
     public String getCaptchaCode() {
@@ -24,35 +30,46 @@ public class RegistrationDataValidator implements Validator<RegistrationData> {
     public void setCaptchaCode(String captchaCode) {
         this.captchaCode = captchaCode;
     }
+
+    public int getCaptchaTimeout() {
+        return captchaTimeout;
+    }
+
+    public void setCaptchaTimeout(int captchaTimeout) {
+        this.captchaTimeout = captchaTimeout;
+    }
+
     @Override
     public List<String> isValid(RegistrationData registrationData) {
         List<String> errors = new ArrayList<>();
         if (isNullOrBlank(registrationData.getEmail())) {
-            errors.add("Email address must be filled out (required field)!");
+            errors.add(ValidationMessages.EMAIL_REQUIRED_FIELD);
         } else if (!RegexPattern.EMAIL_PATTERN.matcher(registrationData.getEmail().strip()).matches()) {
-            errors.add("Invalid format email address, must contain '@' symbol!");
+            errors.add(ValidationMessages.INVALID_EMAIL);
         }
 
         if (isNullOrBlank(registrationData.getFirstName()) || isNullOrBlank(registrationData.getLastName())) {
-            errors.add("First and last name must be filled out (required fields)!");
+            errors.add(ValidationMessages.NAMES_REQUIRED_FIELDS);
         } else if (!RegexPattern.SHORT_NAME_PATTERN.matcher(registrationData.getFirstName().strip()).matches()
                 || !RegexPattern.SHORT_NAME_PATTERN.matcher(registrationData.getLastName().strip()).matches()) {
-            errors.add("The maximum allowed number of characters for first and last name is 40!");
+            errors.add(ValidationMessages.NAMES_MAXIMUM_LENGTH);
         }
 
-        if (isNullOrBlank(registrationData.getPassword()) || isNullOrBlank(registrationData.getConfirmationPassword())) {
-            errors.add("Password and confirmation password must be filled out (required fields)!");
+        if (!registrationData.getPassword().equals(registrationData.getConfirmationPassword())) {
+            errors.add(ValidationMessages.PASSWORDS_MUST_MATCH);
+        } else if (isNullOrBlank(registrationData.getPassword()) || isNullOrBlank(registrationData.getConfirmationPassword())) {
+            errors.add(ValidationMessages.PASSWORDS_REQUIRED_FIELDS);
         } else if (!RegexPattern.PASSWORD_PATTERN.matcher(registrationData.getPassword().strip()).matches()
                 || !RegexPattern.PASSWORD_PATTERN.matcher(registrationData.getConfirmationPassword().strip()).matches()) {
-            errors.add("Password cannot be shorter than 6 characters and longer than 18!");
-        } else if (!registrationData.getPassword().equals(registrationData.getConfirmationPassword())) {
-            errors.add("Password and confirmation password must match!");
+            errors.add(ValidationMessages.PASSWORDS_LENGTH_RESTRICTIONS);
         }
 
         if (isNullOrBlank(registrationData.getCaptchaCode())) {
-            errors.add("Captcha code must be filled out (required fields and it's cannot be empty)!");
+            errors.add(ValidationMessages.CAPTCHA_CODE_REQUIRED_FIELDS);
+        } else if (registrationData.getCaptchaLifetime() > captchaTimeout) {
+            errors.add(ValidationMessages.CAPTCHA_TIMEOUT);
         } else if (!registrationData.getCaptchaCode().strip().equals(captchaCode)) {
-            errors.add("Captcha code didn't match, try again.");
+            errors.add(ValidationMessages.CAPTCHA_CODE_NOT_MATCH);
         }
 
         return errors;

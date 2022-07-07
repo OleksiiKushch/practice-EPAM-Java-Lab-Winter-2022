@@ -6,6 +6,9 @@ import com.epam.task11.entity.User;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class RegistrationData {
     private String email;
     private String firstName;
@@ -13,6 +16,7 @@ public class RegistrationData {
     private String password;
     private String confirmationPassword;
     private String captchaCode;
+    private int captchaLifetime;
 
     public String getEmail() {
         return email;
@@ -62,6 +66,14 @@ public class RegistrationData {
         this.captchaCode = captchaCode;
     }
 
+    public int getCaptchaLifetime() {
+        return captchaLifetime;
+    }
+
+    public void setCaptchaLifetime(int captchaLifetime) {
+        this.captchaLifetime = captchaLifetime;
+    }
+
     @Override
     public String toString() {
         return "RegistrationData{" +
@@ -71,8 +83,21 @@ public class RegistrationData {
                 ", password='" + password + '\'' +
                 ", confirmationPassword='" + confirmationPassword + '\'' +
                 ", captchaCode='" + captchaCode + '\'' +
+                ", captchaLifetime=" + captchaLifetime +
                 '}';
     }
+
+    /** registration non-sensitive data (without password and confirmation password) */
+    public String toStringWithoutSensitiveData() {
+        return "RegistrationData{" +
+                "email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", captchaCode='" + captchaCode + '\'' +
+                ", captchaLifetime=" + captchaLifetime +
+                '}';
+    }
+
     public User mapUser() {
         return new User.Builder()
                 .withEmail(email)

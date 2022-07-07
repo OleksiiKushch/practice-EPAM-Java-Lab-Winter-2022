@@ -4,6 +4,9 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class CaptchaCodeContainer {
     private Map<Integer, String> container;
 

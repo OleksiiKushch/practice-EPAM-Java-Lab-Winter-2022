@@ -1,8 +1,9 @@
 package com.epam.task11.controller.servlet;
 
 import com.epam.task11.constant.ShopLiterals;
-import com.epam.task11.controller.servlet.captcha.CaptchaCodeStorageStrategy;
+import com.epam.task11.controller.servlet.captcha.CaptchaDataStorageStrategy;
 import com.epam.task11.entity.User;
+import com.epam.task11.repository.impl.mock.UserRepositoryMockImpl;
 import com.epam.task11.service.MyServiceException;
 import com.epam.task11.service.impl.UserServiceImpl;
 import com.epam.task11.util.RegistrationData;
@@ -20,6 +21,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Oleksii Kushch
+ */
 @WebServlet("/registration")
 public class RegistrationServlet extends HttpServlet {
     private static final Logger log = LogManager.getLogger(RegistrationServlet.class);
@@ -46,20 +50,24 @@ public class RegistrationServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("User try registration");
         RegistrationData registrationData = getDataFromRequest(request);
-        log.debug("Registration data: " + registrationData);
 
-        CaptchaCodeStorageStrategy captchaCodeStorageStrategy = (CaptchaCodeStorageStrategy) request.getServletContext()
-                .getAttribute(ShopLiterals.CAPTCHA_CODE_STORAGE_STRATEGY);
+        CaptchaDataStorageStrategy captchaDataStorageStrategy = (CaptchaDataStorageStrategy) request.getServletContext()
+                .getAttribute(ShopLiterals.CAPTCHA_DATA_STORAGE_STRATEGY);
 
-        String storedCaptchaCode = captchaCodeStorageStrategy.getStoredCode(request);
+        registrationData.setCaptchaLifetime(captchaDataStorageStrategy.getCaptchaLifetime(request));
+        log.debug("Registration data: " + registrationData.toStringWithoutSensitiveData());
+
+        String storedCaptchaCode = captchaDataStorageStrategy.getStoredCode(request);
         log.debug("Stored captcha code: " + storedCaptchaCode);
 
-        List<String> errors = new RegistrationDataValidator(storedCaptchaCode).isValid(registrationData);
+        captchaDataStorageStrategy.cleanStoredData(request);
+
+        List<String> errors = new RegistrationDataValidator(storedCaptchaCode, captchaDataStorageStrategy.getCaptchaTimeout()).isValid(registrationData);
         if (errors.isEmpty()) {
             User user = registrationData.mapUser();
-            log.debug("New user data: " + user);
+            log.debug("New user data: " + user.toStringWithoutSensitiveData());
             try {
-                new UserServiceImpl().create(user);
+                new UserServiceImpl(new UserRepositoryMockImpl()).create(user);
             } catch (MyServiceException exception) {
                 errors.add(exception.getMessage());
                 log.error(exception.getMessage());
@@ -71,7 +79,6 @@ public class RegistrationServlet extends HttpServlet {
         } else {
             log.debug("Registration data is invalid, error messages: " + errors);
             cleanPasswords(registrationData);
-            log.debug("Registration data after clean password: " + registrationData);
             HttpSession session = request.getSession();
             session.setAttribute(ShopLiterals.REGISTRATION_DATA, registrationData);
             session.setAttribute(ShopLiterals.ERRORS, errors);

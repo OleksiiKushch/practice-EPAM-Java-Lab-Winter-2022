@@ -3,6 +3,11 @@ package com.epam.task11.util.captcha.draw;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+/**
+ * Captcha drawer (render) or just template on which the captcha is drawn.
+ *
+ * @author Oleksii Kushch
+ */
 public abstract class CaptchaDrawer {
     public static final int WIDTH = 153;
     public static final int HEIGHT = 58;

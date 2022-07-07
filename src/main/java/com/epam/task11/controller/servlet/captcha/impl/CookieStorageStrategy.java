@@ -10,18 +10,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 
-public class CookieStorageStrategy extends ContextAppCaptchaCodeStorageStrategy {
+/**
+ * Implementation that stores captcha data in cookie.
+ *
+ * @author Oleksii Kushch
+ */
+public class CookieStorageStrategy extends ContextAppCaptchaDataStorageStrategy {
     private static final Logger log = LogManager.getLogger(CookieStorageStrategy.class);
 
-    public CookieStorageStrategy(CaptchaCodeContainer captchaCodeContainer) {
-        super(captchaCodeContainer);
+    public CookieStorageStrategy(CaptchaCodeContainer captchaCodeContainer, int captchaTimeout) {
+        super(captchaCodeContainer, captchaTimeout);
     }
 
     @Override
     protected void saveId(HttpServletRequest request, HttpServletResponse response, Integer captchaId) {
         Cookie cookie = new Cookie(ShopLiterals.CAPTCHA_ID, String.valueOf(captchaId));
-        cookie.setMaxAge(TIMEOUT); // set storage timeout on captcha id
+        cookie.setMaxAge(captchaTimeout); // set storage timeout on captcha id
         response.addCookie(cookie);
+        saveCaptchaLoadingTime(request);
     }
 
     @Override
@@ -32,6 +38,11 @@ public class CookieStorageStrategy extends ContextAppCaptchaCodeStorageStrategy 
                 .findAny()
                 .map(s -> captchaCodeContainer.getContainer().get(Integer.valueOf(s)))
                 .orElse(null);
+    }
+
+    @Override
+    public void cleanStoredData(HttpServletRequest request) {
+        cleanSavedCaptchaLoadingTime(request);
     }
 
     @Override

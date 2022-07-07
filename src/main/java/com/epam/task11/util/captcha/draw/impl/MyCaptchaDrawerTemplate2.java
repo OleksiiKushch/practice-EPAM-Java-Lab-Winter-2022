@@ -5,6 +5,9 @@ import com.epam.task11.util.captcha.draw.CaptchaDrawer;
 import java.awt.*;
 import java.security.SecureRandom;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class MyCaptchaDrawerTemplate2 extends CaptchaDrawer {
     private static final int MIN_CODE_FONT_SIZE = 30;
     private static final int MAX_CODE_FONT_SIZE = 52;

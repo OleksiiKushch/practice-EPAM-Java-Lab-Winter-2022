@@ -10,8 +10,7 @@ public final class ShopLiterals {
     public static final String CONFIRMATION_PASSWORD = "confirmationPassword";
     public static final String CAPTCHA = "captcha";
     public static final String CAPTCHA_CODE = "captchaCode";
-//    public static final String CAPTCHA_CODE_CONTAINER = "captchaCodeContainer";
     public static final String CAPTCHA_ID = "captchaId";
-    public static final String CAPTCHA_CODE_STORAGE_STRATEGY = "captchaCodeStorageStrategy";
-
+    public static final String CAPTCHA_DATA_STORAGE_STRATEGY = "captchaDataStorageStrategy";
+    public static final String TIME_CAPTCHA_LOAD = "timeCaptchaLoad";
 }

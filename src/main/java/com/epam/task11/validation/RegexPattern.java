@@ -2,6 +2,9 @@ package com.epam.task11.validation;
 
 import java.util.regex.Pattern;
 
+/**
+ * @author Oleksii Kushch
+ */
 public final class RegexPattern {
     public static final int MIN_LENGTH_NAME = 1;
     public static final int MAX_LENGTH_SHORT_NAME = 40;

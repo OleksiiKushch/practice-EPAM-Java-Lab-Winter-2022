@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
+/**
+ * A container that stores captcha rendering templates and, if necessary, returns a random one.
+ *
+ * @author Oleksii Kushch
+ */
 public class CaptchaDrawerContainer {
     private final List<Supplier<CaptchaDrawer>> container;
 
@@ -16,7 +21,7 @@ public class CaptchaDrawerContainer {
         initContainer();
     }
 
-    public CaptchaDrawer getRandom() {
+    public CaptchaDrawer getRandomTemplate() {
         return container.get(new SecureRandom().nextInt(container.size())).get();
     }
 

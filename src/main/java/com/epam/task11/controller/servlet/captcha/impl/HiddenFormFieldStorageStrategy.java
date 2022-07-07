@@ -7,38 +7,42 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
-public class HiddenFormFieldStorageStrategy extends ContextAppCaptchaCodeStorageStrategy {
+/**
+ * Implementation that stores captcha data in hidden form field on html/jsp page.
+ *
+ * @author Oleksii Kushch
+ */
+public class HiddenFormFieldStorageStrategy extends ContextAppCaptchaDataStorageStrategy {
     private static final Logger log = LogManager.getLogger(HiddenFormFieldStorageStrategy.class);
 
-    public HiddenFormFieldStorageStrategy(CaptchaCodeContainer captchaCodeContainer) {
-        super(captchaCodeContainer);
+    public HiddenFormFieldStorageStrategy(CaptchaCodeContainer captchaCodeContainer, int captchaTimeout) {
+        super(captchaCodeContainer, captchaTimeout);
     }
 
     @Override
     protected void saveId(HttpServletRequest request, HttpServletResponse response, Integer captchaId) {
-        HttpSession session = request.getSession();
-
-        session.setAttribute(ShopLiterals.CAPTCHA_ID, captchaId);
-
-        // set storage timeout on captcha id
-        Executors.newSingleThreadScheduledExecutor().schedule(() -> session.removeAttribute(ShopLiterals.CAPTCHA_ID),
-                TIMEOUT, TimeUnit.SECONDS);
+        request.setAttribute(ShopLiterals.CAPTCHA_ID, captchaId);
+        saveCaptchaLoadingTime(request);
     }
 
     @Override
     public String getStoredCode(HttpServletRequest request) {
-        Integer captchaId = (Integer) request.getSession().getAttribute(ShopLiterals.CAPTCHA_ID);
+        Integer captchaId = Integer.valueOf(request.getParameter(ShopLiterals.CAPTCHA_ID));
         log.debug("Stored captcha id: " + captchaId);
         return captchaCodeContainer.getContainer().get(captchaId);
     }
 
     @Override
+    public void cleanStoredData(HttpServletRequest request) {
+        cleanSavedCaptchaLoadingTime(request);
+    }
+
+    @Override
     public String getHtml(HttpServletRequest request) {
-        return "<img src='captcha' /><input name='captchaId' value='"
-                + request.getSession().getAttribute(ShopLiterals.CAPTCHA_ID) + "' type='hidden'>";
+        Integer captchaId = (Integer) request.getAttribute(ShopLiterals.CAPTCHA_ID);
+        return "<img src='captcha?" + ShopLiterals.CAPTCHA_ID + "=" + captchaId + "' />" +
+                "<input name='" + ShopLiterals.CAPTCHA_ID + "' value='"
+                + captchaId + "' type='hidden'>";
     }
 }

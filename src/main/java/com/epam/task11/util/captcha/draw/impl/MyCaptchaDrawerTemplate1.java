@@ -4,6 +4,9 @@ import com.epam.task11.util.captcha.draw.CaptchaDrawer;
 
 import java.awt.*;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class MyCaptchaDrawerTemplate1 extends CaptchaDrawer {
     private static final Color CODE_COLOR = new Color(95, 75, 139);
     private static final Font CODE_FONT = new Font("", Font.PLAIN, 48);

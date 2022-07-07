@@ -1,5 +1,8 @@
 package com.epam.task11.entity;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class User extends Entity {
     private String email;
     private String firstName;
@@ -56,6 +59,16 @@ public class User extends Entity {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
+                '}';
+    }
+
+    /** user non-sensitive data (without password) */
+    public String toStringWithoutSensitiveData() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 '}';
     }
 

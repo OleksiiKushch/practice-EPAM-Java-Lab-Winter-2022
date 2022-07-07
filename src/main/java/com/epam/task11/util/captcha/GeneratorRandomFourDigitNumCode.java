@@ -3,7 +3,7 @@ package com.epam.task11.util.captcha;
 import java.security.SecureRandom;
 
 /**
- * generates a random four-digit numeric code
+ * Generates a random four-digit numeric code.
  */
 public class GeneratorRandomFourDigitNumCode implements GeneratorCode {
     private static final int NUM_DIGITS = 4;

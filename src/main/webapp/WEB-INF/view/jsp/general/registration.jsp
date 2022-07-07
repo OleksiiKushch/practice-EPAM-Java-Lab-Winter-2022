@@ -33,7 +33,7 @@
         <h1 class="my-3">Registration page:</h1>
         <div class="card bg-light">
             <div class="card-body">
-                <form name="registrationForm" class="was-validated" action="registration" method="post" > <!-- onsubmit="return validationRegistrationForm()" -->
+                <form name="registrationForm" class="was-validated" action="registration" method="post" onsubmit="return validationRegistrationForm()" >
                     <div class="mb-3">
                         <label for="inputEmail" class="form-label">Email address:</label>
                         <input type="email" class="form-control" id="inputEmail" placeholder="email address"
