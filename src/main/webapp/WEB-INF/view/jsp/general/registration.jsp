@@ -17,7 +17,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/script/validator.general.form.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/script/validator.general-form.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/script/reload-captcha.js"></script>
 </head>
 
 <c:set var="saved_email" value="${requestScope[ShopLiterals.REGISTRATION_DATA].email}"/>
@@ -64,9 +65,11 @@
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-sm-4">
-                                <captchaProvider:get />
+                                <span id="captchaContainer">
+                                    <captchaProvider:get />
+                                </span>
                                 <br>
-                                <button type="button" class="btn btn-link">reload</button>
+                                <button type="button" onclick="reloadCaptcha()" class="btn btn-link">reload</button>
                             </div>
                             <div class="col-sm-8">
                                 <label for="inputCaptcha" class="form-label">Enter the code from the image here:</label>

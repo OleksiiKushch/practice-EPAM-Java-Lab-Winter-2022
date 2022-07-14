@@ -16,9 +16,9 @@ import java.io.IOException;
 /**
  * @author Oleksii Kushch
  */
-@WebServlet("/captcha")
-public class CaptchaServlet extends HttpServlet {
-    private static final Logger log = LogManager.getLogger(CaptchaServlet.class);
+@WebServlet("/captchaProvider")
+public class CaptchaProviderServlet extends HttpServlet {
+    private static final Logger log = LogManager.getLogger(CaptchaProviderServlet.class);
 
     private static final String IMG_FORMAT = "jpg";
 
@@ -32,10 +32,10 @@ public class CaptchaServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String code = ((CaptchaDataStorageStrategy) request.getServletContext().getAttribute(ShopLiterals.CAPTCHA_DATA_STORAGE_STRATEGY)).getStoredCode(request);
+        log.debug("Stored captcha code: " + code);
         ServletOutputStream outputStream = response.getOutputStream();
-        ImageIO.write(captchaDrawerContainer.getRandomTemplate().drawCaptcha(
-                ((CaptchaDataStorageStrategy) request.getServletContext().getAttribute(ShopLiterals.CAPTCHA_DATA_STORAGE_STRATEGY)).getStoredCode(request)),
-                IMG_FORMAT, outputStream);
+        ImageIO.write(captchaDrawerContainer.getRandomTemplate().drawCaptcha(code), IMG_FORMAT, outputStream);
         outputStream.flush();
     }
 }

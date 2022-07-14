@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 /**
  * Implementation captcha data storage strategy that stored data (captcha code) in session.
@@ -61,6 +62,6 @@ public class SessionCaptchaDataStorageStrategy extends CaptchaDataStorageStrateg
 
     @Override
     public String getHtml(HttpServletRequest request) {
-        return "<img src='captcha' />";
+        return "<img src='captchaProvider?t=" + new Date().getTime() + "' />";
     }
 }

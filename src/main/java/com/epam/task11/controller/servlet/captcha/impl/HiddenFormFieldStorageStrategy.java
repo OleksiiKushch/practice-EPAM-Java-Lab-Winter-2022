@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * Implementation that stores captcha data in hidden form field on html/jsp page.
@@ -41,8 +42,8 @@ public class HiddenFormFieldStorageStrategy extends ContextAppCaptchaDataStorage
     @Override
     public String getHtml(HttpServletRequest request) {
         Integer captchaId = (Integer) request.getAttribute(ShopLiterals.CAPTCHA_ID);
-        return "<img src='captcha?" + ShopLiterals.CAPTCHA_ID + "=" + captchaId + "' />" +
-                "<input name='" + ShopLiterals.CAPTCHA_ID + "' value='"
-                + captchaId + "' type='hidden'>";
+        return "<img src='captchaProvider?" + ShopLiterals.CAPTCHA_ID + "=" + captchaId +
+                "&t=" + new Date().getTime() + "' />" +
+                "<input name='" + ShopLiterals.CAPTCHA_ID + "' value='" + captchaId + "' type='hidden'>";
     }
 }

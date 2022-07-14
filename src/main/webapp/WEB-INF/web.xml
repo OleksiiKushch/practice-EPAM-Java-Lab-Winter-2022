@@ -27,12 +27,12 @@
 
     <context-param>
         <param-name>captcha-data-stored-strategy</param-name>
-        <param-value>hidden_field</param-value> <!-- session / hidden_field / cookie -->
+        <param-value>cookie</param-value> <!-- session / hidden_field / cookie -->
     </context-param>
 
     <context-param>
         <param-name>captcha-timeout</param-name>
-        <param-value>20</param-value>
+        <param-value>20</param-value> <!-- seconds -->
     </context-param>
 
     <listener>

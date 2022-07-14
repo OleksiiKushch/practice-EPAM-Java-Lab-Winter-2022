@@ -9,6 +9,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Implementation that stores captcha data in cookie.
@@ -47,6 +48,6 @@ public class CookieStorageStrategy extends ContextAppCaptchaDataStorageStrategy 
 
     @Override
     public String getHtml(HttpServletRequest request) {
-        return "<img src='captcha' />";
+        return "<img src='captchaProvider?t=" + new Date().getTime() + "' />";
     }
 }
