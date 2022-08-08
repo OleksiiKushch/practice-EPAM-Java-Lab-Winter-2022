@@ -24,6 +24,8 @@
 
         <json-simple.version>1.1.1</json-simple.version>
 
+        <mysql.version>8.0.29</mysql.version>
+
     </properties>
 
     <dependencies>
@@ -86,6 +88,11 @@
             <version>1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
 
     </dependencies>
 

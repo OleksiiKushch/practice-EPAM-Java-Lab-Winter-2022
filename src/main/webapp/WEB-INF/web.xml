@@ -6,6 +6,10 @@
 
     <display-name>BookShop</display-name>
 
+    <welcome-file-list>
+        <welcome-file>/WEB-INF/view/jsp/general/main.jsp</welcome-file>
+    </welcome-file-list>
+
     <session-config>
         <session-timeout>30</session-timeout>
     </session-config>
@@ -20,6 +24,13 @@
         <location>/WEB-INF/view/jsp/error/internal_server_error.jsp</location>
     </error-page>
 
+    <resource-ref>
+        <description>DB Connection</description>
+        <res-ref-name>jdbc/bookShop</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+    </resource-ref>
+
     <context-param>
         <param-name>log4j-config-location</param-name>
         <param-value>WEB-INF/log4j.properties</param-value>
@@ -29,7 +40,6 @@
         <param-name>captcha-data-stored-strategy</param-name>
         <param-value>cookie</param-value> <!-- session / hidden_field / cookie -->
     </context-param>
-
     <context-param>
         <param-name>captcha-timeout</param-name>
         <param-value>20</param-value> <!-- seconds -->

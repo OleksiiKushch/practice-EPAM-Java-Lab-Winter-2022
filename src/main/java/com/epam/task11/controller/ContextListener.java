@@ -21,6 +21,7 @@ import java.util.Map;
  */
 @WebListener("application context listener")
 public class ContextListener implements ServletContextListener {
+    public static final String ABSOLUTE_PATH_STORAGE_AVATARS = "C:/javaTech/apache-tomcat-8.5.81/resources/practice-EPAM-Java-Lab-Winter-2022-1.0-SNAPSHOT/user_avatars/";
 
     /**
      * Initialize log4j and some app settings when the application is being started
