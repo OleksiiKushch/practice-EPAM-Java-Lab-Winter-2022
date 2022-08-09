@@ -9,20 +9,23 @@ import org.apache.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class UserToPreparedStatement implements Mapper<User, PreparedStatement> {
     private static final Logger LOG = LogManager.getLogger(UserToPreparedStatement.class);
 
     @Override
-    public void map(User source, PreparedStatement target) throws MapException {
+    public void map(User user, PreparedStatement preparedStatement) throws MapException {
         int i = 0;
         try {
-            target.setString(++i, source.getEmail());
-            target.setString(++i, source.getFirstName());
-            target.setString(++i, source.getLastName());
-            target.setString(++i, source.getPassword());
+            preparedStatement.setString(++i, user.getEmail());
+            preparedStatement.setString(++i, user.getFirstName());
+            preparedStatement.setString(++i, user.getLastName());
+            preparedStatement.setString(++i, user.getPassword());
         } catch (SQLException exception) {
             LOG.warn(exception.getMessage());
-            throw new MapException("", exception);
+            throw new MapException(exception.getMessage(), exception);
         }
     }
 }

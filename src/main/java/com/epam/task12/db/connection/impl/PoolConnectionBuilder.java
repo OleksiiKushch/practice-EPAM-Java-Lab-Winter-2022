@@ -10,8 +10,11 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Objects;
 
-
+/**
+ * @author Oleksii Kushch
+ */
 public class PoolConnectionBuilder implements ConnectionBuilder {
     private static final Logger LOG = LogManager.getLogger(PoolConnectionBuilder.class);
 
@@ -21,7 +24,7 @@ public class PoolConnectionBuilder implements ConnectionBuilder {
     }
 
     public static synchronized PoolConnectionBuilder getInstance() {
-        if (dataSource == null) {
+        if (Objects.isNull(dataSource)) {
             try {
                 Context ctx = new InitialContext();
                 dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/bookShop");

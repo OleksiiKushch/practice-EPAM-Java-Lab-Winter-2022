@@ -1,11 +1,5 @@
 package com.epam.task11.util;
 
-import com.epam.task11.constant.ShopLiterals;
-import com.epam.task11.entity.User;
-
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * @author Oleksii Kushch
  */
@@ -96,30 +90,5 @@ public class RegistrationData {
                 ", captchaCode='" + captchaCode + '\'' +
                 ", captchaLifetime=" + captchaLifetime +
                 '}';
-    }
-
-    public User mapUser() {
-        return new User.Builder()
-                .withEmail(email)
-                .withFirstName(firstName)
-                .withLastName(lastName)
-                .withPassword(password)
-                .build();
-    }
-
-    public static RegistrationData mapRegistrationData(List<String> parameters) {
-        RegistrationData result = new RegistrationData();
-        int i = -1;
-        result.setEmail(parameters.get(++i));
-        result.setFirstName(parameters.get(++i));
-        result.setLastName(parameters.get(++i));
-        result.setPassword(parameters.get(++i));
-        result.setConfirmationPassword(parameters.get(++i));
-        result.setCaptchaCode(parameters.get(++i));
-        return result;
-    }
-    public static List<String> getListStrParameters() {
-        return Arrays.asList(ShopLiterals.EMAIL, ShopLiterals.FIRST_NAME, ShopLiterals.LAST_NAME,
-                ShopLiterals.PASSWORD, ShopLiterals.CONFIRMATION_PASSWORD, ShopLiterals.CAPTCHA);
     }
 }

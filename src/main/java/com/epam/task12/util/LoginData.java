@@ -1,5 +1,8 @@
 package com.epam.task12.util;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class LoginData {
     private String email;
     private String password;
@@ -28,6 +31,7 @@ public class LoginData {
                 '}';
     }
 
+    /** login non-sensitive data (without password) */
     public String toStringWithoutSensitiveData() {
         return "LoginData{" +
                 "email='" + email + '\'' +

@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class DBUtils {
     private static final Logger LOG = LogManager.getLogger(DBUtils.class);
 

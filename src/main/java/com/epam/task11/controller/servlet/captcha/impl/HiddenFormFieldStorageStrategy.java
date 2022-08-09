@@ -24,6 +24,7 @@ public class HiddenFormFieldStorageStrategy extends ContextAppCaptchaDataStorage
     @Override
     protected void saveId(HttpServletRequest request, HttpServletResponse response, Integer captchaId) {
         request.setAttribute(ShopLiterals.CAPTCHA_ID, captchaId);
+        log.debug("Save captcha id: " + captchaId);
         saveCaptchaLoadingTime(request);
     }
 

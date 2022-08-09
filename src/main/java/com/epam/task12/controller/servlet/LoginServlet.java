@@ -6,7 +6,7 @@ import com.epam.task11.service.MyServiceException;
 import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.connection.impl.PoolConnectionBuilder;
 import com.epam.task12.db.dao.impl.mysql.MySqlUserDao;
-import com.epam.task12.mapper.impl.HttpRequestToLoginData;
+import com.epam.task12.mapper.impl.HttpServletRequestToLoginData;
 import com.epam.task12.service.UserService;
 import com.epam.task12.service.impl.UserServiceImpl;
 import com.epam.task12.service.transaction.impl.TransactionManagerImpl;
@@ -50,13 +50,13 @@ public class LoginServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         LOG.info("User try log in");
         LoginData loginData = new LoginData();
-        new HttpRequestToLoginData().map(request, loginData);
+        new HttpServletRequestToLoginData().map(request, loginData);
 
         List<String> errors = new LoginDataValidator().isValid(loginData);
         User user = null;
         if (errors.isEmpty()) {
             ConnectionBuilder connectionBuilder = PoolConnectionBuilder.getInstance();
-            UserService userService = new UserServiceImpl(new MySqlUserDao(connectionBuilder), new TransactionManagerImpl(connectionBuilder));
+            UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new TransactionManagerImpl(connectionBuilder));
             try {
                 user = userService.login(loginData);
             } catch (MyServiceException exception) {

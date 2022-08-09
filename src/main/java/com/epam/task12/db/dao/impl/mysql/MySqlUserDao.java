@@ -11,7 +11,9 @@ import org.apache.log4j.Logger;
 
 import java.sql.*;
 
-
+/**
+ * @author Oleksii Kushch
+ */
 public class MySqlUserDao implements UserDao {
     private static final Logger LOG = LogManager.getLogger(TransactionManagerImpl.class);
 
@@ -25,7 +27,7 @@ public class MySqlUserDao implements UserDao {
     public User getUserForEmail(String email) throws SQLException {
         User result = null;
         try (Connection connection = connectionBuilder.getConnection();
-             PreparedStatement ps = connection.prepareStatement(MySqlConstant.GET_USER_BY_EMAIL)) {
+             PreparedStatement ps = connection.prepareStatement(MySqlConstant.UserQuery.GET_USER_BY_EMAIL)) {
             ps.setString(1, email);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -43,7 +45,7 @@ public class MySqlUserDao implements UserDao {
     @Override
     public int create(User user) throws SQLException {
         try (Connection connection = connectionBuilder.getConnection();
-             PreparedStatement ps = connection.prepareStatement(MySqlConstant.CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = connection.prepareStatement(MySqlConstant.UserQuery.CREATE_USER, Statement.RETURN_GENERATED_KEYS)) {
             new UserToPreparedStatement().map(user, ps);
             int result = ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -53,7 +55,7 @@ public class MySqlUserDao implements UserDao {
             }
             return result;
         } catch (SQLException exception) {
-            LOG.error(exception.getMessage());
+            LOG.warn(exception.getMessage());
             throw exception;
         }
     }

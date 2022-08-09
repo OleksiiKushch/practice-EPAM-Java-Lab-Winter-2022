@@ -7,7 +7,10 @@ import com.epam.task12.util.LoginData;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class HttpRequestToLoginData implements Mapper<HttpServletRequest, LoginData> {
+/**
+ * @author Oleksii Kushch
+ */
+public class HttpServletRequestToLoginData implements Mapper<HttpServletRequest, LoginData> {
     @Override
     public void map(HttpServletRequest request, LoginData loginData) throws MapException {
         loginData.setEmail(request.getParameter(ShopLiterals.EMAIL));

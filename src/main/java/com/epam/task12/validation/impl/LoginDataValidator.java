@@ -8,6 +8,9 @@ import com.epam.task12.util.LoginData;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Oleksii Kushch
+ */
 public class LoginDataValidator implements Validator<LoginData> {
     @Override
     public List<String> isValid(LoginData loginData) {
@@ -19,7 +22,7 @@ public class LoginDataValidator implements Validator<LoginData> {
         }
 
         if (isNullOrBlank(loginData.getPassword())) {
-            errors.add(ValidationMessages.PASSWORDS_REQUIRED_FIELDS);
+            errors.add(ValidationMessages.PASSWORD_REQUIRED_FIELD);
         } else if (!RegexPattern.PASSWORD_PATTERN.matcher(loginData.getPassword().strip()).matches()) {
             errors.add(ValidationMessages.PASSWORDS_LENGTH_RESTRICTIONS);
         }
