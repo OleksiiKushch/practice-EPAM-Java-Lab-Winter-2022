@@ -45,6 +45,7 @@ public class SessionCaptchaDataStorageStrategy extends CaptchaDataStorageStrateg
 
         // save captcha code
         session.setAttribute(ShopLiterals.CAPTCHA_CODE, code);
+        log.debug("Save captcha code: " + code);
 
         saveCaptchaLoadingTime(request);
     }

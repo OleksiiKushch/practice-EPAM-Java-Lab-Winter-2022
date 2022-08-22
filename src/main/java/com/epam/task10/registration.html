@@ -5,8 +5,12 @@
     <title>BookShop</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- custom styles -->
+    <link rel="stylesheet" href="styles/upload.image.css">
 
     <!-- custom scripts -->
     <script src="scripts/load.page.components.js"></script>
@@ -30,11 +34,27 @@
                         <input type="password" class="form-control" id="inputPassword" placeholder="password"
                                name="password" minlength="6" maxlength="18" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="inputConfirmationPassword" class="form-label">Confirmation password:</label>
-                        <input type="password" class="form-control" id="inputConfirmationPassword" placeholder="confirmation password"
-                               name="confirmation_password" minlength="6" maxlength="18" required>
+
+                    <div class="row py-4">
+                        <div class="col-lg-8 mx-auto">
+                            <!-- Upload image (avatar) input -->
+                            <p class="text-center">Set your avatar, upload your desired image.</p>
+                            <div class="input-group mb-3 px-2 py-2 border border-success rounded-pill">
+                                <input id="upload" type="file" onchange="readURL(this);" class="form-control border-0">
+                                <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+                                <div id="inputImage" class="input-group-append">
+                                    <label for="upload" class="btn btn-outline-primary m-0 rounded-pill px-4"><i class="fa fa-cloud-upload mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
+                                    <button type="button" class="btn btn-outline-warning m-0 ml-1 rounded-pill px-4"><small class="text-uppercase font-weight-bold text-muted">Clean</small></button>
+                                </div>
+                            </div>
+                            <!-- Uploaded image (avatar) area -->
+                            <p class="text-center">The image (avatar) uploaded will be rendered inside the box below.</p>
+                            <div id="imageArea" class="image-area mt-4">
+                                <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                            </div>
+                        </div>
                     </div>
+
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-sm-4">
@@ -43,7 +63,7 @@
                                 <a href="">reload</a>
                             </div>
                             <div class="col-sm-8">
-                                <label for="inputCaptcha"  class="form-label">Enter the code from the image here:</label>
+                                <label for="inputCaptcha" class="form-label">Enter the code from the image here:</label>
                                 <input type="text" class="form-control" id="inputCaptcha" placeholder="code"
                                        name="captcha" required>
                             </div>
@@ -66,4 +86,7 @@
 <script>
     loadGeneralPageComponents();
 </script>
+<script src="scripts/show.uploaded.image.js"></script>
+<script src="scripts/show.uploaded.image.name.js"></script>
+<script src="scripts/clean.uploaded.image.js"></script>
 </html>

@@ -20,6 +20,15 @@ function validationRegistrationForm() {
     }
 }
 
+function validationLoginForm() {
+    if (!isValidEmail(document.forms["loginForm"]["email"].value)) {
+        return false;
+    }
+    if (!isValidPassword(document.forms["loginForm"]["password"].value)) {
+        return false;
+    }
+}
+
 function isValidEmail(email) {
     if (isEmpty(email)) {
         alert("Email address must be filled out (required field)!");

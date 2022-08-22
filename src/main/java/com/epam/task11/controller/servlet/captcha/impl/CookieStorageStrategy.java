@@ -26,6 +26,7 @@ public class CookieStorageStrategy extends ContextAppCaptchaDataStorageStrategy 
     @Override
     protected void saveId(HttpServletRequest request, HttpServletResponse response, Integer captchaId) {
         Cookie cookie = new Cookie(ShopLiterals.CAPTCHA_ID, String.valueOf(captchaId));
+        log.debug("Save captcha id: " + captchaId);
         cookie.setMaxAge(captchaTimeout); // set storage timeout on captcha id
         response.addCookie(cookie);
         saveCaptchaLoadingTime(request);

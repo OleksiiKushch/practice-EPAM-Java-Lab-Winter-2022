@@ -13,12 +13,16 @@
     <title>BookShop</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    <!-- custom styles -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/styles/upload.image.css">
+
     <!-- custom scripts -->
-    <script src="${pageContext.request.contextPath}/resources/script/validator.general-form.js"></script>
-    <script src="${pageContext.request.contextPath}/resources/script/reload-captcha.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/scripts/validator.general-form.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/scripts/reload-captcha.js"></script>
 </head>
 
 <c:set var="saved_email" value="${requestScope[ShopLiterals.REGISTRATION_DATA].email}"/>
@@ -34,7 +38,7 @@
         <h1 class="my-3">Registration page:</h1>
         <div class="card bg-light">
             <div class="card-body">
-                <form name="registrationForm" class="was-validated" action="registration" method="post" onsubmit="return validationRegistrationForm()" >
+                <form name="registrationForm" class="was-validated" action="registration" method="post" enctype="multipart/form-data" onsubmit="" > <!-- return validationRegistrationForm() -->
                     <div class="mb-3">
                         <label for="inputEmail" class="form-label">Email address:</label>
                         <input type="email" class="form-control" id="inputEmail" placeholder="email address"
@@ -61,6 +65,25 @@
                         <label for="inputConfirmationPassword" class="form-label">Confirmation password:</label>
                         <input type="password" class="form-control" id="inputConfirmationPassword" placeholder="confirmation password"
                                name="${ShopLiterals.CONFIRMATION_PASSWORD}" minlength="${RegexPattern.MIN_LENGTH_PASSWORD}" maxlength="${RegexPattern.MAX_LENGTH_PASSWORD}" required>
+                    </div>
+                    <div class="row py-4">
+                        <div class="col-lg-8 mx-auto">
+                            <!-- Upload image (avatar) input -->
+                            <p class="text-center">Set your avatar, upload your desired image.</p>
+                            <div class="input-group mb-3 px-2 py-2 border border-success rounded-pill">
+                                <input id="upload" type="file" name="${ShopLiterals.AVATAR_IMAGE}" onchange="readURL(this);" class="form-control border-0">
+                                <label id="upload-label" for="upload" class="font-weight-light text-muted">Choose file</label>
+                                <div id="inputImage" class="input-group-append">
+                                    <label for="upload" class="btn btn-outline-primary m-0 rounded-pill px-4"><i class="fa fa-cloud-upload mr-2 text-muted"></i><small class="text-uppercase font-weight-bold text-muted">Choose file</small></label>
+                                    <button type="button" class="btn btn-outline-warning m-0 ml-1 rounded-pill px-4"><small class="text-uppercase font-weight-bold text-muted">Clean</small></button>
+                                </div>
+                            </div>
+                            <!-- Uploaded image (avatar) area -->
+                            <p class="text-center">The image (avatar) uploaded will be rendered inside the box below.</p>
+                            <div class="image-area mt-4">
+                                <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <div class="row">
@@ -101,4 +124,8 @@
 
     <jsp:include page="/WEB-INF/view/jsp/component/footer.jsp" />
 </body>
+<!-- custom scripts -->
+<script src="${pageContext.request.contextPath}/resources/scripts/show.uploaded.image.js"></script>
+<script src="${pageContext.request.contextPath}/resources/scripts/show.uploaded.image.name.js"></script>
+<script src="${pageContext.request.contextPath}/resources/scripts/clean.uploaded.image.js"></script>
 </html>

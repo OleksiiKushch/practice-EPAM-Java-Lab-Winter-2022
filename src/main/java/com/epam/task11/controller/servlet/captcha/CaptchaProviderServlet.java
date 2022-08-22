@@ -34,6 +34,7 @@ public class CaptchaProviderServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String code = ((CaptchaDataStorageStrategy) request.getServletContext().getAttribute(ShopLiterals.CAPTCHA_DATA_STORAGE_STRATEGY)).getStoredCode(request);
         log.debug("Stored captcha code: " + code);
+        response.setContentType("image/jpeg");
         ServletOutputStream outputStream = response.getOutputStream();
         ImageIO.write(captchaDrawerContainer.getRandomTemplate().drawCaptcha(code), IMG_FORMAT, outputStream);
         outputStream.flush();

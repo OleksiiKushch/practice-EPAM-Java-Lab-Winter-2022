@@ -8,3 +8,7 @@ function reloadCaptcha() {
     xhttp.open("GET", "http://localhost:8080/practice-EPAM-Java-Lab-Winter-2022-1.0-SNAPSHOT/reloadCaptcha", true);
     xhttp.send();
 }
+
+window.onload = function() {
+    reloadCaptcha();
+};
