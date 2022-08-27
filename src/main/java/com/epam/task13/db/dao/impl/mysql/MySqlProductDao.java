@@ -12,6 +12,7 @@ import com.epam.task13.mapper.impl.ResultSetToProduct;
 import com.epam.task13.util.PagePaginationData;
 import com.epam.task13.util.ProductFilterFormBean;
 import com.epam.task13.util.SortingData;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -177,7 +178,7 @@ public class MySqlProductDao extends MySqlEntityDao<Product> implements ProductD
 
     private String parseSortingPartOfQuery(SortingData sortingData) {
         StringBuilder result = new StringBuilder();
-        if (Objects.nonNull(sortingData.getParameter())) {
+        if (StringUtils.isNotEmpty(sortingData.getParameter())) {
             result.append("ORDER BY ");
             if (ShopLiterals.NAME.equals(sortingData.getParameter())) {
                 result.append(MySqlConstant.ProductModel.NAME);
