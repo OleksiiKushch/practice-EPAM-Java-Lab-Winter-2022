@@ -2,7 +2,7 @@ package com.epam.task11.service.impl;
 
 import com.epam.task11.entity.User;
 import com.epam.task11.repository.UserRepository;
-import com.epam.task11.service.MyServiceException;
+import com.epam.task11.service.ServiceException;
 import com.epam.task11.service.ServiceMessages;
 import com.epam.task11.service.UserService;
 
@@ -19,10 +19,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void create(User user) throws MyServiceException {
+    public void create(User user) throws ServiceException {
         user.setEmail(user.getEmail().toLowerCase(Locale.ROOT));
         if (userRepository.isContainUser(user.getEmail())) {
-            throw new MyServiceException(ServiceMessages.ACCOUNT_ALREADY_EXISTS);
+            throw new ServiceException(ServiceMessages.ACCOUNT_ALREADY_EXISTS);
         }
         userRepository.insert(user);
     }

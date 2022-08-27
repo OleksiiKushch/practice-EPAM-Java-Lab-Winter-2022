@@ -6,6 +6,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
+<!--    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- custom styles -->
@@ -20,6 +21,158 @@
     <div class="album py-2 bg-light">
         <div class="container">
             <h1 class="my-3">Product catalog:</h1>
+            <hr>
+            <div class="row">
+                <div class="card col-sm-8">
+                    <p class="mt-2">Filtration panel:</p>
+                    <form>
+                    <div class="row">
+                        <aside class="col-sm-6">
+                            <div class="card mb-3">
+                                <article class="card-group-item">
+                                    <header class="card-header">
+                                        <h6 class="title">Range prices</h6>
+                                    </header>
+                                    <div class="filter-content">
+                                        <div class="card-body">
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label>Min Price</label>
+                                                    <input type="number" class="form-control" id="inputEmail4" placeholder="$0">
+                                                </div>
+                                                <div class="form-group col-md-6 text-right">
+                                                    <label>Max Price</label>
+                                                    <input type="number" class="form-control" placeholder="$1,0000">
+                                                </div>
+                                            </div>
+
+                                        </div> <!-- card-body.// -->
+                                    </div>
+                                </article> <!-- card-group-item.// -->
+                                <article class="card-group-item">
+                                    <header class="card-header border-top">
+                                        <h6 class="title">Filtering by category</h6>
+                                    </header>
+                                    <div class="filter-content">
+                                        <div class="card-body">
+                                            <div class="custom-control custom-checkbox">
+                                                <span class="float-right badge badge-light round">31</span>
+                                                <input type="checkbox" class="custom-control-input" id="Check1">
+                                                <label class="custom-control-label" for="Check1">Book</label>
+                                            </div> <!-- form-check.// -->
+                                            <div class="custom-control custom-checkbox">
+                                                <span class="float-right badge badge-light round">67</span>
+                                                <input type="checkbox" class="custom-control-input" id="Check2">
+                                                <label class="custom-control-label" for="Check2">Audiobook</label>
+                                            </div> <!-- form-check.// -->
+                                            <div class="custom-control custom-checkbox">
+                                                <span class="float-right badge badge-light round">7</span>
+                                                <input type="checkbox" class="custom-control-input" id="Check3">
+                                                <label class="custom-control-label" for="Check3">E-Reader</label>
+                                            </div> <!-- form-check.// -->
+                                        </div> <!-- card-body.// -->
+                                    </div>
+                                </article> <!-- card-group-item.// -->
+                            </div> <!-- card.// -->
+                        </aside> <!-- col.// -->
+                        <aside class="col-sm-6">
+                            <div class="card">
+                                <article class="card-group-item">
+                                    <header class="card-header"><h6 class="title">Filtering</h6></header>
+                                    <div class="filter-content">
+                                        <div class="list-group list-group-flush">
+                                            <div class="mt-2 mx-3">
+                                                <label for="filterByName" class="form-label">Filter By Name:</label>
+                                                <input type="text" class="form-control" id="filterByName" name="filterByName"
+                                                       value="" placeholder="" />
+                                            </div>
+                                            <div class="my-4 mx-3">
+                                                <label for="filterByManufacturer" class="form-label">Filter By Manufacturer:</label>
+                                                <input type="text" class="form-control" id="filterByManufacturer" name="filterByManufacturer"
+                                                       value="" placeholder="" />
+                                            </div>
+                                        </div>  <!-- list-group .// -->
+                                    </div>
+                                </article> <!-- card-group-item.// -->
+                            </div> <!-- card.// -->
+                        </aside> <!-- col.// -->
+                        <button type="submit" class="btn btn-primary mb-3 ml-3">Submit all</button>
+                    </div>
+                    </form>
+                </div>
+
+                <aside class="col-sm-4">
+                    <p>Sorted panel</p>
+                    <div class="card">
+                        <article class="card-group-item">
+                            <header class="card-header">
+                                <h6 class="title">Sorting</h6>
+                            </header>
+                            <div class="filter-content">
+                                <div class="card-body">
+                                    <form>
+                                        <button type="button" class="custom-control btn-primary btn-sm ">Sort By Name</button>
+                                        <button type="button" class="custom-control btn-primary btn-sm mt-3">Sort By Manufacturer</button>
+                                        <button type="button" class="custom-control btn-primary btn-sm mt-3">Sort By Price</button>
+                                    </form>
+                                </div> <!-- card-body.// -->
+                            </div>
+                        </article> <!-- card-group-item.// -->
+                    </div> <!-- card.// -->
+                </aside> <!-- col.// -->
+
+<!--                <ul class="pagination justify-content-end">-->
+<!--                    <li class="page-item">-->
+<!--                        <form action="" method="get">-->
+<!--                            <label for="selectSortParameter" class="form-label">Sort by:</label>-->
+<!--                            <select id="selectSortParameter" name="productSortParam">-->
+<!--                                <option value="none" selected>none</option>-->
+<!--                                <option value="productName">name</option>-->
+<!--                            </select>-->
+<!--                            <button type="submit" class="btn btn-primary btn-sm">go</button>-->
+<!--                        </form>-->
+<!--                    </li>-->
+<!--                </ul>-->
+
+            </div>
+            <hr>
+
+            <nav class="navbar">
+
+                <ul class="pagination justify-content-end">
+                    <li class="page-item">
+                        <form action="" method="get">
+                            <label for="setLimitProductsOnPage" class="form-label">Set size page:</label>
+                            <select class="form-select" name="limitProductsOnPage" id="setLimitProductsOnPage">
+                                <option value="6">6</option>
+                                <option value="8" selected>8</option>
+                                <option value="12">12</option>
+                                <option value="20">20</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary btn-sm">Go</button>
+                        </form>
+                    </li>
+                </ul>
+
+                <ul class="pagination justify-content-end">
+                    <li class="page-item">
+                        <form action="" method="get">
+                            <label for="selectPage" class="form-label">select number of page</label>
+                            <select class="form-select" name="page" id="selectPage">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                            <input name="limitProductsOnPage" value="" type="hidden">
+                            <button type="submit" class="btn btn-primary btn-sm">go</button>
+                        </form>
+                    </li>
+                </ul>
+
+            </nav>
+
+            <hr>
             <div class="row my-3" id="container">
                 <!-- here content -->
             </div>
@@ -35,7 +188,7 @@
                 <img class="card-img-top" src="img/where_the_crawdads_sing.jpg">
                 <div class="card-body">
                     <h6 class="card-title">Where the Crawdads Sing</h6>
-                    <p>by <a href="#">Delia Owens</a></p>
+                    <p>by (manufacturer):<br><a href="#">Delia Owens</a></p>
                     <p class="card-text">Price: 12.99</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">

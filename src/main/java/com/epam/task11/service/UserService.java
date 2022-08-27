@@ -6,5 +6,5 @@ import com.epam.task11.entity.User;
  * @author Oleksii Kushch
  */
 public interface UserService {
-    void create(User user) throws MyServiceException;
+    void create(User user) throws ServiceException;
 }

@@ -1,18 +1,22 @@
 package com.epam.task12.service.impl;
 
 import com.epam.task11.entity.User;
-import com.epam.task11.service.MyServiceException;
+import com.epam.task11.service.ServiceException;
 import com.epam.task11.service.ServiceMessages;
+import com.epam.task11.util.RegistrationData;
 import com.epam.task12.db.dao.UserDao;
+import com.epam.task12.mapper.impl.RegistrationDataToUser;
 import com.epam.task12.service.UserService;
 import com.epam.task12.service.transaction.Transaction;
+import com.epam.task12.service.transaction.TransactionException;
 import com.epam.task12.service.transaction.TransactionManager;
 import com.epam.task12.util.LoginData;
+import com.epam.task13.db.dao.DaoException;
+import com.epam.task13.service.impl.MediaServiceImpl;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Proxy;
-import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -44,8 +48,8 @@ public class UserServiceImpl implements UserService {
                         try {
                             LOG.debug("Method: " + method.getName() + " invoke transactionally");
                             return userService.transactionManager.doInTransaction(() -> method.invoke(userService, methodArgs));
-                        } catch (SQLException exception) {
-                            throw new MyServiceException(exception.getMessage());
+                        } catch (TransactionException exception) {
+                            throw new ServiceException(exception.getMessage());
                         }
                     } else {
                         LOG.debug("Method: " + method.getName() + " invoke NON transactionally");
@@ -55,34 +59,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registration(User user) {
+    public User registration(RegistrationData registrationData) throws ServiceException {
+        User user = new User();
+        new RegistrationDataToUser().map(registrationData, user);
         user.setEmail(user.getEmail().toLowerCase(Locale.ROOT));
         try {
             User existingUser = userDao.getUserForEmail(user.getEmail());
             if (Objects.isNull(existingUser)) {
-                int numOfRecords = userDao.create(user);
-                return numOfRecords > 0; // is added eny records
+                userDao.insert(user);
             } else {
-                throw new MyServiceException(ServiceMessages.ACCOUNT_ALREADY_EXISTS);
+                throw new ServiceException(ServiceMessages.ACCOUNT_ALREADY_EXISTS);
             }
-        } catch (SQLException exception) {
+        } catch (DaoException exception) {
             LOG.warn(exception.getMessage());
-            throw new MyServiceException(exception.getMessage());
+            throw new ServiceException(exception.getMessage());
         }
+        new MediaServiceImpl().saveImage(registrationData.getAvatar(), String.valueOf(user.getId()));
+        return user;
     }
 
     @Override
-    public User login(LoginData loginData) {
+    public User login(LoginData loginData) throws ServiceException {
         try {
             User user = userDao.getUserForEmail(loginData.getEmail());
             if (Objects.isNull(user) || !user.getPassword().equals(loginData.getPassword())) {
-                throw new MyServiceException(ServiceMessages.EMAIL_OR_PASSWORD_IS_INCORRECT);
+                throw new ServiceException(ServiceMessages.EMAIL_OR_PASSWORD_IS_INCORRECT);
             } else {
                 return user;
             }
-        } catch (SQLException exception) {
+        } catch (DaoException exception) {
             LOG.warn(exception.getMessage());
-            throw new MyServiceException(exception.getMessage());
+            throw new ServiceException(exception.getMessage());
         }
     }
 }

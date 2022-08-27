@@ -5,13 +5,19 @@ import com.epam.task11.controller.servlet.captcha.CaptchaDataStorageStrategy;
 import com.epam.task11.util.RegistrationData;
 import com.epam.task12.mapper.MapException;
 import com.epam.task12.mapper.Mapper;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /**
  * @author Oleksii Kushch
  */
 public class HttpServletRequestToRegistrationData implements Mapper<HttpServletRequest, RegistrationData> {
+    private static final Logger LOG = LogManager.getLogger(HttpServletRequestToRegistrationData.class);
+
     @Override
     public void map(HttpServletRequest request, RegistrationData registrationData) throws MapException {
         registrationData.setEmail(request.getParameter(ShopLiterals.EMAIL));
@@ -22,5 +28,11 @@ public class HttpServletRequestToRegistrationData implements Mapper<HttpServletR
         registrationData.setCaptchaCode(request.getParameter(ShopLiterals.CAPTCHA));
         registrationData.setCaptchaLifetime(((CaptchaDataStorageStrategy) request.getServletContext()
                 .getAttribute(ShopLiterals.CAPTCHA_DATA_STORAGE_STRATEGY)).getCaptchaLifetime(request));
+        try {
+            registrationData.setAvatar(request.getPart(ShopLiterals.AVATAR_IMAGE));
+        } catch (IOException | ServletException exception) {
+            LOG.warn(exception.getMessage());
+            throw new MapException(exception.getMessage(), exception);
+        }
     }
 }

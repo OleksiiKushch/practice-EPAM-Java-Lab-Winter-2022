@@ -21,7 +21,8 @@ import java.util.Map;
  */
 @WebListener("application context listener")
 public class ContextListener implements ServletContextListener {
-    public static final String ABSOLUTE_PATH_STORAGE_AVATARS = "C:/javaTech/apache-tomcat-8.5.81/resources/practice-EPAM-Java-Lab-Winter-2022-1.0-SNAPSHOT/user_avatars/";
+    public static final String ABSOLUTE_PATH_STORAGE_USER_AVATARS = "C:/javaTech/apache-tomcat-8.5.81/resources/practice-EPAM-Java-Lab-Winter-2022-1.0-SNAPSHOT/user/avatars/";
+    public static final String ABSOLUTE_PATH_STORAGE_PRODUCT_PICTURES = "C:/javaTech/apache-tomcat-8.5.81/resources/practice-EPAM-Java-Lab-Winter-2022-1.0-SNAPSHOT/product/pictures/";
 
     /**
      * Initialize log4j and some app settings when the application is being started

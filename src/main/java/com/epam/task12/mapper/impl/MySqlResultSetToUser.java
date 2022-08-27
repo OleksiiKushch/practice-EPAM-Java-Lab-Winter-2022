@@ -19,11 +19,11 @@ public class MySqlResultSetToUser implements Mapper<ResultSet, User> {
     @Override
     public void map(ResultSet resultSet, User user) throws MapException {
         try {
-            user.setId(resultSet.getInt(MySqlConstant.UserField.ID));
-            user.setEmail(resultSet.getString(MySqlConstant.UserField.EMAIL));
-            user.setFirstName(resultSet.getString(MySqlConstant.UserField.FIRST_NAME));
-            user.setLastName(resultSet.getString(MySqlConstant.UserField.LAST_NAME));
-            user.setPassword(resultSet.getString(MySqlConstant.UserField.PASSWORD));
+            user.setId(resultSet.getInt(MySqlConstant.EntityModel.ID));
+            user.setEmail(resultSet.getString(MySqlConstant.UserModel.EMAIL));
+            user.setFirstName(resultSet.getString(MySqlConstant.UserModel.FIRST_NAME));
+            user.setLastName(resultSet.getString(MySqlConstant.UserModel.LAST_NAME));
+            user.setPassword(resultSet.getString(MySqlConstant.UserModel.PASSWORD));
         } catch (SQLException exception) {
             LOG.warn(exception.getMessage());
             throw new MapException(exception.getMessage(), exception);

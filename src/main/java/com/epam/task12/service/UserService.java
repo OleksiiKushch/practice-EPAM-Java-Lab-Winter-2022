@@ -1,7 +1,8 @@
 package com.epam.task12.service;
 
 import com.epam.task11.entity.User;
-import com.epam.task11.service.MyServiceException;
+import com.epam.task11.service.ServiceException;
+import com.epam.task11.util.RegistrationData;
 import com.epam.task12.service.transaction.Transaction;
 import com.epam.task12.util.LoginData;
 
@@ -9,7 +10,8 @@ import com.epam.task12.util.LoginData;
  * @author Oleksii Kushch
  */
 public interface UserService {
-    boolean registration(User user) throws MyServiceException;
     @Transaction
-    User login(LoginData loginData) throws MyServiceException;
+    User registration(RegistrationData registrationData) throws ServiceException;
+    @Transaction
+    User login(LoginData loginData) throws ServiceException;
 }

@@ -7,7 +7,7 @@ import java.io.Serial;
  */
 public class MapException extends RuntimeException {
     @Serial
-    private static final long serialVersionUID = -2280904009639576411L;
+    private static final long serialVersionUID = 1493800882909173795L;
 
     public MapException(String msg, Throwable cause) {
         super(msg, cause);

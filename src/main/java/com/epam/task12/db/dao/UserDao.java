@@ -1,13 +1,12 @@
 package com.epam.task12.db.dao;
 
 import com.epam.task11.entity.User;
-
-import java.sql.SQLException;
+import com.epam.task13.db.dao.DaoException;
 
 /**
  * @author Oleksii Kushch
  */
 public interface UserDao {
-    User getUserForEmail(String email) throws SQLException;
-    int create(User user) throws SQLException;
+    int insert(User user) throws DaoException;
+    User getUserForEmail(String email) throws DaoException;
 }
