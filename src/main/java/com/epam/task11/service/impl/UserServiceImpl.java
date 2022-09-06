@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void create(User user) throws ServiceException {
+    public void registration(User user) throws ServiceException {
         user.setEmail(user.getEmail().toLowerCase(Locale.ROOT));
         if (userRepository.isContainUser(user.getEmail())) {
             throw new ServiceException(ServiceMessages.ACCOUNT_ALREADY_EXISTS);

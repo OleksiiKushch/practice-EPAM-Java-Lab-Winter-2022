@@ -26,42 +26,43 @@
                 </li>
             </ul>
 
-            <c:if test="${logged_user != null}">
-                <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav">
+
+                <a class="btn btn-outline-success mx-1 my-sm-0" href="${pageContext.request.contextPath}/my_cart">My cart</a>
+
+                <c:if test="${logged_user != null}">
                     <a class="btn btn-outline-primary mx-1 my-sm-0" href="${pageContext.request.contextPath}/myProfile">My profile</a>
                     <a class="logoutLink btn btn-outline-warning my-sm-0" data-toggle="modal" data-target="#logoutModal" href="">Log out</a>
-                </ul>
 
-                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalCenterTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="logoutModalCenterTitle">Warning!</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <%-- Here a help message (warning) on logout --%>
-                                <h6 id="modalBodyWarningMessageLogout"></h6>
-                            </div>
-                            <div class="modal-footer">
-                                <form id="logoutForm" action="logout" method="get">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-                                    <button type="submit" class="btn btn-primary">Yes</button>
-                                </form>
+                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="logoutModalCenterTitle">Warning!</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <%-- Here a help message (warning) on logout --%>
+                                    <h6 id="modalBodyWarningMessageLogout"></h6>
+                                </div>
+                                <div class="modal-footer">
+                                    <form id="logoutForm" action="logout" method="get">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                        <button type="submit" class="btn btn-primary">Yes</button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </c:if>
+                </c:if>
 
-            <c:if test="${logged_user == null}">
-                <ul class="nav navbar-nav">
+                <c:if test="${logged_user == null}">
                     <a class="btn btn-outline-warning mx-1 my-sm-0" href="${pageContext.request.contextPath}/registration">Registration</a>
                     <a class="btn btn-outline-primary my-sm-0" href="${pageContext.request.contextPath}/login">Log in</a>
-                </ul>
-            </c:if>
+                </c:if>
+            </ul>
 
         </div>
     </nav>

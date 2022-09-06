@@ -22,13 +22,13 @@ class UserServiceImplTest {
 
     @Test
     void testCreate_ifValid() throws ServiceException {
-        userService.create(new User.Builder().withEmail("unicronix2002@gmail.com").build());
+        userService.registration(new User.Builder().withEmail("unicronix2002@gmail.com").build());
         assertTrue(userRepository.isContainUser("unicronix2002@gmail.com"));
     }
 
     @Test
     void testCreate_ifUserWithThisEmailAlreadyExists() {
         assertThrows(ServiceException.class, () ->
-                userService.create(new User.Builder().withEmail("UnicroniX2001@gmail.com").build()));
+                userService.registration(new User.Builder().withEmail("UnicroniX2001@gmail.com").build()));
     }
 }

@@ -40,6 +40,11 @@ public class MySqlProductDao extends MySqlEntityDao<Product> implements ProductD
     }
 
     @Override
+    public Product getProductForId(int id) throws DaoException {
+        return getForId(id, connectionBuilder, Product.class, new ResultSetToProduct(), MySqlConstant.ProductQuery.GET_BY_ID);
+    }
+
+    @Override
     public int getCount() throws DaoException {
         return getCount(connectionBuilder, MySqlConstant.ProductQuery.GET_COUNT);
     }

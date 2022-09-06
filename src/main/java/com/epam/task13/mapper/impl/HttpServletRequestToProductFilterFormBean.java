@@ -6,6 +6,7 @@ import com.epam.task12.mapper.Mapper;
 import com.epam.task13.entity.ProductCategory;
 import com.epam.task13.entity.ProductManufacturer;
 import com.epam.task13.util.ProductFilterFormBean;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -30,10 +31,10 @@ public class HttpServletRequestToProductFilterFormBean implements Mapper<HttpSer
         productFilterFormBean.setNamePattern(request.getParameter(ShopLiterals.FILTER_PRODUCT_NAME_PATTERN));
         String minPriceParam = request.getParameter(ShopLiterals.FILTER_MIN_PRICE);
         String maxPriceParam = request.getParameter(ShopLiterals.FILTER_MAX_PRICE);
-        if (Objects.nonNull(minPriceParam) && !minPriceParam.isEmpty()) { // need do it in validation class (isEmpty)
+        if (StringUtils.isNotEmpty(minPriceParam)) { // need do it in validation class (isEmpty)
             productFilterFormBean.setMinPrice(new BigDecimal(minPriceParam));
         }
-        if (Objects.nonNull(maxPriceParam) && !maxPriceParam.isEmpty()) { // need do it in validation class (isEmpty)
+        if (StringUtils.isNotEmpty(maxPriceParam)) { // need do it in validation class (isEmpty)
             productFilterFormBean.setMaxPrice(new BigDecimal(maxPriceParam));
         }
         for (ProductManufacturer manufacturer : manufacturers) {

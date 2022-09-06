@@ -54,17 +54,14 @@ public class ProductCatalogServlet extends HttpServlet {
         new HttpServletRequestToPagePaginationData().map(request, pagePaginationData);
         LOG.debug("Page pagination data: " + pagePaginationData);
 
-        ProductDao productDao = new MySqlProductDao(connectionBuilder);
-        ProductService productService = new ProductServiceImpl(productDao,
-                new ProductManufacturerServiceImpl(new MySqlProductManufacturerDao(connectionBuilder), productDao),
-                new ProductCategoryServiceImpl(new MySqlProductCategoryDao(connectionBuilder), productDao));
-
         ProductFilterFormBean productFilterFormBean = new ProductFilterFormBean();
         new HttpServletRequestToProductFilterFormBean(manufacturers, categories).map(request, productFilterFormBean);
 
         SortingData sortingData = new SortingData();
         new HttpServletRequestToSortingData().map(request, sortingData);
         LOG.debug("Product sorting data: " + sortingData);
+
+        ProductService productService = getProductService(connectionBuilder);
 
         List<Product> products = productService.findProducts(productFilterFormBean, sortingData, pagePaginationData);
         LOG.debug("Found products: " + products);
@@ -95,5 +92,12 @@ public class ProductCatalogServlet extends HttpServlet {
         request.setAttribute(ShopLiterals.NUMBER_OF_PRODUCTS, numberOfProductsWithFiltering);
 
         request.getRequestDispatcher("/WEB-INF/view/jsp/product_catalog.jsp").forward(request, response);
+    }
+
+    private ProductService getProductService(ConnectionBuilder connectionBuilder) {
+        ProductDao productDao = new MySqlProductDao(connectionBuilder);
+        return new ProductServiceImpl(productDao,
+                new ProductManufacturerServiceImpl(new MySqlProductManufacturerDao(connectionBuilder), productDao),
+                new ProductCategoryServiceImpl(new MySqlProductCategoryDao(connectionBuilder), productDao));
     }
 }

@@ -16,6 +16,7 @@ public final class ShopLiterals {
 
     public static final String NAME = "name";
     public static final String PRICE = "price";
+    public static final String DELIVERY = "delivery";
 
     public static final String CAPTCHA = "captcha";
     public static final String CAPTCHA_DATA_STORAGE_STRATEGY = "captchaDataStorageStrategy";
@@ -49,4 +50,8 @@ public final class ShopLiterals {
 
     public static final String IMAGE_ID = "imageId";
     public static final String AVATAR_IMAGE = "avatarImage";
+
+    public static final String CART = "cart";
+    public static final String PRODUCT_ID = "product_id";
+    public static final String AMOUNT = "amount";
 }

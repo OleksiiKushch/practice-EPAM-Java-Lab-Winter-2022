@@ -36,6 +36,23 @@ public abstract class MySqlConstant {
         public static final String CATEGORY_ID = "category_id";
     }
 
+    public static class OrderModel {
+        public static final String TYPE_NAME = "order";
+        public static final String STATUS_ID = "status_id";
+        public static final String STATE_DETAIL = "state_detail";
+        public static final String DELIVERY = "delivery";
+        public static final String DATE_TIME = "date_time";
+        public static final String USER_ID = "user_id";
+    }
+
+    public static class OrderProductRelationModel {
+        public static final String TYPE_NAME = "order_has_product";
+        public static final String ORDER_ID = "order_id";
+        public static final String PRODUCT_ID = "product_id";
+        public static final String PRICE = "price";
+        public static final String AMOUNT = "amount";
+    }
+
     public static class UserQuery {
         public static final String GET_BY_EMAIL = StringUtils.join("SELECT * FROM `", UserModel.TYPE_NAME, "` WHERE ", UserModel.EMAIL, " = ?");
         public static final String INSERT = StringUtils.join("INSERT INTO ", UserModel.TYPE_NAME, " (", EntityModel.ID, ", ", UserModel.EMAIL, ", ", UserModel.FIRST_NAME, ", ", UserModel.LAST_NAME, ", `", UserModel.PASSWORD, "`) VALUES (DEFAULT, ?, ?, ?, ?)");
@@ -53,9 +70,18 @@ public abstract class MySqlConstant {
 
     public static class ProductQuery {
         public static final String INSERT = StringUtils.join("INSERT INTO ", ProductModel.TYPE_NAME, " (", EntityModel.ID, ", `", ProductModel.NAME, "`, ", ProductModel.PRICE, ", ", ProductModel.MANUFACTURER_ID, ", ", ProductModel.CATEGORY_ID, ") VALUES (DEFAULT, ?, ?, ?, ?)");
+        public static final String GET_BY_ID = StringUtils.join("SELECT * FROM ", ProductModel.TYPE_NAME, " WHERE ", EntityModel.ID, " = ?");
         public static final String GET_COUNT = StringUtils.join("SELECT COUNT(*) FROM ", ProductModel.TYPE_NAME);
         public static final String GET_ALL = StringUtils.join("SELECT * FROM ", ProductModel.TYPE_NAME);
         public static final String GET_COUNT_FOR_CATEGORY_ID = StringUtils.join("SELECT COUNT(*) FROM ", ProductModel.TYPE_NAME, " WHERE ", ProductModel.CATEGORY_ID, " = ?");
         public static final String GET_COUNT_FOR_MANUFACTURER_ID = StringUtils.join("SELECT COUNT(*) FROM ", ProductModel.TYPE_NAME, " WHERE ", ProductModel.MANUFACTURER_ID, " = ?");
+    }
+
+    public static class OrderQuery {
+        public static final String INSERT = StringUtils.join("INSERT INTO `", OrderModel.TYPE_NAME, "` (", EntityModel.ID, ", `", OrderModel.STATUS_ID, "`, ", OrderModel.STATE_DETAIL, ", ", OrderModel.DELIVERY, ", ", OrderModel.DATE_TIME, ", ", OrderModel.USER_ID, ") VALUES (DEFAULT, ?, ?, ?, DEFAULT, ?)");
+    }
+
+    public static class OrderProductRelationQuery {
+        public static final String INSERT_HAS_PRODUCT = StringUtils.join("INSERT INTO ", OrderProductRelationModel.TYPE_NAME, " (", OrderProductRelationModel.ORDER_ID, ", ", OrderProductRelationModel.PRODUCT_ID, ", ", OrderProductRelationModel.PRICE, ", ", OrderProductRelationModel.AMOUNT, ") VALUES (?, ?, ?, ?)");
     }
 }

@@ -6,7 +6,6 @@ import com.epam.task12.service.transaction.TransactionManager;
 import com.epam.task12.service.transaction.TransactionOperation;
 import com.epam.task12.util.db.DBUtils;
 import com.epam.task12.util.db.JdbcConnectionHolder;
-import com.epam.task13.db.dao.DaoException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -39,13 +38,15 @@ public class MySqlTransactionManager implements TransactionManager {
             result = operation.execute();
 
             connection.commit();
-        } catch (SQLException | DaoException exception) {
+        } catch (SQLException | IllegalAccessException exception) {
             LOG.warn(exception.getMessage());
             DBUtils.rollback(connection);
             throw new TransactionException(exception.getMessage(), exception);
-        } catch (InvocationTargetException | IllegalAccessException exception) {
-            LOG.warn(exception.getMessage());
-            throw new RuntimeException(exception);
+        } catch (InvocationTargetException exception) {
+            Throwable innerException = exception.getCause();
+            LOG.warn(innerException.getMessage());
+            DBUtils.rollback(connection);
+            throw new TransactionException(innerException.getMessage(), innerException);
         } finally {
             JdbcConnectionHolder.unset();
             DBUtils.closeConnection(connection);

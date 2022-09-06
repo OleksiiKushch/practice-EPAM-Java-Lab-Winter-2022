@@ -1,7 +1,5 @@
 package com.epam.task12.service.transaction;
 
-import com.epam.task13.db.dao.DaoException;
-
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -9,5 +7,5 @@ import java.lang.reflect.InvocationTargetException;
  */
 @FunctionalInterface
 public interface TransactionOperation<T> {
-    T execute() throws DaoException, InvocationTargetException, IllegalAccessException;
+    T execute() throws InvocationTargetException, IllegalAccessException;
 }
