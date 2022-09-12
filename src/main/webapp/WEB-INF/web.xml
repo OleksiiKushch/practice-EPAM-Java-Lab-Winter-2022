@@ -48,4 +48,49 @@
     <listener>
         <listener-class>com/epam/task11/controller/ContextListener</listener-class>
     </listener>
+
+    <filter>
+        <filter-name>LocalizationFilter</filter-name>
+        <filter-class>com.epam.task15.controller.filter.LocalizationFilter</filter-class>
+        <init-param>
+            <param-name>default-locale</param-name>
+            <param-value>en</param-value>
+        </init-param>
+        <init-param>
+            <param-name>locales</param-name>
+            <param-value>/WEB-INF/locales.properties</param-value>
+        </init-param>
+        <init-param>
+            <param-name>localization-storage-strategy</param-name>
+            <param-value>session</param-value> <!-- session, cookie -->
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>LocalizationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>localization-cookie-lifetime</param-name>
+        <param-value>20</param-value> <!-- seconds -->
+    </context-param>
+
+    <filter>
+        <filter-name>TextGZipServletFilter</filter-name>
+        <filter-class>com.epam.task15.controller.filter.TextGZipServletFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>TextGZipServletFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>NoCacheFilter</filter-name>
+        <filter-class>com.epam.task15.controller.filter.NoCacheFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>NoCacheFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 </web-app>

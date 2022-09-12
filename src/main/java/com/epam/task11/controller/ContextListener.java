@@ -24,6 +24,9 @@ public class ContextListener implements ServletContextListener {
     public static final String ABSOLUTE_PATH_STORAGE_USER_AVATARS = "C:/javaTech/apache-tomcat-8.5.81/resources/practice-EPAM-Java-Lab-Winter-2022-1.0-SNAPSHOT/user/avatars/";
     public static final String ABSOLUTE_PATH_STORAGE_PRODUCT_PICTURES = "C:/javaTech/apache-tomcat-8.5.81/resources/practice-EPAM-Java-Lab-Winter-2022-1.0-SNAPSHOT/product/pictures/";
 
+    public static final String WELCOME_SERVLET_NAME = "main";
+    public static final String WELCOME_SERVLET_PATH = "//WEB-INF/view/jsp/general/main.jsp";
+
     /**
      * Initialize log4j and some app settings when the application is being started
      */
@@ -34,6 +37,10 @@ public class ContextListener implements ServletContextListener {
         initLog4j(context);
 
         initCaptchaDataStorageStrategy(context);
+    }
+
+    @Override
+    public void contextDestroyed(ServletContextEvent event) {
     }
 
     private void initLog4j(ServletContext context) {

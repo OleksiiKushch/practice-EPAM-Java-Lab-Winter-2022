@@ -1,6 +1,10 @@
 package com.epam.task11.constant;
 
 public final class ShopLiterals {
+    public static final String SERVLET_NAME = "servletName";
+    public static final String LOCALE = "locale";
+    public static final String LOCALES = "locales";
+    public static final String LOCALIZATION_STORAGE_STRATEGY = "localizationStorageStrategy";
     public static final String LOGGED_USER = "loggerUser";
     public static final String ERRORS = "errors";
 
