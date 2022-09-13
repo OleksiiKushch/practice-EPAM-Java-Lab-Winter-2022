@@ -24,9 +24,9 @@ public class TextGZipServletFilter implements Filter {
 
         if (acceptsGZipEncoding(request) && isTextContentType(request)) {
             response.addHeader("Content-Encoding", "gzip");
-             GZipServletResponseWrapper gzipResponse = new GZipServletResponseWrapper(response);
+            GZipServletResponseWrapper gzipResponse = new GZipServletResponseWrapper(response);
             filterChain.doFilter(servletRequest, gzipResponse);
-             gzipResponse.close();
+            gzipResponse.close();
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }

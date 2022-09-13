@@ -35,52 +35,16 @@ public class LocalizationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String localesFilePath = filterConfig.getInitParameter("locales");
-        Properties allAvailableLocales = setAllLocalesToRequest(localesFilePath, servletRequest);
+        Properties allAvailableLocales = setAllLocalesToRequest(localesFilePath, request);
 
-        String paramLocalizationStorageStrategy = filterConfig.getInitParameter("localization-storage-strategy");
-        LocalizationStorageStrategy localizationStorageStrategy;
-        if ("cookie".equals(paramLocalizationStorageStrategy)) {
-            int lifetime = Integer.parseInt(servletRequest.getServletContext().getInitParameter("localization-cookie-lifetime"));
-            localizationStorageStrategy = new CookieLocalizationStorageStrategy(lifetime);
-            LOG.debug("Using cookie localization storage strategy.");
-        } else { //  if ("session".equals(paramLocalizationStorageStrategy))
-            localizationStorageStrategy = new SessionLocalizationStorageStrategy();
-            LOG.debug("Using session localization storage strategy.");
-        }
-        setLocalizationStorageStrategyToRequest(localizationStorageStrategy, servletRequest);
+        LocalizationStorageStrategy localizationStorageStrategy = getLocalizationStorageStrategy(request);
+        setLocalizationStorageStrategyToRequest(localizationStorageStrategy, request);
 
-        String locale = servletRequest.getParameter(ShopLiterals.LOCALE); // for changing current locale in storage
-        if (StringUtils.isNotEmpty(locale)) {
-            LOG.debug("Request to change locale to: " + locale);
-            localizationStorageStrategy.saveLocale(locale, request, response);
-        } else {
-            locale = localizationStorageStrategy.getLocale(request);
-            LOG.debug("Set (update) current locale: " + locale);
-            if (StringUtils.isEmpty(locale)) { // reset lifetime for current locale if present in storage or set available locales for browser or set default locale
-                Enumeration<Locale> localesFroBrowser = servletRequest.getLocales();
-                if (localesFroBrowser.hasMoreElements()) {
-                    locale = findFirstMatchWithBrowserLocale(localesFroBrowser, allAvailableLocales);
-                }
-            }
-            if (StringUtils.isEmpty(locale)) {
-                locale = filterConfig.getInitParameter("default-locale");
-                LOG.debug("Set default locale: " + locale);
-            }
-            localizationStorageStrategy.saveLocale(locale, request, response);
-        }
+        String locale = getLocale(request, localizationStorageStrategy, allAvailableLocales);
+        localizationStorageStrategy.saveLocale(locale, request, response);
         LOG.debug("Set locale: " + locale);
 
-        String servletPath = request.getServletPath();
-        if (StringUtils.isNotEmpty(servletPath)) {
-            String servletName;
-            if (ContextListener.WELCOME_SERVLET_PATH.equals(servletPath)) {
-                servletName = ContextListener.WELCOME_SERVLET_NAME;
-            } else {
-                servletName = servletPath.substring(1); // skip first delimiter '/main' -> 'main'
-            }
-            LOG.debug("Servlet name: " + servletName);
-            request.setAttribute(ShopLiterals.SERVLET_NAME, servletName);
-        }
+        setServletName(request);
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
@@ -89,20 +53,55 @@ public class LocalizationFilter implements Filter {
     public void destroy() {
     }
 
-    private void setLocalizationStorageStrategyToRequest(LocalizationStorageStrategy localizationStorageStrategy, ServletRequest servletRequest) {
-        servletRequest.setAttribute(ShopLiterals.LOCALIZATION_STORAGE_STRATEGY, localizationStorageStrategy);
+    private LocalizationStorageStrategy getLocalizationStorageStrategy(ServletRequest servletRequest) {
+        LocalizationStorageStrategy result;
+        String paramLocalizationStorageStrategy = filterConfig.getInitParameter("localization-storage-strategy");
+        if ("cookie".equals(paramLocalizationStorageStrategy)) {
+            int lifetime = Integer.parseInt(servletRequest.getServletContext().getInitParameter("localization-cookie-lifetime"));
+            result = new CookieLocalizationStorageStrategy(lifetime);
+            LOG.debug("Using cookie localization storage strategy.");
+        } else { //  if ("session".equals(paramLocalizationStorageStrategy))
+            result = new SessionLocalizationStorageStrategy();
+            LOG.debug("Using session localization storage strategy.");
+        }
+        return result;
     }
 
-    private Properties setAllLocalesToRequest(String localesFilePath, ServletRequest servletRequest) {
-        String localesFileRealPath = servletRequest.getServletContext().getRealPath(localesFilePath);
-        Properties locales = new Properties();
+    private void setLocalizationStorageStrategyToRequest(LocalizationStorageStrategy localizationStorageStrategy, HttpServletRequest request) {
+        request.setAttribute(ShopLiterals.LOCALIZATION_STORAGE_STRATEGY, localizationStorageStrategy);
+    }
+
+    private String getLocale(HttpServletRequest request, LocalizationStorageStrategy localizationStorageStrategy, Properties allAvailableLocales) {
+        String result = request.getParameter(ShopLiterals.LOCALE); // for changing current locale in storage
+        if (StringUtils.isNotEmpty(result)) {
+            LOG.debug("Request to change locale to: " + result);
+        } else {
+            result = localizationStorageStrategy.getLocale(request);
+            LOG.debug("Set (update) current locale: " + result);
+            if (StringUtils.isEmpty(result)) { // reset lifetime for current locale if present in storage or set available locales for browser or set default locale
+                Enumeration<Locale> localesFroBrowser = request.getLocales();
+                if (localesFroBrowser.hasMoreElements()) {
+                    result = findFirstMatchWithBrowserLocale(localesFroBrowser, allAvailableLocales);
+                }
+            }
+            if (StringUtils.isEmpty(result)) {
+                result = filterConfig.getInitParameter("default-locale");
+                LOG.debug("Set default locale: " + result);
+            }
+        }
+        return result;
+    }
+
+    private Properties setAllLocalesToRequest(String localesFilePath, HttpServletRequest request) {
+        String localesFileRealPath = request.getServletContext().getRealPath(localesFilePath);
+        Properties result = new Properties();
         try {
-            locales.load(new FileInputStream(localesFileRealPath));
+            result.load(new FileInputStream(localesFileRealPath));
         } catch (IOException exception) {
             LOG.error(exception.getMessage());
         }
-        servletRequest.setAttribute(ShopLiterals.LOCALES, locales);
-        return locales;
+        request.setAttribute(ShopLiterals.LOCALES, result);
+        return result;
     }
 
     private String findFirstMatchWithBrowserLocale(Enumeration<Locale> localesFroBrowser, Properties allAvailableLocales) {
@@ -117,5 +116,19 @@ public class LocalizationFilter implements Filter {
             }
         }
         return result;
+    }
+
+    private void setServletName(HttpServletRequest request) {
+        String servletPath = request.getServletPath();
+        if (StringUtils.isNotEmpty(servletPath)) {
+            String servletName;
+            if (ContextListener.WELCOME_SERVLET_PATH.equals(servletPath)) {
+                servletName = ContextListener.WELCOME_SERVLET_NAME;
+            } else {
+                servletName = servletPath.substring(1); // skip first delimiter '/main' -> 'main'
+            }
+            LOG.debug("Servlet name: " + servletName);
+            request.setAttribute(ShopLiterals.SERVLET_NAME, servletName);
+        }
     }
 }
