@@ -1,7 +1,7 @@
 package com.epam.task13.service.impl;
 
 import com.epam.task13.db.dao.ProductDao;
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 import com.epam.task13.service.ProductCategoryService;
 import com.epam.task13.service.ProductManufacturerService;
 import com.epam.task13.service.ProductService;

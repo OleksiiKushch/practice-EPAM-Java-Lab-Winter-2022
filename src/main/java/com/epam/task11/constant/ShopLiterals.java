@@ -58,4 +58,7 @@ public final class ShopLiterals {
     public static final String CART = "cart";
     public static final String PRODUCT_ID = "product_id";
     public static final String AMOUNT = "amount";
+
+    public static final String CUSTOMER_USER_ROLE = "customer";
+    public static final String SECURED_PAGES = "securedPages";
 }

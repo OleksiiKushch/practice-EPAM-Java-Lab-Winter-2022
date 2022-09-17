@@ -1,6 +1,6 @@
 package com.epam.task13.db.dao;
 
-import com.epam.task13.entity.ProductCategory;
+import com.epam.task13.entity.product.ProductCategory;
 
 import java.util.List;
 

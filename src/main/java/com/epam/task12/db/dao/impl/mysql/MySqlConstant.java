@@ -16,6 +16,12 @@ public abstract class MySqlConstant {
         public static final String FIRST_NAME = "first_name";
         public static final String LAST_NAME = "last_name";
         public static final String PASSWORD = "password";
+        public static final String ROLE_ID = "role_id";
+    }
+
+    public static class UserRoleModel {
+        public static final String TYPE_NAME = "user_role";
+        public static final String NAME = "name";
     }
 
     public static class ProductManufacturerModel {
@@ -55,7 +61,12 @@ public abstract class MySqlConstant {
 
     public static class UserQuery {
         public static final String GET_BY_EMAIL = StringUtils.join("SELECT * FROM `", UserModel.TYPE_NAME, "` WHERE ", UserModel.EMAIL, " = ?");
-        public static final String INSERT = StringUtils.join("INSERT INTO ", UserModel.TYPE_NAME, " (", EntityModel.ID, ", ", UserModel.EMAIL, ", ", UserModel.FIRST_NAME, ", ", UserModel.LAST_NAME, ", `", UserModel.PASSWORD, "`) VALUES (DEFAULT, ?, ?, ?, ?)");
+        public static final String INSERT = StringUtils.join("INSERT INTO ", UserModel.TYPE_NAME, " (", EntityModel.ID, ", ", UserModel.EMAIL, ", ", UserModel.FIRST_NAME, ", ", UserModel.LAST_NAME, ", `", UserModel.PASSWORD, "`, " + UserModel.ROLE_ID + ") VALUES (DEFAULT, ?, ?, ?, ?, ?)");
+    }
+
+    public static class UserRoleQuery {
+        public static final String GET_BY_ID = StringUtils.join("SELECT * FROM ", UserRoleModel.TYPE_NAME, " WHERE ", EntityModel.ID, " = ?");
+        public static final String GET_BY_NAME = StringUtils.join("SELECT * FROM ", UserRoleModel.TYPE_NAME, " WHERE ", UserRoleModel.NAME, " = ?");
     }
 
     public static class ProductManufacturerQuery {

@@ -2,7 +2,7 @@ package com.epam.task13.mapper.impl;
 
 import com.epam.task12.mapper.MapException;
 import com.epam.task12.mapper.Mapper;
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

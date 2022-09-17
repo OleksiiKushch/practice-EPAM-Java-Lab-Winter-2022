@@ -1,15 +1,15 @@
-package com.epam.task13.entity;
+package com.epam.task13.entity.product;
 
 import com.epam.task11.entity.Entity;
 
-public class ProductManufacturer extends Entity {
+public class ProductCategory extends Entity {
     private String name;
     private int count;
 
-    public ProductManufacturer() {
+    public ProductCategory() {
     }
 
-    public ProductManufacturer(int id) {
+    public ProductCategory(int id) {
         super(id);
     }
 
@@ -31,7 +31,7 @@ public class ProductManufacturer extends Entity {
 
     @Override
     public String toString() {
-        return "ProductManufacturer{" +
+        return "ProductCategory{" +
                 "id=" + getId() +
                 ", name='" + name + '\'' +
                 ", count=" + count +

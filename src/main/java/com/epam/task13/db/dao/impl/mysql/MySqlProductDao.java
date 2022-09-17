@@ -5,7 +5,7 @@ import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.dao.impl.mysql.MySqlConstant;
 import com.epam.task13.db.dao.DaoException;
 import com.epam.task13.db.dao.ProductDao;
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 import com.epam.task13.mapper.impl.ProductFilterFormBeanToPreparedStatement;
 import com.epam.task13.mapper.impl.ProductToPreparedStatement;
 import com.epam.task13.mapper.impl.ResultSetToProduct;

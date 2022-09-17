@@ -1,6 +1,6 @@
 package com.epam.task11.repository;
 
-import com.epam.task11.entity.User;
+import com.epam.task11.entity.user.User;
 
 /**
  * @author Oleksii Kushch

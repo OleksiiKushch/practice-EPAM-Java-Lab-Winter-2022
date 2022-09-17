@@ -1,7 +1,7 @@
 package com.epam.task12.controller.servlet;
 
 import com.epam.task11.constant.ShopLiterals;
-import com.epam.task11.entity.User;
+import com.epam.task11.entity.user.User;
 import com.epam.task11.service.ServiceException;
 import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.connection.impl.PoolConnectionBuilder;
@@ -12,6 +12,9 @@ import com.epam.task12.service.impl.UserServiceImpl;
 import com.epam.task12.service.transaction.impl.MySqlTransactionManager;
 import com.epam.task12.util.LoginData;
 import com.epam.task12.validation.impl.LoginDataValidator;
+import com.epam.task16.db.impl.mysql.MySqlUserRoleDao;
+import com.epam.task16.service.UserRoleService;
+import com.epam.task16.service.impl.UserRoleServiceImpl;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -34,7 +37,6 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         LoginData loginData = (LoginData) session.getAttribute(ShopLiterals.LOGIN_DATA);
-        LOG.debug("Login data: " + (loginData == null ? null : loginData.toStringWithoutSensitiveData()));
         request.setAttribute(ShopLiterals.LOGIN_DATA, loginData);
         session.removeAttribute(ShopLiterals.LOGIN_DATA);
 
@@ -54,7 +56,8 @@ public class LoginServlet extends HttpServlet {
         List<String> errors = new LoginDataValidator().isValid(loginData);
         if (errors.isEmpty()) {
             ConnectionBuilder connectionBuilder = PoolConnectionBuilder.getInstance();
-            UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new MySqlTransactionManager(connectionBuilder));
+            UserRoleService userRoleService = new UserRoleServiceImpl(new MySqlUserRoleDao(connectionBuilder));
+            UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new MySqlTransactionManager(connectionBuilder), userRoleService);
             try {
                 User user = userService.login(loginData);
                 request.getSession().setAttribute(ShopLiterals.LOGGED_USER, user);

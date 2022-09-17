@@ -1,6 +1,6 @@
 package com.epam.task13.service;
 
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 import com.epam.task13.util.PagePaginationData;
 import com.epam.task13.util.ProductFilterFormBean;
 import com.epam.task13.util.SortingData;

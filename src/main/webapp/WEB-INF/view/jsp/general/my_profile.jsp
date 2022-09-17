@@ -35,15 +35,19 @@
                         </div>
                         <div class="row mt-2">
                             <div class="col-md-6">
-                                <label class="labels">Name (first name)</label>
+                                <label class="labels">Name (first name):</label>
                                 <input type="text" class="form-control" value="${logged_user.firstName}" placeholder="first name">
                             </div>
                             <div class="col-md-6">
-                                <label class="labels">Surname (last name)</label>
+                                <label class="labels">Surname (last name):</label>
                                 <input type="text" class="form-control" value="${logged_user.lastName}" placeholder="last name">
                             </div>
                         </div>
-                        <div class="mt-5 text-center">
+                        <div class="mt-4 col-md-12">
+                            <label class="labels">User role:</label>
+                            <input type="text" class="form-control" value="${logged_user.role.name}" placeholder="user role" disabled>
+                        </div>
+                        <div class="mt-4 text-center">
                             <button class="btn btn-primary profile-button" type="button">Save Profile</button>
                         </div>
                     </div>

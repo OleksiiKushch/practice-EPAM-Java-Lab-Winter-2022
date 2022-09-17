@@ -1,7 +1,7 @@
 package com.epam.task14.controller.servlet;
 
 import com.epam.task11.constant.ShopLiterals;
-import com.epam.task11.entity.User;
+import com.epam.task11.entity.user.User;
 import com.epam.task11.service.ServiceException;
 import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.connection.impl.PoolConnectionBuilder;

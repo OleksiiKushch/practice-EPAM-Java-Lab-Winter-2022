@@ -1,0 +1,6 @@
+<security>
+    <constraint>
+        <url-pattern>/admin/*</url-pattern>
+        <role>admin</role>
+    </constraint>
+</security>

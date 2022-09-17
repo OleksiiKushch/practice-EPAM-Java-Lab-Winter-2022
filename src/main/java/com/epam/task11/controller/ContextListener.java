@@ -37,6 +37,8 @@ public class ContextListener implements ServletContextListener {
         initLog4j(context);
 
         initCaptchaDataStorageStrategy(context);
+
+        initSecurity(context);
     }
 
     @Override
@@ -80,6 +82,20 @@ public class ContextListener implements ServletContextListener {
         container.put(8, "8888");
         container.put(9, "9999");
         captchaCodeContainer.setContainer(container);
+    }
+
+    private void initSecurity(ServletContext context) {
+        String pathSecurityConfigFile = context.getInitParameter("security-config-location");
+        String fullPathSecurityConfigFile = context.getRealPath("") + File.separator + pathSecurityConfigFile;
+        Map<String, String> securedPages = parseSecureConfigFile(fullPathSecurityConfigFile);
+        context.setAttribute(ShopLiterals.SECURED_PAGES, securedPages);
+    }
+
+    private Map<String, String> parseSecureConfigFile(String fullPathSecurityConfigFile) {
+        Map<String, String> result = new HashMap<>();
+        // parse file
+        result.put("/admin", "admin");
+        return result;
     }
 }
 

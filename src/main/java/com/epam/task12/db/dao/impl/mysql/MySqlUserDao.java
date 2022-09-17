@@ -1,9 +1,9 @@
 package com.epam.task12.db.dao.impl.mysql;
 
-import com.epam.task11.entity.User;
+import com.epam.task11.entity.user.User;
 import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.dao.UserDao;
-import com.epam.task12.mapper.impl.MySqlResultSetToUser;
+import com.epam.task12.mapper.impl.ResultSetToUser;
 import com.epam.task12.mapper.impl.UserToPreparedStatement;
 import com.epam.task13.db.dao.DaoException;
 import com.epam.task13.db.dao.impl.mysql.MySqlEntityDao;
@@ -41,7 +41,7 @@ public class MySqlUserDao extends MySqlEntityDao<User> implements UserDao {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     result = new User();
-                    new MySqlResultSetToUser().map(rs, result);
+                    new ResultSetToUser().map(rs, result);
                 }
             }
         } catch (SQLException exception) {

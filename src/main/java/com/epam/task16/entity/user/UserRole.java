@@ -1,15 +1,14 @@
-package com.epam.task13.entity;
+package com.epam.task16.entity.user;
 
 import com.epam.task11.entity.Entity;
 
-public class ProductCategory extends Entity {
+public class UserRole extends Entity {
     private String name;
-    private int count;
 
-    public ProductCategory() {
+    public UserRole() {
     }
 
-    public ProductCategory(int id) {
+    public UserRole(int id) {
         super(id);
     }
 
@@ -21,20 +20,11 @@ public class ProductCategory extends Entity {
         this.name = name;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
     @Override
     public String toString() {
         return "ProductCategory{" +
                 "id=" + getId() +
                 ", name='" + name + '\'' +
-                ", count=" + count +
                 '}';
     }
 }

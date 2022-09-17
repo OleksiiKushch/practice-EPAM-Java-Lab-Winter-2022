@@ -3,7 +3,7 @@ package com.epam.task13.db.dao.impl.mysql;
 import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.dao.impl.mysql.MySqlConstant;
 import com.epam.task13.db.dao.ProductManufacturerDao;
-import com.epam.task13.entity.ProductManufacturer;
+import com.epam.task13.entity.product.ProductManufacturer;
 import com.epam.task13.mapper.impl.ResultSetToProductManufacturer;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

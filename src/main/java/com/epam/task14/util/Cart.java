@@ -1,7 +1,7 @@
 package com.epam.task14.util;
 
 import com.epam.task11.entity.Entity;
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 
 import java.io.Serial;
 import java.math.BigDecimal;

@@ -4,7 +4,7 @@ import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.dao.impl.mysql.MySqlConstant;
 import com.epam.task13.db.dao.DaoException;
 import com.epam.task13.db.dao.impl.mysql.MySqlEntityDao;
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 import com.epam.task14.db.dao.OrderDao;
 import com.epam.task14.entity.Order;
 import com.epam.task14.mapper.impl.CartEntryToPreparedStatement;

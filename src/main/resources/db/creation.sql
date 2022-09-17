@@ -7,6 +7,7 @@ USE bookshopdb;
 DROP TABLE IF EXISTS product_category;
 DROP TABLE IF EXISTS product_manufacturer;
 DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS order_status;
 DROP TABLE IF EXISTS `order`;
@@ -41,15 +42,26 @@ CONSTRAINT fk_product_product_category1
       ON DELETE CASCADE
       ON UPDATE CASCADE);
 
+CREATE TABLE IF NOT EXISTS user_role (
+id INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(45) NOT NULL UNIQUE KEY);
+
 CREATE TABLE IF NOT EXISTS `user` (
 id INT NOT NULL AUTO_INCREMENT,
 email VARCHAR(320) NOT NULL,
 first_name VARCHAR(45) NOT NULL,
 last_name VARCHAR(45) NOT NULL,
 `password` VARCHAR(256) NOT NULL,
+role_id INT NOT NULL,
 PRIMARY KEY (id),
 UNIQUE KEY email (email),
-FULLTEXT INDEX IX_email_fulltext (email));
+FULLTEXT INDEX IX_email_fulltext (email),
+INDEX fk_user_user_role1_idx (role_id) ,
+CONSTRAINT fk_user_user_role1
+  FOREIGN KEY (role_id)
+      REFERENCES user_role (id)
+      ON DELETE CASCADE
+      ON UPDATE CASCADE);
 
 CREATE TABLE IF NOT EXISTS order_status (
 id INT AUTO_INCREMENT PRIMARY KEY,
@@ -100,6 +112,7 @@ CONSTRAINT fk_order_has_product_product1
 ALTER TABLE product_category AUTO_INCREMENT = 1;
 ALTER TABLE product_manufacturer AUTO_INCREMENT = 1;
 ALTER TABLE product AUTO_INCREMENT = 1;
+ALTER TABLE user_role AUTO_INCREMENT = 1;
 ALTER TABLE `user` AUTO_INCREMENT = 1;
 ALTER TABLE order_status AUTO_INCREMENT = 1;
 ALTER TABLE `order` AUTO_INCREMENT = 1;
