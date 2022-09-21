@@ -1,4 +1,4 @@
 $(".logoutLink").click(function () {
-    var str = "Are you sure you want to logout?";
+    var str = '<fmt:message key="header.log.out.alert"/>';
     $("#modalBodyWarningMessageLogout").html(str);
 });
