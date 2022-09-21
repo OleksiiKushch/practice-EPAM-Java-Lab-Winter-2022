@@ -3,25 +3,26 @@ package com.epam.task11.controller.servlet;
 import com.epam.task11.constant.ShopLiterals;
 import com.epam.task11.controller.ContextListener;
 import com.epam.task11.controller.servlet.captcha.CaptchaDataStorageStrategy;
-import com.epam.task11.entity.User;
-import com.epam.task11.service.MyServiceException;
+import com.epam.task11.service.ServiceException;
 import com.epam.task11.util.RegistrationData;
 import com.epam.task11.validation.impl.RegistrationDataValidator;
 import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.connection.impl.PoolConnectionBuilder;
 import com.epam.task12.db.dao.impl.mysql.MySqlUserDao;
 import com.epam.task12.mapper.impl.HttpServletRequestToRegistrationData;
-import com.epam.task12.mapper.impl.RegistrationDataToUser;
 import com.epam.task12.service.UserService;
 import com.epam.task12.service.impl.UserServiceImpl;
-import com.epam.task12.service.transaction.impl.TransactionManagerImpl;
+import com.epam.task12.service.transaction.impl.MySqlTransactionManager;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -30,17 +31,13 @@ import java.util.List;
  */
 @WebServlet("/registration")
 @MultipartConfig(
-        location= ContextListener.ABSOLUTE_PATH_STORAGE_AVATARS,
+        location= ContextListener.ABSOLUTE_PATH_STORAGE_USER_AVATARS,
         fileSizeThreshold = 1024 * 1024,      // 1 MB
         maxFileSize       = 1024 * 1024 * 15, // 15 MB
         maxRequestSize    = 1024 * 1024 * 25  // 25 MB
 )
 public class RegistrationServlet extends HttpServlet {
     private static final Logger log = LogManager.getLogger(RegistrationServlet.class);
-
-    public static final String SAVED_AVATAR_EXTENSION = ".png";
-
-    private static final int SIZE_EMPTY_PART = 0;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -62,7 +59,6 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("User try registration");
         RegistrationData registrationData = new RegistrationData();
         new HttpServletRequestToRegistrationData().map(request, registrationData);
         log.debug("Registration data: " + registrationData.toStringWithoutSensitiveData());
@@ -77,16 +73,12 @@ public class RegistrationServlet extends HttpServlet {
 
         List<String> errors = new RegistrationDataValidator(storedCaptchaCode, captchaDataStorageStrategy.getCaptchaTimeout()).isValid(registrationData);
         if (errors.isEmpty()) {
-            User user = new User();
-            new RegistrationDataToUser().map(registrationData, user);
-            log.debug("New user data: " + user.toStringWithoutSensitiveData());
             try {
                 // new UserServiceImpl(new UserRepositoryMockImpl()).create(user);
                 ConnectionBuilder connectionBuilder = PoolConnectionBuilder.getInstance();
-                UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new TransactionManagerImpl(connectionBuilder));
-                userService.registration(user);
-                saveAvatarImage(request, user);
-            } catch (MyServiceException exception) {
+                UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new MySqlTransactionManager(connectionBuilder));
+                userService.registration(registrationData);
+            } catch (ServiceException exception) {
                 errors.add(exception.getMessage());
                 log.error(exception.getMessage());
             }
@@ -107,21 +99,5 @@ public class RegistrationServlet extends HttpServlet {
     private void cleanPasswords(RegistrationData registrationData) {
         registrationData.setPassword(null);
         registrationData.setConfirmationPassword(null);
-    }
-
-    private void saveAvatarImage(HttpServletRequest request, User user) {
-        String nameSavedFile = user.getEmail();
-        try {
-            Part avatar = request.getPart(ShopLiterals.AVATAR_IMAGE);
-            if (avatar.getSize() > SIZE_EMPTY_PART) {
-                avatar.write(nameSavedFile + SAVED_AVATAR_EXTENSION);
-                log.info("User: " + user.getEmail() + " successfully set an avatar");
-            } else {
-                log.info("User: " + user.getEmail() + " didn't set an avatar");
-            }
-        } catch (IOException | ServletException exception) {
-            log.warn(exception.getMessage());
-            throw new RuntimeException(exception);
-        }
     }
 }

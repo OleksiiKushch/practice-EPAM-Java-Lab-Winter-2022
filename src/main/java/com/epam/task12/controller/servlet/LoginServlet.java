@@ -2,14 +2,14 @@ package com.epam.task12.controller.servlet;
 
 import com.epam.task11.constant.ShopLiterals;
 import com.epam.task11.entity.User;
-import com.epam.task11.service.MyServiceException;
+import com.epam.task11.service.ServiceException;
 import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.db.connection.impl.PoolConnectionBuilder;
 import com.epam.task12.db.dao.impl.mysql.MySqlUserDao;
 import com.epam.task12.mapper.impl.HttpServletRequestToLoginData;
 import com.epam.task12.service.UserService;
 import com.epam.task12.service.impl.UserServiceImpl;
-import com.epam.task12.service.transaction.impl.TransactionManagerImpl;
+import com.epam.task12.service.transaction.impl.MySqlTransactionManager;
 import com.epam.task12.util.LoginData;
 import com.epam.task12.validation.impl.LoginDataValidator;
 import org.apache.log4j.LogManager;
@@ -48,26 +48,24 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        LOG.info("User try log in");
         LoginData loginData = new LoginData();
         new HttpServletRequestToLoginData().map(request, loginData);
 
         List<String> errors = new LoginDataValidator().isValid(loginData);
-        User user = null;
         if (errors.isEmpty()) {
             ConnectionBuilder connectionBuilder = PoolConnectionBuilder.getInstance();
-            UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new TransactionManagerImpl(connectionBuilder));
+            UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new MySqlTransactionManager(connectionBuilder));
             try {
-                user = userService.login(loginData);
-            } catch (MyServiceException exception) {
+                User user = userService.login(loginData);
+                request.getSession().setAttribute(ShopLiterals.LOGGED_USER, user);
+                LOG.info("User: " + user.getEmail() + " successful log in!");
+            } catch (ServiceException exception) {
                 errors.add(exception.getMessage());
                 LOG.error(exception.getMessage());
             }
         }
         if (errors.isEmpty()) {
-            request.getSession().setAttribute(ShopLiterals.LOGGED_USER, user);
             response.sendRedirect(request.getContextPath() + "/main");
-            LOG.info("User: " + user.getEmail() + " successful log in!");
         } else {
             LOG.debug("Login data is invalid, error messages: " + errors);
             cleanPassword(loginData);

@@ -22,7 +22,7 @@
                     <a class="nav-link" href="${pageContext.request.contextPath}/main">Home</a>
                 </li>
                 <li class="nav-item" id="product_catalog_li">
-                    <a class="nav-link" href="product_catalog.html">Product catalog</a>
+                    <a class="nav-link" href="${pageContext.request.contextPath}/productCatalog">Product catalog</a>
                 </li>
             </ul>
 

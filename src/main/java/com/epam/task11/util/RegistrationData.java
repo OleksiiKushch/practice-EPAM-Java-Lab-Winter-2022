@@ -1,5 +1,7 @@
 package com.epam.task11.util;
 
+import javax.servlet.http.Part;
+
 /**
  * @author Oleksii Kushch
  */
@@ -11,6 +13,7 @@ public class RegistrationData {
     private String confirmationPassword;
     private String captchaCode;
     private int captchaLifetime;
+    private Part avatar;
 
     public String getEmail() {
         return email;
@@ -68,6 +71,14 @@ public class RegistrationData {
         this.captchaLifetime = captchaLifetime;
     }
 
+    public Part getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(Part avatar) {
+        this.avatar = avatar;
+    }
+
     @Override
     public String toString() {
         return "RegistrationData{" +
@@ -78,6 +89,7 @@ public class RegistrationData {
                 ", confirmationPassword='" + confirmationPassword + '\'' +
                 ", captchaCode='" + captchaCode + '\'' +
                 ", captchaLifetime=" + captchaLifetime +
+                ", avatar=" + avatar +
                 '}';
     }
 
@@ -89,6 +101,7 @@ public class RegistrationData {
                 ", lastName='" + lastName + '\'' +
                 ", captchaCode='" + captchaCode + '\'' +
                 ", captchaLifetime=" + captchaLifetime +
+                ", avatar=" + avatar +
                 '}';
     }
 }

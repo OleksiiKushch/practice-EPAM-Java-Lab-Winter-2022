@@ -15,6 +15,10 @@ public abstract class Entity implements Serializable {
     protected Entity() {
     }
 
+    protected Entity(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
