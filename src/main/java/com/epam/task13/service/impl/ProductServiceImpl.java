@@ -28,6 +28,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Product getProductById(int id) {
+        return productDao.getProductForId(id);
+    }
+
+    @Override
     public List<Product> findProducts(ProductFilterFormBean productFilterFormBean, SortingData sortingData, PagePaginationData pagePaginationData) {
         List<Product> result = productDao.getProductsWithPaginationSortingFiltration(productFilterFormBean, sortingData, pagePaginationData);
         for (Product product : result) {

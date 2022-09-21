@@ -9,12 +9,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+        integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/js/bootstrap.bundle.min.js"
+        integrity="sha512-9GacT4119eY3AcosfWtHMsT5JyZudrexyEVzTBWV3viP/YfB9e2pEy3N7WXL3SV6ASXpTU0vzzSxsbfsuUH4sQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.7.8"></script>
 
     <!-- custom styles -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/styles/my.tooltip.css">
 
     <!-- custom scripts -->
-
+    <script src="${pageContext.request.contextPath}/resources/scripts/put-to-cart.js"></script>
 </head>
 
 <c:set var="categories" value="${requestScope[ShopLiterals.PRODUCT_CATEGORIES]}"/>
@@ -41,7 +46,7 @@
 <body>
     <jsp:include page="/WEB-INF/view/jsp/component/header.jsp" />
 
-    <div class="album py-2 bg-light">
+    <div class="album py-2 bg-light h-95">
         <div class="container">
             <h1 class="my-3">Product catalog page:</h1>
             <hr>
@@ -69,12 +74,12 @@
                                                 <div class="form-row">
                                                     <div class="form-group col-md-6">
                                                         <label for="inputMinPrice">Min Price</label>
-                                                        <input type="number" class="form-control" id="inputMinPrice" name="${ShopLiterals.FILTER_MIN_PRICE}"
+                                                        <input type="number" step="0.01" class="form-control" id="inputMinPrice" name="${ShopLiterals.FILTER_MIN_PRICE}"
                                                             placeholder="$0.00" value="${product_min_price}">
                                                     </div>
                                                     <div class="form-group col-md-6 text-right">
                                                         <label for="inputMaxPrice">Max Price</label>
-                                                        <input type="number" class="form-control" id="inputMaxPrice" name="${ShopLiterals.FILTER_MAX_PRICE}"
+                                                        <input type="number" step="0.01" class="form-control" id="inputMaxPrice" name="${ShopLiterals.FILTER_MAX_PRICE}"
                                                             placeholder="$1,000.00" value="${product_max_price}">
                                                     </div>
                                                 </div>
@@ -344,7 +349,8 @@
                                 <p class="card-text">Price: ${product.price}</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-success">Buy</button>
+                                        <button type="button" class="btn btn-sm btn-outline-success putToCartButton" data-id="${product.id}"
+                                            data-toggle="modal" data-target="#pubToCartModal">Buy</button>
                                         <button type="button" class="btn btn-sm btn-outline-primary">See details</button>
                                     </div>
                                     <button type="button" class="btn btn-link my-tooltip">
@@ -356,10 +362,46 @@
                     </div>
                 </c:forEach>
             </div>
+            <c:if test="${products == null || products.isEmpty()}">
+               <h3 class="text-center">No products found!</h3>
+            </c:if>
+        </div>
+    </div>
+
+    <div class="modal fade" id="pubToCartModal" tabindex="-1" role="dialog" aria-labelledby="pubToCartModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pubToCartModalCenterTitle">Form</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <%-- Here a help message (form) on add product to cart --%>
+                    <h6 id="modalBodyPubToCartForm"></h6>
+                </div>
+                <div class="modal-footer">
+                    <form class="was-validated" method="get">
+                        <input id="putToCartFormProductId" name="${ShopLiterals.PRODUCT_ID}" value="" type="hidden">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button type="button" onclick="putToCart()" data-dismiss="modal"
+                                class="input-group-text mb-3 btn btn-outline-success">Put to cart</button>
+                            </div>
+                            <label for="putToCartFormInputAmount"></label>
+                            <input type="number" min="1" step="1" class="form-control"
+                                   id="putToCartFormInputAmount" name="${ShopLiterals.AMOUNT}" value="" required>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
     <jsp:include page="/WEB-INF/view/jsp/component/footer.jsp" />
 </body>
+
+<script src="${pageContext.request.contextPath}/resources/scripts/put-to-cart.modal.js"></script>
 
 </html>

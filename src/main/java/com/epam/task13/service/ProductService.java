@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface ProductService {
+    Product getProductById(int id);
     List<Product> findProducts(ProductFilterFormBean productFilterFormBean, SortingData sortingData, PagePaginationData pagePaginationData);
     int getCountOfProductsWithFiltering(ProductFilterFormBean productFilterFormBean);
     BigDecimal getMinProductPriceWithFiltering(ProductFilterFormBean productFilterFormBean);
