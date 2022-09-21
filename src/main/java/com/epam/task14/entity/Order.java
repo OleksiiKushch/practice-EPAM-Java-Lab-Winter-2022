@@ -1,7 +1,7 @@
 package com.epam.task14.entity;
 
 import com.epam.task11.entity.Entity;
-import com.epam.task11.entity.User;
+import com.epam.task11.entity.user.User;
 import com.epam.task14.util.Cart;
 
 import java.time.LocalDateTime;

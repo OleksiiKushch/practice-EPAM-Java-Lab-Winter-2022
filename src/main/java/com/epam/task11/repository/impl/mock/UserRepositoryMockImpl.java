@@ -1,6 +1,6 @@
 package com.epam.task11.repository.impl.mock;
 
-import com.epam.task11.entity.User;
+import com.epam.task11.entity.user.User;
 import com.epam.task11.repository.UserRepository;
 
 import java.util.ArrayList;

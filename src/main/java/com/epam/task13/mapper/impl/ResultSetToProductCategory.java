@@ -3,7 +3,7 @@ package com.epam.task13.mapper.impl;
 import com.epam.task12.db.dao.impl.mysql.MySqlConstant;
 import com.epam.task12.mapper.MapException;
 import com.epam.task12.mapper.Mapper;
-import com.epam.task13.entity.ProductCategory;
+import com.epam.task13.entity.product.ProductCategory;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

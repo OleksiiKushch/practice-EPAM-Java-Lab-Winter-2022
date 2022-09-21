@@ -1,6 +1,6 @@
 package com.epam.task13.service;
 
-import com.epam.task13.entity.ProductManufacturer;
+import com.epam.task13.entity.product.ProductManufacturer;
 
 import java.util.List;
 

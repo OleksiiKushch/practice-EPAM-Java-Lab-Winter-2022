@@ -96,8 +96,7 @@ public class RegistrationData {
     /** registration non-sensitive data (without password and confirmation password) */
     public String toStringWithoutSensitiveData() {
         return "RegistrationData{" +
-                "email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
+                "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", captchaCode='" + captchaCode + '\'' +
                 ", captchaLifetime=" + captchaLifetime +

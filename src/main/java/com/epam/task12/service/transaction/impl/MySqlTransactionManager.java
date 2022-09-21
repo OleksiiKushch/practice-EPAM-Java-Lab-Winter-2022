@@ -4,8 +4,8 @@ import com.epam.task12.db.connection.ConnectionBuilder;
 import com.epam.task12.service.transaction.TransactionException;
 import com.epam.task12.service.transaction.TransactionManager;
 import com.epam.task12.service.transaction.TransactionOperation;
-import com.epam.task12.util.db.DBUtils;
-import com.epam.task12.util.db.JdbcConnectionHolder;
+import com.epam.task12.db.util.DBUtils;
+import com.epam.task12.db.util.JdbcConnectionHolder;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 

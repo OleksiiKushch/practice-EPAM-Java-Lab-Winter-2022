@@ -13,6 +13,9 @@ import com.epam.task12.mapper.impl.HttpServletRequestToRegistrationData;
 import com.epam.task12.service.UserService;
 import com.epam.task12.service.impl.UserServiceImpl;
 import com.epam.task12.service.transaction.impl.MySqlTransactionManager;
+import com.epam.task16.db.impl.mysql.MySqlUserRoleDao;
+import com.epam.task16.service.UserRoleService;
+import com.epam.task16.service.impl.UserRoleServiceImpl;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -76,7 +79,8 @@ public class RegistrationServlet extends HttpServlet {
             try {
                 // new UserServiceImpl(new UserRepositoryMockImpl()).create(user);
                 ConnectionBuilder connectionBuilder = PoolConnectionBuilder.getInstance();
-                UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new MySqlTransactionManager(connectionBuilder));
+                UserRoleService userRoleService = new UserRoleServiceImpl(new MySqlUserRoleDao(connectionBuilder));
+                UserService userService = UserServiceImpl.getInstance(new MySqlUserDao(connectionBuilder), new MySqlTransactionManager(connectionBuilder), userRoleService);
                 userService.registration(registrationData);
             } catch (ServiceException exception) {
                 errors.add(exception.getMessage());

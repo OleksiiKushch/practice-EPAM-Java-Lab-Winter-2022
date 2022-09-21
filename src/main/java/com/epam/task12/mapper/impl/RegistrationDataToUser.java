@@ -1,6 +1,6 @@
 package com.epam.task12.mapper.impl;
 
-import com.epam.task11.entity.User;
+import com.epam.task11.entity.user.User;
 import com.epam.task11.util.RegistrationData;
 import com.epam.task12.mapper.MapException;
 import com.epam.task12.mapper.Mapper;

@@ -1,4 +1,4 @@
-package com.epam.task12.util.db;
+package com.epam.task12.db.util;
 
 import java.sql.Connection;
 

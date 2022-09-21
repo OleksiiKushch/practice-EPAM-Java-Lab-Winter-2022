@@ -1,6 +1,6 @@
 package com.epam.task12.mapper.impl;
 
-import com.epam.task11.entity.User;
+import com.epam.task11.entity.user.User;
 import com.epam.task12.mapper.MapException;
 import com.epam.task12.mapper.Mapper;
 import org.apache.log4j.LogManager;
@@ -23,6 +23,7 @@ public class UserToPreparedStatement implements Mapper<User, PreparedStatement> 
             preparedStatement.setString(++i, user.getFirstName());
             preparedStatement.setString(++i, user.getLastName());
             preparedStatement.setString(++i, user.getPassword());
+            preparedStatement.setInt(++i, user.getRole().getId());
         } catch (SQLException exception) {
             LOG.warn(exception.getMessage());
             throw new MapException(exception.getMessage(), exception);

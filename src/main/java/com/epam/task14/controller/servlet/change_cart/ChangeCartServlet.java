@@ -7,7 +7,7 @@ import com.epam.task13.db.dao.ProductDao;
 import com.epam.task13.db.dao.impl.mysql.MySqlProductCategoryDao;
 import com.epam.task13.db.dao.impl.mysql.MySqlProductDao;
 import com.epam.task13.db.dao.impl.mysql.MySqlProductManufacturerDao;
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 import com.epam.task13.service.ProductService;
 import com.epam.task13.service.impl.ProductCategoryServiceImpl;
 import com.epam.task13.service.impl.ProductManufacturerServiceImpl;

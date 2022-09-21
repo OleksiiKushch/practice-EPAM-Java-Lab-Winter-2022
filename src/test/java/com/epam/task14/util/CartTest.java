@@ -1,6 +1,6 @@
 package com.epam.task14.util;
 
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

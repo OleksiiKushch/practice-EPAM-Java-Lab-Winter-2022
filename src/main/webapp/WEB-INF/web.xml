@@ -38,7 +38,7 @@
 
     <context-param>
         <param-name>captcha-data-stored-strategy</param-name>
-        <param-value>hidden_field</param-value> <!-- session / hidden_field / cookie -->
+        <param-value>cookie</param-value> <!-- session / hidden_field / cookie -->
     </context-param>
     <context-param>
         <param-name>captcha-timeout</param-name>
@@ -90,6 +90,20 @@
     </filter>
     <filter-mapping>
         <filter-name>NoCacheFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <context-param>
+        <param-name>security-config-location</param-name>
+        <param-value>WEB-INF/security.xml</param-value>
+    </context-param>
+
+    <filter>
+        <filter-name>SecurityFilter</filter-name>
+        <filter-class>com.epam.task16.controller.filter.SecurityFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SecurityFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

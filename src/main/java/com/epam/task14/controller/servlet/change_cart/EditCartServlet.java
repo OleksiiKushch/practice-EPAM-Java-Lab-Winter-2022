@@ -1,7 +1,7 @@
 package com.epam.task14.controller.servlet.change_cart;
 
 import com.epam.task11.constant.ShopLiterals;
-import com.epam.task13.entity.Product;
+import com.epam.task13.entity.product.Product;
 import com.epam.task14.util.Cart;
 import com.epam.task14.util.CartEntryFormData;
 

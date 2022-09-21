@@ -1,4 +1,4 @@
-package com.epam.task13.entity;
+package com.epam.task13.entity.product;
 
 import com.epam.task11.entity.Entity;
 

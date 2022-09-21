@@ -1,5 +1,16 @@
 USE bookshopdb;
 
+INSERT INTO user_role (id, `name`)
+VALUES
+    (DEFAULT, 'customer'),
+    (DEFAULT, 'admin');
+
+SET @admin_user_role_id = (SELECT id FROM user_role WHERE `name` = 'admin');
+
+INSERT INTO `user` (id, email, first_name,  last_name, `password`, role_id)
+VALUES
+	(DEFAULT, 'admin@i.ua', 'admin', 'admin', 'nimda0', @admin_user_role_id);
+
 INSERT INTO product_category (id, `name`)
 VALUES
     (DEFAULT, 'book'),
@@ -50,4 +61,3 @@ VALUES
     (4, 'expelled'), -- выслан
     (5, 'completed'), -- завершен
     (6, 'canceled'); -- отменен
-

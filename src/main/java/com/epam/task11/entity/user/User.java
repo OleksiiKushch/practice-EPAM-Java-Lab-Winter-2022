@@ -1,4 +1,7 @@
-package com.epam.task11.entity;
+package com.epam.task11.entity.user;
+
+import com.epam.task11.entity.Entity;
+import com.epam.task16.entity.user.UserRole;
 
 /**
  * @author Oleksii Kushch
@@ -8,15 +11,17 @@ public class User extends Entity {
     private String firstName;
     private String lastName;
     private String password;
+    private UserRole role;
 
     public User() {
     }
 
-    public User(String email, String firstName, String lastName, String password) {
+    public User(String email, String firstName, String lastName, String password, UserRole role) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
+        this.role = role;
     }
 
     public String getEmail() {
@@ -51,6 +56,14 @@ public class User extends Entity {
         this.password = password;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -59,6 +72,7 @@ public class User extends Entity {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", password='" + password + '\'' +
+                ", role=" + role +
                 '}';
     }
 
@@ -69,6 +83,7 @@ public class User extends Entity {
                 ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", role=" + role +
                 '}';
     }
 
@@ -101,6 +116,11 @@ public class User extends Entity {
 
         public Builder withPassword(String password) {
             newUser.password = password;
+            return this;
+        }
+
+        public Builder withRole(UserRole role) {
+            newUser.role = role;
             return this;
         }
 

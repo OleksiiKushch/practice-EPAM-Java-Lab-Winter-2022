@@ -2,7 +2,7 @@ package com.epam.task13.service.impl;
 
 import com.epam.task13.db.dao.ProductDao;
 import com.epam.task13.db.dao.ProductManufacturerDao;
-import com.epam.task13.entity.ProductManufacturer;
+import com.epam.task13.entity.product.ProductManufacturer;
 import com.epam.task13.service.ProductManufacturerService;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
