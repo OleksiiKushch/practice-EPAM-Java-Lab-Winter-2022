@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Part;
 import java.io.*;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
@@ -63,11 +64,17 @@ public class MediaServiceImpl implements MediaService {
     }
 
     @Override
-    public void writeImageWithDefault(ServletOutputStream out, File imageFile, String absolutePathDefaultImage) {
+    public void writeImageWithDefault(ServletOutputStream out, File imageFile, String sourceFolder, String defaultSourceFolder) {
         if (Objects.nonNull(imageFile)) {
             writeImage(out, imageFile);
         } else {
-            writeImage(out, new File(absolutePathDefaultImage + DEFAULT_IMAGE));
+            URL url = getClass().getClassLoader().getResource(sourceFolder + DEFAULT_IMAGE);
+            if (Objects.isNull(url)) {
+                url = getClass().getClassLoader().getResource(defaultSourceFolder + DEFAULT_IMAGE);
+            }
+            if (Objects.nonNull(url) && Objects.nonNull(url.getFile())) {
+                writeImage(out, new File(url.getFile()));
+            }
         }
     }
 

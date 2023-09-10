@@ -1,5 +1,28 @@
 # Java practice EPAM Lab Winter 2022 (01/01/2022 - 06/01/2022)
 
+
+## Prerequisites
+* [Java 17](https://jdk.java.net/archive/)
+* [Apache Tomcat 9](https://tomcat.apache.org/download-90.cgi)
+* [MySQL server 8](https://dev.mysql.com/downloads/mysql/)
+
+
+## Installing
+
+Download and Install Java 17.
+Ensure that your Java installation is acceptable by executing the following command in the command prompt: `java -version`
+
+Download and Install Apache Tomcat 9.
+Navigate to `com.epam.task11.controller.ContextListener` and set convenient image storage directories for the `ABSOLUTE_PATH_STORAGE_USER_AVATARS` and `ABSOLUTE_PATH_STORAGE_PRODUCT_PICTURES` constants. Make sure these directories exist, otherwise, you will encounter an error. You can also use test media data from `src/main/resources/media`.
+
+Download and Install MySQL Server 8.
+After the MySQL Server installation is complete, create the database using the following scripts:
+Creating script: `src/main/resources/db/creation.sql`
+Fill test data script: `src/main/resources/db/fill_test_data.sql`
+
+
+## Tasks
+
 ************************************Task1************************************
 
 1. Create a class hierarchy describing a certain subject area. The depth of the inheritance hierarchy should be three levels (ancestor, its descendant, descendant of the descendant).

@@ -13,7 +13,8 @@ import java.io.File;
 import java.io.IOException;
 
 public interface DisplayImage {
-    default void displayImage(HttpServletRequest request, HttpServletResponse response, String sourceFolder) throws IOException {
+
+    default void displayImage(HttpServletRequest request, HttpServletResponse response, String sourceFolder, String defaultSourceFolder) throws IOException {
         String imageId = request.getParameter(ShopLiterals.IMAGE_ID);
         LogHolder.LOG.debug("Process image with id (unique name): " + imageId);
 
@@ -23,7 +24,7 @@ public interface DisplayImage {
 
         // response.setContentType("image/jpeg");
         ServletOutputStream out = response.getOutputStream();
-        mediaService.writeImageWithDefault(out, imageFile, sourceFolder);
+        mediaService.writeImageWithDefault(out, imageFile, sourceFolder, defaultSourceFolder);
         out.flush();
     }
 }

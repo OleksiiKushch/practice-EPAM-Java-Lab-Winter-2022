@@ -14,6 +14,7 @@ public class RegistrationData {
     private String captchaCode;
     private int captchaLifetime;
     private Part avatar;
+    private String base64Avatar;
 
     public String getEmail() {
         return email;
@@ -77,6 +78,14 @@ public class RegistrationData {
 
     public void setAvatar(Part avatar) {
         this.avatar = avatar;
+    }
+
+    public String getBase64Avatar() {
+        return base64Avatar;
+    }
+
+    public void setBase64Avatar(String base64Avatar) {
+        this.base64Avatar = base64Avatar;
     }
 
     @Override

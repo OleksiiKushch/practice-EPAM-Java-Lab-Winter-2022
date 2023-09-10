@@ -10,5 +10,5 @@ public interface MediaService {
     boolean saveImage(Part image, String uniqueName) throws ServiceException;
     File getImage(String uniqueName, String pathFolder) ;
     void writeImage(ServletOutputStream out, File imageFile);
-    void writeImageWithDefault(ServletOutputStream out, File imageFile, String absolutePathDefaultImage);
+    void writeImageWithDefault(ServletOutputStream out, File imageFile, String sourceFolder, String defaultSourceFolder);
 }

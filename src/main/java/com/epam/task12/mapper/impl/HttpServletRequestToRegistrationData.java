@@ -5,6 +5,7 @@ import com.epam.task11.controller.servlet.captcha.CaptchaDataStorageStrategy;
 import com.epam.task11.util.RegistrationData;
 import com.epam.task12.mapper.MapException;
 import com.epam.task12.mapper.Mapper;
+import com.epam.task12.util.MyMediaUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -34,5 +35,6 @@ public class HttpServletRequestToRegistrationData implements Mapper<HttpServletR
             LOG.warn(exception.getMessage());
             throw new MapException(exception.getMessage(), exception);
         }
+        registrationData.setBase64Avatar(MyMediaUtils.convertToBase64(registrationData.getAvatar()));
     }
 }

@@ -28,6 +28,9 @@
 <c:set var="saved_email" value="${requestScope[ShopLiterals.REGISTRATION_DATA].email}"/>
 <c:set var="saved_first_name" value="${requestScope[ShopLiterals.REGISTRATION_DATA].firstName}"/>
 <c:set var="saved_last_name" value="${requestScope[ShopLiterals.REGISTRATION_DATA].lastName}"/>
+<c:set var="saved_base64_avatar" value="${requestScope[ShopLiterals.REGISTRATION_DATA].base64Avatar}"/>
+<c:set var="saved_submitted_avatar_name" value="${requestScope[ShopLiterals.REGISTRATION_DATA].avatar.getSubmittedFileName()}"/>
+<c:set var="saved_avatar_type" value="${requestScope[ShopLiterals.REGISTRATION_DATA].avatar.getContentType()}"/>
 
 <c:set var="error_messages" value="${requestScope[ShopLiterals.ERRORS]}"/>
 
@@ -81,7 +84,7 @@
                             <!-- Uploaded image (avatar) area -->
                             <p class="text-center">The image (avatar) uploaded will be rendered inside the box below.</p>
                             <div class="image-area mt-4">
-                                <img id="imageResult" src="#" alt="" class="img-fluid rounded shadow-sm mx-auto d-block">
+                                <img id="imageResult" src="" alt="" onerror="this.style.display='none'" class="img-fluid rounded shadow-sm mx-auto d-block">
                             </div>
                         </div>
                     </div>
@@ -106,7 +109,7 @@
 
                     <div class="mb-1">
                         <label for="noAccount" class="form-label">Have account? Log in:</label>
-                        <a href="login.html" class="fw-bold text-body" id="noAccount"><u>here</u></a>
+                        <a href="login.jsp" class="fw-bold text-body" id="noAccount"><u>here</u></a>
                     </div>
                 </form>
             </div>
@@ -128,4 +131,36 @@
 <script src="${pageContext.request.contextPath}/resources/scripts/show.uploaded.image.js"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/show.uploaded.image.name.js"></script>
 <script src="${pageContext.request.contextPath}/resources/scripts/clean.uploaded.image.js"></script>
+<script>
+    function urlToFile(url, filename, mimeType){
+        if (url.startsWith('data:')) {
+            let arr = url.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bst = atob(arr[arr.length - 1]),
+                n = bst.length,
+                u8arr = new Uint8Array(n);
+            while(n--) {
+                u8arr[n] = bst.charCodeAt(n);
+            }
+            return new File([u8arr], filename, {type:mime || mimeType});
+        }
+    }
+
+    function detectPageReload() {
+        window.addEventListener('load', function () {
+            const base64Avatar = '${saved_base64_avatar}';
+            const avatarType = '${saved_avatar_type}';
+            const avatarUrl = "data:" + avatarType + ";base64," + base64Avatar;
+            if (base64Avatar) { // Check if base64Avatar is not empty string, undefined, null, ...
+                const file = urlToFile(avatarUrl, '${saved_submitted_avatar_name}', avatarType);
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                document.getElementById('upload').files = dataTransfer.files;
+                document.getElementById('upload-label').textContent = "File name: " + '${saved_submitted_avatar_name}';
+                document.getElementById('imageResult').src = avatarUrl;
+            }
+        });
+    }
+    detectPageReload();
+</script>
 </html>

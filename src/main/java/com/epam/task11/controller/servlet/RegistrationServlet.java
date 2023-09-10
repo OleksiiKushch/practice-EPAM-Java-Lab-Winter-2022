@@ -34,7 +34,7 @@ import java.util.List;
  */
 @WebServlet("/registration")
 @MultipartConfig(
-        location= ContextListener.ABSOLUTE_PATH_STORAGE_USER_AVATARS,
+        location = ContextListener.ABSOLUTE_PATH_STORAGE_USER_AVATARS,
         fileSizeThreshold = 1024 * 1024,      // 1 MB
         maxFileSize       = 1024 * 1024 * 15, // 15 MB
         maxRequestSize    = 1024 * 1024 * 25  // 25 MB
