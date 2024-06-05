@@ -36,7 +36,7 @@ Video on YouTube:
 - Console version: [here](https://youtu.be/hUW3t6befE8).
 
 ### Additional description of course (preview)
-The project is divided into 3 modules and includes 16 tasks, which were completed under the guidance of mentors and covered various aspects of Java development. These topics include: working with Git, unit and integration testing, code documentation, working with collections, working with files, multithreading (my favorite task 😄: search for prime numbers within a given range (parallel implementation)), practical implementation of design patterns such as "chain of responsibility," "strategy," "command," "abstract factory," "template method," "iterator," "dynamic proxies." Important concepts such as 'context' and 'dependency injection' were also covered.
+The project is divided into 3 modules and includes 16 tasks, which were completed under the guidance of mentors and covered various aspects of Java development. These topics include: working with Git, unit and integration testing, code documentation, working with collections, working with files, multithreading (my favorite task 😄: search for prime numbers within a given range (parallel implementation)), practical implementation of design patterns such as "chain of responsibility", "strategy", "command", "abstract factory", "template method", "iterator", "dynamic proxies" and so on. Important concepts such as 'context' and 'dependency injection' were also covered.
 
 ### Tasks
 Description of tasks [here](tasks/tasks.md#task1)
